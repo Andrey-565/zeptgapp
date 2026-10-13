@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Minecraft Auth - Mini App</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="server-badge">
+                <span class="pulse-dot"></span> <span id="serverName">MINECRAFT SERVER</span>
+            </div>
+            <h1>Авторизация</h1>
+            <p class="subtitle" id="headerSubtitle">Подтверждение входа в игру</p>
+        </header>
+
+        <!-- Main Card Container -->
+        <main class="card" id="mainCard">
+            <!-- Loading View -->
+            <div class="view" id="loaderView">
+                <div class="spinner"></div>
+                <p class="hint-text">Подключение к сессии...</p>
+            </div>
+
+            <!-- Auto-Detect Verification View (Когда есть код в ссылке) -->
+            <div class="view" id="confirmView" style="display: none;">
+                <div class="avatar-wrapper">
+                    <img id="playerAvatar" src="https://mc-heads.net/avatar/Steve/120" alt="Avatar" class="avatar">
+                    <div class="shield-badge">🛡️</div>
+                </div>
+
+                <h2 id="playerName">Игрок</h2>
+                <div class="status-pill" id="statusPill">Подтверждение сессии</div>
+
+                <div class="info-box">
+                    <div class="info-row">
+                        <span class="info-label">🔑 Код сессии:</span>
+                        <span class="code-badge" id="sessionCodeBadge">------</span>
+                    </div>
+                    <div class="info-row" id="ipRow" style="display: none;">
+                        <span class="info-label">🌐 IP-адрес:</span>
+                        <span class="info-val" id="playerIp">0.0.0.0</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" id="btnConfirm">
+                        <span class="btn-icon">🎮</span> Подтвердить вход
+                    </button>
+                    <button class="btn btn-danger" id="btnReject">
+                        Это не я (Отклонить)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Manual PIN Entry View (Если код не передан в ссылке) -->
+            <div class="view" id="manualView" style="display: none;">
+                <div class="manual-icon">⌨️</div>
+                <h2>Введите код</h2>
+                <p class="hint-text">Введите 6-значный код авторизации с экрана сервера:</p>
+
+                <div class="pin-inputs" id="pinInputs">
+                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric" autofocus>
+                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                </div>
+
+                <button class="btn btn-primary" id="btnManualSubmit" disabled>
+                    Войти по коду
+                </button>
+            </div>
+
+            <!-- Success View -->
+            <div class="view result-view" id="successView" style="display: none;">
+                <div class="icon-circle success-circle">✓</div>
+                <h2>Вход подтверждён!</h2>
+                <p class="success-desc">Сервер перенаправляет вас в основной мир. Приятной игры!</p>
+                <div class="tip-box">
+                    ✨ Вы можете закрыть это окно и вернуться в игру.
+                </div>
+                <button class="btn btn-secondary" id="btnCloseApp">
+                    Закрыть окно
+                </button>
+            </div>
+
+            <!-- Error View -->
+            <div class="view result-view" id="errorView" style="display: none;">
+                <div class="icon-circle error-circle">✕</div>
+                <h2 id="errorTitle">Вход отклонён</h2>
+                <p id="errorDesc" class="hint-text">Сессия не найдена или время ожидания истекло.</p>
+                <button class="btn btn-secondary" id="btnRetry">
+                    Попробовать снова
+                </button>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <span>Защита аккаунта Minecraft через Telegram 2FA</span>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
