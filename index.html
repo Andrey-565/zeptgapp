@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Zephyrius Network - Mini App</title>
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -63,22 +63,7 @@
                         <span class="card-arrow">→</span>
                     </div>
 
-                    <!-- Кнопка 2: Онлайн игроков -->
-                    <div class="menu-card card-online" id="menuBtnOnline">
-                        <div class="card-icon-wrap">
-                            <span class="card-icon">👥</span>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title-row">
-                                <h3>Онлайн игроков</h3>
-                                <span class="badge badge-online" id="onlineBadge">В сети</span>
-                            </div>
-                            <p>Статистика серверов: <strong id="menuOnlineCount">Загрузка...</strong></p>
-                        </div>
-                        <span class="card-arrow">→</span>
-                    </div>
-
-                    <!-- Кнопка 3: Карта сервера (BlueMap) -->
+                    <!-- Кнопка 2: Карта сервера (BlueMap) -->
                     <div class="menu-card card-map" id="menuBtnMap">
                         <div class="card-icon-wrap">
                             <span class="card-icon">🗺️</span>
@@ -89,18 +74,6 @@
                                 <span class="badge badge-3d">3D BlueMap</span>
                             </div>
                             <p>Интерактивная 3D карта основного мира в реальном времени</p>
-                        </div>
-                        <span class="card-arrow">→</span>
-                    </div>
-
-                    <!-- Кнопка 4: Информация о сервере -->
-                    <div class="menu-card card-info" id="menuBtnInfo">
-                        <div class="card-icon-wrap">
-                            <span class="card-icon">ℹ️</span>
-                        </div>
-                        <div class="card-content">
-                            <h3>Информация</h3>
-                            <p>IP адрес для подключения, версия и помощь</p>
                         </div>
                         <span class="card-arrow">→</span>
                     </div>
@@ -161,112 +134,60 @@
                 </div>
             </section>
 
-            <!-- ================= VIEW 3: ОНЛАЙН ИГРОКОВ ================= -->
-            <section class="view" id="onlineView" style="display: none;">
-                <div class="online-card">
-                    <div class="online-header">
-                        <div class="online-status-icon">🟢</div>
-                        <div class="online-title-block">
-                            <span class="online-meta-label">ОБЩИЙ ОНЛАЙН СЕТИ</span>
-                            <div class="online-numbers">
-                                <span class="big-online" id="statOnlineCount">1</span>
-                                <span class="max-online" id="statMaxCount">/ 100</span>
-                            </div>
-                        </div>
-                        <button class="btn-refresh" id="btnRefreshOnline" title="Обновить">🔄</button>
-                    </div>
-
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="onlineProgressFill" style="width: 5%;"></div>
-                    </div>
-
-                    <div class="servers-list">
-                        <div class="server-item">
-                            <div class="server-item-left">
-                                <span class="server-item-icon">🌲</span>
-                                <div>
-                                    <div class="server-item-name">Основной сервер (Main)</div>
-                                    <div class="server-item-desc">Выживание, Кровавая луна</div>
-                                </div>
-                            </div>
-                            <span class="server-item-badge badge-active">Онлайн</span>
-                        </div>
-
-                        <div class="server-item">
-                            <div class="server-item-left">
-                                <span class="server-item-icon">🏰</span>
-                                <div>
-                                    <div class="server-item-name">Хаб авторизации (Hub)</div>
-                                    <div class="server-item-desc">Вход и привязка Telegram</div>
-                                </div>
-                            </div>
-                            <span class="server-item-badge badge-active">Онлайн</span>
-                        </div>
-
-                        <div class="server-item">
-                            <div class="server-item-left">
-                                <span class="server-item-icon">⚡</span>
-                                <div>
-                                    <div class="server-item-name">Velocity Proxy</div>
-                                    <div class="server-item-desc">Защита и мгновенная маршрутизация</div>
-                                </div>
-                            </div>
-                            <span class="server-item-badge badge-active">Порт 25565</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ================= VIEW 4: КАРТА СЕРВЕРА (BLUEMAP) ================= -->
+            <!-- ================= VIEW 3: КАРТА СЕРВЕРА (BLUEMAP 3D) ================= -->
             <section class="view" id="mapView" style="display: none;">
-                <div class="map-card">
-                    <div class="map-toolbar">
-                        <span class="map-indicator">🌐 3D Карта мира</span>
-                        <a href="#" target="_blank" class="btn btn-sm btn-secondary" id="btnOpenMapExternal">
-                            Во весь экран ↗
-                        </a>
+                <div class="map-card-modern">
+                    <div class="map-hero-preview">
+                        <div class="map-hero-glow"></div>
+                        <span class="map-hero-icon">🌍</span>
+                        <div class="map-hero-badge">3D ИНТЕРАКТИВНЫЙ МИР</div>
                     </div>
-                    <div class="map-frame-wrapper">
-                        <iframe id="mapFrame" src="about:blank" frameborder="0" allowfullscreen></iframe>
-                        <div class="map-loader" id="mapLoader">
-                            <div class="spinner"></div>
-                            <p>Загрузка 3D карты BlueMap...</p>
+
+                    <h2>Глобальная карта сервера</h2>
+                    <p class="hint-text">
+                        Полная 3D визуализация мира из плагина BlueMap с постройками, биомами и игроками в реальном времени.
+                    </p>
+
+                    <div class="map-feature-list">
+                        <div class="map-feature-item">
+                            <span>🧱</span> <strong>Высокая детализация</strong> блоков и текстур
+                        </div>
+                        <div class="map-feature-item">
+                            <span>🧭</span> <strong>Свободный обзор</strong> 360°, приближение и изометрия
+                        </div>
+                        <div class="map-feature-item">
+                            <span>📍</span> <strong>Маркеры игроков</strong> и локаций онлайн
                         </div>
                     </div>
-                    <p class="map-hint">Используйте касания для вращения и масштабирования карты мира.</p>
+
+                    <div class="actions">
+                        <button class="btn btn-primary btn-glow" id="btnLaunchMapDirect">
+                            <span class="btn-icon">🚀</span> Открыть 3D карту в браузере
+                        </button>
+                        <button class="btn btn-secondary" id="btnCopyMapLink">
+                            📋 Скопировать ссылку на карту
+                        </button>
+                    </div>
+
+                    <div class="copy-toast" id="mapCopyToast" style="display: none;">✔ Ссылка на карту скопирована!</div>
                 </div>
             </section>
 
-            <!-- ================= VIEW 5: О СЕРВЕРЕ ================= -->
-            <section class="view" id="infoView" style="display: none;">
-                <div class="info-card">
-                    <div class="info-header-icon">⚔️</div>
-                    <h2>Подключение к игре</h2>
-                    <p class="hint-text">Скопируйте IP и добавьте сервер в список ваших миров:</p>
+            <!-- ================= VIEW 4: ПЛЕЙСХОЛДЕРЫ ДЛЯ ТАБОВ ================= -->
+            <section class="view" id="placeholderView" style="display: none;">
+                <div class="placeholder-card">
+                    <div class="placeholder-icon" id="placeholderIcon">✨</div>
+                    <h2 id="placeholderTitle">Раздел</h2>
+                    <p class="hint-text" id="placeholderDesc">Этот раздел находится в разработке.</p>
 
-                    <div class="ip-copy-box" id="btnCopyIp">
-                        <div class="ip-copy-text">
-                            <span class="ip-label">IP СЕРВЕРА:</span>
-                            <span class="ip-value" id="displayServerIp">localhost</span>
-                        </div>
-                        <button class="btn btn-sm btn-primary" id="btnCopyIpBtn">Копировать</button>
+                    <div class="placeholder-box">
+                        <div class="pulse-dot"></div>
+                        <span>Скоро в обновлении сервера</span>
                     </div>
-                    <div class="copy-toast" id="copyToast" style="display: none;">✔ IP скопирован в буфер!</div>
 
-                    <div class="server-specs">
-                        <div class="spec-row">
-                            <span>🎮 Версия Minecraft:</span>
-                            <strong>1.21.x (Java Edition)</strong>
-                        </div>
-                        <div class="spec-row">
-                            <span>🛡️ Авторизация:</span>
-                            <strong>Беспарольная (Telegram 2FA)</strong>
-                        </div>
-                        <div class="spec-row">
-                            <span>🌕 Особенности:</span>
-                            <strong>Кровавая луна, BlueMap 3D, Корпротект</strong>
-                        </div>
-                    </div>
+                    <button class="btn btn-secondary" id="btnPlaceholderBack">
+                        ← В главное меню
+                    </button>
                 </div>
             </section>
 
@@ -296,6 +217,44 @@
 
         </main>
     </div>
+
+    <!-- ================= FLOATING BOTTOM DOCK NAVIGATION (ФОТО 3) ================= -->
+    <nav class="bottom-dock">
+        <!-- Вкладка 1: Главная (Home) -->
+        <button class="dock-tab active" data-tab="home" title="Главная">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+        </button>
+
+        <!-- Вкладка 2: Оплата / Донат / Магазин (Banknote with arrow - в точности как на фото 3) -->
+        <button class="dock-tab" data-tab="shop" title="Магазин">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="6" width="20" height="12" rx="3"></rect>
+                <circle cx="10" cy="12" r="2.5"></circle>
+                <path d="M19 16l3-3"></path>
+                <path d="M19 13h3v3"></path>
+            </svg>
+        </button>
+
+        <!-- Вкладка 3: Настройки (Settings Gear) -->
+        <button class="dock-tab" data-tab="settings" title="Настройки">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+        </button>
+
+        <!-- Вкладка 4: Профиль (User in Circle) -->
+        <button class="dock-tab" data-tab="profile" title="Профиль">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="10" r="3"></circle>
+                <path d="M7 18.5a5 5 0 0 1 10 0"></path>
+            </svg>
+        </button>
+    </nav>
 
     <!-- Scripts -->
     <script src="config.js"></script>

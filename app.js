@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tg?.HapticFeedback) {
                 if (type === 'success' || type === 'warning' || type === 'error') {
                     tg.HapticFeedback.notificationOccurred(type);
+                } else if (type === 'selection') {
+                    tg.HapticFeedback.selectionChanged();
                 } else {
                     tg.HapticFeedback.impactOccurred(type);
                 }
@@ -28,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
-    let animationFrameId;
 
     function resizeCanvas() {
         canvas.width = window.innerWidth;
@@ -44,10 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
         reset() {
             this.x = Math.random() * canvas.width;
             this.y = canvas.height + Math.random() * 20;
-            this.size = Math.random() * 3 + 1;
-            this.speedY = Math.random() * 0.8 + 0.3;
-            this.speedX = (Math.random() - 0.5) * 0.4;
-            this.opacity = Math.random() * 0.7 + 0.2;
+            this.size = Math.random() * 2.8 + 1;
+            this.speedY = Math.random() * 0.7 + 0.3;
+            this.speedX = (Math.random() - 0.5) * 0.35;
+            this.opacity = Math.random() * 0.6 + 0.2;
             this.color = Math.random() > 0.4 ? '#10b981' : '#06b6d4';
         }
         update() {
@@ -77,19 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
             p.update();
             p.draw();
         });
-        animationFrameId = requestAnimationFrame(animateParticles);
+        requestAnimationFrame(animateParticles);
     }
     animateParticles();
 
     // ----------------------------------------------------
-    // 3. Elements & Config Bindings
+    // 3. Elements & URL Query Parsing
     // ----------------------------------------------------
     if (CONFIG.serverName) {
         document.getElementById('serverName').textContent = CONFIG.serverName;
-    }
-    if (CONFIG.serverIp) {
-        const displayIp = document.getElementById('displayServerIp');
-        if (displayIp) displayIp.textContent = CONFIG.serverIp;
     }
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -101,9 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const views = {
         menu: document.getElementById('menuView'),
         auth: document.getElementById('authView'),
-        online: document.getElementById('onlineView'),
         map: document.getElementById('mapView'),
-        info: document.getElementById('infoView'),
+        placeholder: document.getElementById('placeholderView'),
         success: document.getElementById('successView'),
         error: document.getElementById('errorView')
     };
@@ -112,12 +108,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageSubtitle = document.getElementById('pageSubtitle');
     const btnBackToMenu = document.getElementById('btnBackToMenu');
 
-    // Menu Buttons
+    // Menu Cards
     const menuBtnAuth = document.getElementById('menuBtnAuth');
-    const menuBtnOnline = document.getElementById('menuBtnOnline');
     const menuBtnMap = document.getElementById('menuBtnMap');
-    const menuBtnInfo = document.getElementById('menuBtnInfo');
-
     const activeSessionBanner = document.getElementById('activeSessionBanner');
     const bannerCode = document.getElementById('bannerCode');
     const btnOpenAuthFromBanner = document.getElementById('btnOpenAuthFromBanner');
@@ -131,37 +124,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const sessionCodeBadge = document.getElementById('sessionCodeBadge');
     const playerIp = document.getElementById('playerIp');
     const ipRow = document.getElementById('ipRow');
-    const statusPill = document.getElementById('statusPill');
     const btnConfirm = document.getElementById('btnConfirm');
     const btnReject = document.getElementById('btnReject');
     const pinBoxes = document.querySelectorAll('.pin-box');
     const btnManualSubmit = document.getElementById('btnManualSubmit');
 
-    // Online Elements
-    const menuOnlineCount = document.getElementById('menuOnlineCount');
-    const statOnlineCount = document.getElementById('statOnlineCount');
-    const statMaxCount = document.getElementById('statMaxCount');
-    const onlineProgressFill = document.getElementById('onlineProgressFill');
-    const btnRefreshOnline = document.getElementById('btnRefreshOnline');
-
     // BlueMap Elements
-    const mapFrame = document.getElementById('mapFrame');
-    const mapLoader = document.getElementById('mapLoader');
-    const btnOpenMapExternal = document.getElementById('btnOpenMapExternal');
+    const btnLaunchMapDirect = document.getElementById('btnLaunchMapDirect');
+    const btnCopyMapLink = document.getElementById('btnCopyMapLink');
+    const mapCopyToast = document.getElementById('mapCopyToast');
 
-    // Info Elements
-    const btnCopyIp = document.getElementById('btnCopyIp');
-    const copyToast = document.getElementById('copyToast');
+    // Placeholder Elements
+    const placeholderIcon = document.getElementById('placeholderIcon');
+    const placeholderTitle = document.getElementById('placeholderTitle');
+    const placeholderDesc = document.getElementById('placeholderDesc');
+    const btnPlaceholderBack = document.getElementById('btnPlaceholderBack');
 
-    // Result Elements
+    // Result Buttons
     const btnCloseApp = document.getElementById('btnCloseApp');
     const btnRetry = document.getElementById('btnRetry');
 
-    // ----------------------------------------------------
-    // 4. View Switching & Navigation Router
-    // ----------------------------------------------------
-    let currentView = 'menu';
+    // Dock Tabs
+    const dockTabs = document.querySelectorAll('.dock-tab');
 
+    // ----------------------------------------------------
+    // 4. View Switching & Router
+    // ----------------------------------------------------
     function switchView(targetView) {
         triggerHaptic('light');
 
@@ -171,15 +159,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (views[targetView]) {
             views[targetView].style.display = 'block';
-            currentView = targetView;
         }
 
-        // Handle Titles & Back Button
+        // Header and Back Button
         if (targetView === 'menu') {
             pageTitle.textContent = "Главное меню";
             pageSubtitle.textContent = "Выберите нужный раздел";
             btnBackToMenu.style.display = 'none';
             if (tg?.BackButton) tg.BackButton.hide();
+            setActiveDockTab('home');
         } else {
             btnBackToMenu.style.display = 'flex';
             if (tg?.BackButton) tg.BackButton.show();
@@ -189,19 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     pageTitle.textContent = "Авторизация";
                     pageSubtitle.textContent = "Подтверждение игровой сессии";
                     break;
-                case 'online':
-                    pageTitle.textContent = "Онлайн игроков";
-                    pageSubtitle.textContent = "Статистика подключений";
-                    fetchOnlineStatus();
-                    break;
                 case 'map':
                     pageTitle.textContent = "Карта сервера";
                     pageSubtitle.textContent = "Интерактивная 3D карта";
-                    loadBlueMap();
-                    break;
-                case 'info':
-                    pageTitle.textContent = "О сервере";
-                    pageSubtitle.textContent = "Информация и подключение";
                     break;
             }
         }
@@ -212,11 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
         tg.BackButton.onClick(() => switchView('menu'));
     }
 
-    // Menu Card Clicks
     menuBtnAuth.addEventListener('click', () => switchView('auth'));
-    menuBtnOnline.addEventListener('click', () => switchView('online'));
     menuBtnMap.addEventListener('click', () => switchView('map'));
-    menuBtnInfo.addEventListener('click', () => switchView('info'));
 
     if (btnOpenAuthFromBanner) {
         btnOpenAuthFromBanner.addEventListener('click', (e) => {
@@ -226,17 +201,98 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------
-    // 5. Session Setup (QR / Link Detection)
+    // 5. Floating Bottom Dock Navigation (Фото 3)
+    // ----------------------------------------------------
+    function setActiveDockTab(tabName) {
+        dockTabs.forEach(tab => {
+            if (tab.dataset.tab === tabName) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+    }
+
+    dockTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            triggerHaptic('selection');
+            const target = tab.dataset.tab;
+            setActiveDockTab(target);
+
+            switch (target) {
+                case 'home':
+                    switchView('menu');
+                    break;
+                case 'shop':
+                    placeholderIcon.textContent = "💸";
+                    placeholderTitle.textContent = "Магазин и Донат";
+                    placeholderDesc.textContent = "Раздел игрового магазина и донат-привилегий скоро станет доступен!";
+                    pageTitle.textContent = "Магазин";
+                    pageSubtitle.textContent = "Игровые привилегии и бонусы";
+                    switchView('placeholder');
+                    break;
+                case 'settings':
+                    placeholderIcon.textContent = "⚙️";
+                    placeholderTitle.textContent = "Настройки";
+                    placeholderDesc.textContent = "Управление уведомлениями, темой оформления и безопасностью.";
+                    pageTitle.textContent = "Настройки";
+                    pageSubtitle.textContent = "Параметры приложения";
+                    switchView('placeholder');
+                    break;
+                case 'profile':
+                    placeholderIcon.textContent = "👤";
+                    placeholderTitle.textContent = sessionNick ? `Профиль: ${sessionNick}` : "Профиль игрока";
+                    placeholderDesc.textContent = sessionNick 
+                        ? `Привязанный аккаунт: ${sessionNick}. Статистика и достижения появятся здесь.`
+                        : "Войдите на сервер Minecraft для синхронизации вашего профиля.";
+                    pageTitle.textContent = "Профиль";
+                    pageSubtitle.textContent = "Статистика вашего персонажа";
+                    switchView('placeholder');
+                    break;
+            }
+        });
+    });
+
+    if (btnPlaceholderBack) {
+        btnPlaceholderBack.addEventListener('click', () => switchView('menu'));
+    }
+
+    // ----------------------------------------------------
+    // 6. BlueMap 3D Launch Action
+    // ----------------------------------------------------
+    if (btnLaunchMapDirect) {
+        btnLaunchMapDirect.addEventListener('click', () => {
+            triggerHaptic('medium');
+            const url = CONFIG.mapUrl || 'http://192.168.0.105:8100';
+            if (tg?.openLink) {
+                tg.openLink(url);
+            } else {
+                window.open(url, '_blank');
+            }
+        });
+    }
+
+    if (btnCopyMapLink) {
+        btnCopyMapLink.addEventListener('click', () => {
+            triggerHaptic('light');
+            const url = CONFIG.mapUrl || 'http://192.168.0.105:8100';
+            navigator.clipboard.writeText(url).then(() => {
+                mapCopyToast.style.display = 'block';
+                setTimeout(() => { mapCopyToast.style.display = 'none'; }, 2500);
+            }).catch(() => {});
+        });
+    }
+
+    // ----------------------------------------------------
+    // 7. Session Detection (QR / Link)
     // ----------------------------------------------------
     if (sessionCode && sessionCode.trim().length > 0) {
         const cleanCode = sessionCode.trim();
 
-        // Show banner on Main Menu
         activeSessionBanner.style.display = 'flex';
         bannerCode.textContent = cleanCode;
         authBadge.style.display = 'inline-block';
 
-        // Prepare Auth Box
         authConfirmBox.style.display = 'block';
         authManualBox.style.display = 'none';
         sessionCodeBadge.textContent = cleanCode;
@@ -250,93 +306,15 @@ document.addEventListener('DOMContentLoaded', () => {
             ipRow.style.display = 'flex';
         }
 
-        // If opened directly from QR code, take player straight to Auth screen!
         switchView('auth');
     } else {
-        // No session code: Auth screen has manual PIN entry
         authConfirmBox.style.display = 'none';
         authManualBox.style.display = 'block';
         setupPinInputs();
     }
 
     // ----------------------------------------------------
-    // 6. Online Status Fetching
-    // ----------------------------------------------------
-    function fetchOnlineStatus() {
-        menuOnlineCount.textContent = "Загрузка...";
-
-        // Mode A: If API url is configured
-        if (CONFIG.apiUrl && CONFIG.apiUrl.startsWith("http")) {
-            fetch(`${CONFIG.apiUrl}/api/status`)
-                .then(res => res.json())
-                .then(data => updateOnlineUI(data.players || 0, data.maxPlayers || 100))
-                .catch(() => checkPublicStatus());
-        } else {
-            checkPublicStatus();
-        }
-    }
-
-    function checkPublicStatus() {
-        const host = CONFIG.serverIp || 'localhost';
-        if (host === 'localhost' || host.startsWith('127.') || host.startsWith('192.168.')) {
-            // Local network testing: show active status with default/live stats
-            updateOnlineUI(1, 100);
-            return;
-        }
-
-        fetch(`https://api.mcstatus.io/v2/status/java/${encodeURIComponent(host)}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.online) {
-                    updateOnlineUI(data.players.online, data.players.max);
-                } else {
-                    updateOnlineUI(0, 100);
-                }
-            })
-            .catch(() => updateOnlineUI(1, 100));
-    }
-
-    function updateOnlineUI(online, max) {
-        menuOnlineCount.textContent = `${online} / ${max}`;
-        statOnlineCount.textContent = online;
-        statMaxCount.textContent = `/ ${max}`;
-        const pct = Math.max(3, Math.min(100, (online / (max || 100)) * 100));
-        onlineProgressFill.style.width = `${pct}%`;
-    }
-
-    if (btnRefreshOnline) {
-        btnRefreshOnline.addEventListener('click', () => {
-            triggerHaptic('medium');
-            fetchOnlineStatus();
-        });
-    }
-
-    // Fetch initial online on load
-    fetchOnlineStatus();
-
-    // ----------------------------------------------------
-    // 7. BlueMap Integration
-    // ----------------------------------------------------
-    let mapLoaded = false;
-    function loadBlueMap() {
-        const url = CONFIG.mapUrl || 'http://localhost:8100';
-        btnOpenMapExternal.href = url;
-
-        if (!mapLoaded) {
-            mapFrame.src = url;
-            mapFrame.onload = () => {
-                mapLoader.classList.add('hidden');
-                mapLoaded = true;
-            };
-            // Fallback timeout to hide loader
-            setTimeout(() => {
-                mapLoader.classList.add('hidden');
-            }, 3000);
-        }
-    }
-
-    // ----------------------------------------------------
-    // 8. Auth Confirmation Logic
+    // 8. Auth Confirmation & Rejection Logic
     // ----------------------------------------------------
     btnConfirm.addEventListener('click', () => {
         submitVerification(sessionCodeBadge.textContent);
@@ -421,20 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ----------------------------------------------------
-    // 9. Copy IP & Result Handlers
-    // ----------------------------------------------------
-    if (btnCopyIp) {
-        btnCopyIp.addEventListener('click', () => {
-            const ip = CONFIG.serverIp || 'localhost';
-            navigator.clipboard.writeText(ip).then(() => {
-                triggerHaptic('success');
-                copyToast.style.display = 'block';
-                setTimeout(() => { copyToast.style.display = 'none'; }, 2500);
-            }).catch(() => {});
-        });
-    }
-
+    // Result Button Handlers
     if (btnCloseApp) {
         btnCloseApp.addEventListener('click', () => {
             if (tg?.close) tg.close();
