@@ -122,6 +122,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageSubtitle = document.getElementById('pageSubtitle');
     const btnBackToMenu = document.getElementById('btnBackToMenu');
 
+    // Menu Cards
+    const menuBtnAuth = document.getElementById('menuBtnAuth');
+    const menuBtnMap = document.getElementById('menuBtnMap');
+    const activeSessionBanner = document.getElementById('activeSessionBanner');
+    const bannerCode = document.getElementById('bannerCode');
+    const btnOpenAuthFromBanner = document.getElementById('btnOpenAuthFromBanner');
+    const authBadge = document.getElementById('authBadge');
+
+    // Auth Elements
+    const authConfirmBox = document.getElementById('authConfirmBox');
+    const authManualBox = document.getElementById('authManualBox');
+    const playerAvatar = document.getElementById('playerAvatar');
+    const playerName = document.getElementById('playerName');
+    const sessionCodeBadge = document.getElementById('sessionCodeBadge');
+    const playerIp = document.getElementById('playerIp');
+    const ipRow = document.getElementById('ipRow');
+    const btnConfirm = document.getElementById('btnConfirm');
+    const btnReject = document.getElementById('btnReject');
+    const pinBoxes = document.querySelectorAll('.pin-box');
+    const btnManualSubmit = document.getElementById('btnManualSubmit');
+
+    // BlueMap Elements
+    const btnLaunchMapDirect = document.getElementById('btnLaunchMapDirect');
+    const btnCopyMapLink = document.getElementById('btnCopyMapLink');
+    const mapCopyToast = document.getElementById('mapCopyToast');
+
+    // Placeholder Elements
+    const placeholderIcon = document.getElementById('placeholderIcon');
+    const placeholderTitle = document.getElementById('placeholderTitle');
+    const placeholderDesc = document.getElementById('placeholderDesc');
+    const btnPlaceholderBack = document.getElementById('btnPlaceholderBack');
+
+    // Result Buttons
+    const btnCloseApp = document.getElementById('btnCloseApp');
+    const btnRetry = document.getElementById('btnRetry');
+
+    // Dock Tabs
+    const dockTabs = document.querySelectorAll('.dock-tab');
+
     // ====================================================
     // BILINGUAL TRANSLATION (RU / EN)
     // ====================================================
@@ -534,6 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
         authConfirmBox.style.display = 'none';
         authManualBox.style.display = 'block';
         setupPinInputs();
+        switchView('menu');
     }
 
     // ----------------------------------------------------
