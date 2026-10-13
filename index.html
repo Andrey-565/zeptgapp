@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="style.css?v=2.5">
+    <link rel="stylesheet" href="style.css?v=2.6">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
@@ -140,35 +140,63 @@
             <!-- ================= VIEW 3: КАРТА СЕРВЕРА (BLUEMAP 3D) ================= -->
             <section class="view" id="mapView" style="display: none;">
                 <div class="map-card-modern">
-                    <div class="map-hero-preview">
-                        <div class="map-hero-glow"></div>
-                        <span class="map-hero-icon">🌍</span>
-                        <div class="map-hero-badge">3D ИНТЕРАКТИВНЫЙ МИР</div>
+                    <!-- Миниатюрка окна карты (Miniature Map Window) -->
+                    <div class="map-window-frame">
+                        <div class="map-window-header">
+                            <div class="window-controls">
+                                <span class="win-dot dot-red"></span>
+                                <span class="win-dot dot-yellow"></span>
+                                <span class="win-dot dot-green"></span>
+                            </div>
+                            <div class="window-title">
+                                <span class="pulse-dot"></span>
+                                <span>BlueMap 3D Live</span>
+                            </div>
+                            <span class="window-badge" id="mapCoordsBadge">X: 0, Z: 0</span>
+                        </div>
+
+                        <!-- Область интерактивной миниатюры -->
+                        <div class="map-viewport" id="mapViewport">
+                            <iframe id="mapFrame" src="" allowfullscreen loading="lazy"></iframe>
+
+                            <!-- Оверлей миниатюры с 3D атмосферой и кнопкой быстрого запуска -->
+                            <div class="map-preview-overlay" id="mapPreviewOverlay">
+                                <div class="map-terrain-backdrop"></div>
+                                <div class="radar-circle"></div>
+                                <div class="map-center-pin">
+                                    <span class="pin-icon">📍</span>
+                                    <span class="pin-label">Spawn World</span>
+                                </div>
+                                <button class="btn-expand-map" id="btnExpandMap">
+                                    <span>🔍 Развернуть 3D мир</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
-                    <h2>Глобальная карта сервера</h2>
-                    <p class="hint-text">
+                    <h2 data-i18n="map_h2">Глобальная карта сервера</h2>
+                    <p class="hint-text" data-i18n="map_p">
                         Полная 3D визуализация мира из плагина BlueMap с постройками, биомами и игроками в реальном времени.
                     </p>
 
                     <div class="map-feature-list">
                         <div class="map-feature-item">
-                            <span>🧱</span> <strong>Высокая детализация</strong> блоков и текстур
+                            <span>🧱</span> <strong data-i18n="map_feat1">Высокая детализация блоков</strong>
                         </div>
                         <div class="map-feature-item">
-                            <span>🧭</span> <strong>Свободный обзор</strong> 360°, приближение и изометрия
+                            <span>🧭</span> <strong data-i18n="map_feat2">Обзор 360°, приближение и 3D</strong>
                         </div>
                         <div class="map-feature-item">
-                            <span>📍</span> <strong>Маркеры игроков</strong> и локаций онлайн
+                            <span>📍</span> <strong data-i18n="map_feat3">Маркеры игроков онлайн</strong>
                         </div>
                     </div>
 
                     <div class="actions">
                         <button class="btn btn-primary btn-glow" id="btnLaunchMapDirect">
-                            <span class="btn-icon">🚀</span> Открыть 3D карту в браузере
+                            <span class="btn-icon">🚀</span> <span data-i18n="map_launch_btn">Открыть 3D карту в браузере</span>
                         </button>
                         <button class="btn btn-secondary" id="btnCopyMapLink">
-                            📋 Скопировать ссылку на карту
+                            <span data-i18n="map_copy_btn">📋 Скопировать ссылку на карту</span>
                         </button>
                     </div>
 
@@ -385,7 +413,7 @@
     </nav>
 
     <!-- Scripts -->
-    <script src="config.js?v=2.5"></script>
-    <script src="app.js?v=2.5"></script>
+    <script src="config.js?v=2.6"></script>
+    <script src="app.js?v=2.6"></script>
 </body>
 </html>

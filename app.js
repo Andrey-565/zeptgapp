@@ -364,14 +364,44 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------
     // 6. BlueMap 3D Launch Action
     // ----------------------------------------------------
+    const btnExpandMap = document.getElementById('btnExpandMap');
+    const mapViewport = document.getElementById('mapViewport');
+    const mapFrame = document.getElementById('mapFrame');
+    const mapPreviewOverlay = document.getElementById('mapPreviewOverlay');
+
+    // Если указана HTTPS ссылка, можно загрузить живую карту прямо внутрь миниатюры
+    if (mapFrame && CONFIG.mapUrl && CONFIG.mapUrl.startsWith('https://')) {
+        mapFrame.src = CONFIG.mapUrl;
+        mapFrame.addEventListener('load', () => {
+            if (mapPreviewOverlay) {
+                mapPreviewOverlay.classList.add('map-loaded');
+            }
+        });
+    }
+
+    function launchMap() {
+        triggerHaptic('medium');
+        const url = CONFIG.mapUrl || 'http://192.168.0.105:8100';
+        if (tg?.openLink) {
+            tg.openLink(url);
+        } else {
+            window.open(url, '_blank');
+        }
+    }
+
     if (btnLaunchMapDirect) {
-        btnLaunchMapDirect.addEventListener('click', () => {
-            triggerHaptic('medium');
-            const url = CONFIG.mapUrl || 'http://192.168.0.105:8100';
-            if (tg?.openLink) {
-                tg.openLink(url);
-            } else {
-                window.open(url, '_blank');
+        btnLaunchMapDirect.addEventListener('click', launchMap);
+    }
+    if (btnExpandMap) {
+        btnExpandMap.addEventListener('click', (e) => {
+            e.stopPropagation();
+            launchMap();
+        });
+    }
+    if (mapViewport) {
+        mapViewport.addEventListener('click', (e) => {
+            if (!mapPreviewOverlay || !mapPreviewOverlay.classList.contains('map-loaded')) {
+                launchMap();
             }
         });
     }
