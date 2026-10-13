@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         auth: document.getElementById('authView'),
         map: document.getElementById('mapView'),
         settings: document.getElementById('settingsView'),
+        profile: document.getElementById('profileView'),
         placeholder: document.getElementById('placeholderView'),
         success: document.getElementById('successView'),
         error: document.getElementById('errorView')
@@ -121,50 +122,98 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageSubtitle = document.getElementById('pageSubtitle');
     const btnBackToMenu = document.getElementById('btnBackToMenu');
 
-    // Menu Cards
-    const menuBtnAuth = document.getElementById('menuBtnAuth');
-    const menuBtnMap = document.getElementById('menuBtnMap');
-    const activeSessionBanner = document.getElementById('activeSessionBanner');
-    const bannerCode = document.getElementById('bannerCode');
-    const btnOpenAuthFromBanner = document.getElementById('btnOpenAuthFromBanner');
-    const authBadge = document.getElementById('authBadge');
+    // ====================================================
+    // BILINGUAL TRANSLATION (RU / EN)
+    // ====================================================
+    const I18N = {
+        ru: {
+            menu_title: "Главное меню",
+            menu_sub: "Выберите нужный раздел",
+            auth_title: "Авторизация",
+            auth_sub: "Подтверждение игровой сессии",
+            map_title: "Карта сервера",
+            map_sub: "Интерактивная 3D карта",
+            settings_title: "Настройки",
+            settings_sub: "Параметры и оформление",
+            profile_title: "Профиль",
+            profile_sub: "Данные вашего аккаунта",
+            shop_title: "Магазин",
+            shop_sub: "Игровые привилегии и бонусы",
+            shop_placeholder_title: "Магазин и Донат",
+            shop_placeholder_desc: "Раздел игрового магазина и донат-привилегий скоро станет доступен!",
+            settings_sec_notify: "Уведомления",
+            settings_notify_title: "Уведомления о входе",
+            settings_notify_desc: "Сообщение в боте при успешной авторизации",
+            settings_sec_interface: "Интерфейс и Эффекты",
+            settings_theme_title: "Тема оформления",
+            settings_theme_desc: "Переключение тёмного и светлого стиля",
+            theme_dark: "Тёмная",
+            theme_light: "Светлая",
+            settings_particles_title: "Анимированный фон",
+            settings_particles_desc: "Плавающие частицы и свечение",
+            settings_haptic_title: "Тактильный отклик (Haptic)",
+            settings_haptic_desc: "Вибрация при кликах и переключении меню",
+            settings_lang_title: "Язык приложения",
+            settings_lang_desc: "Язык интерфейса Mini App",
+            settings_sec_system: "Система",
+            settings_version_title: "Версия приложения",
+            settings_reload_btn: "🔄 Сбросить кэш и перезагрузить",
+            profile_sync_desc: "Синхронизация профиля и статистика скоро",
+            coming_soon: "Скоро в обновлении сервера",
+            btn_back: "← В главное меню"
+        },
+        en: {
+            menu_title: "Main Menu",
+            menu_sub: "Select a section",
+            auth_title: "Authorization",
+            auth_sub: "Game session confirmation",
+            map_title: "Server Map",
+            map_sub: "Interactive 3D map",
+            settings_title: "Settings",
+            settings_sub: "Preferences & appearance",
+            profile_title: "Profile",
+            profile_sub: "Your account details",
+            shop_title: "Store",
+            shop_sub: "In-game ranks and perks",
+            shop_placeholder_title: "Store & Donations",
+            shop_placeholder_desc: "In-game store and donate privileges will be available soon!",
+            settings_sec_notify: "Notifications",
+            settings_notify_title: "Login Notifications",
+            settings_notify_desc: "Receive bot message upon successful login",
+            settings_sec_interface: "Interface & Effects",
+            settings_theme_title: "Appearance Theme",
+            settings_theme_desc: "Toggle between dark and light styles",
+            theme_dark: "Dark",
+            theme_light: "Light",
+            settings_particles_title: "Animated Background",
+            settings_particles_desc: "Floating particles and glows",
+            settings_haptic_title: "Haptic Feedback",
+            settings_haptic_desc: "Vibration on button clicks and tab switching",
+            settings_lang_title: "App Language",
+            settings_lang_desc: "Language of Mini App interface",
+            settings_sec_system: "System",
+            settings_version_title: "App Version",
+            settings_reload_btn: "🔄 Reset Cache & Reload",
+            profile_sync_desc: "Profile synchronization & statistics coming soon",
+            coming_soon: "Coming in server update",
+            btn_back: "← To Main Menu"
+        }
+    };
 
-    // Auth Elements
-    const authConfirmBox = document.getElementById('authConfirmBox');
-    const authManualBox = document.getElementById('authManualBox');
-    const playerAvatar = document.getElementById('playerAvatar');
-    const playerName = document.getElementById('playerName');
-    const sessionCodeBadge = document.getElementById('sessionCodeBadge');
-    const playerIp = document.getElementById('playerIp');
-    const ipRow = document.getElementById('ipRow');
-    const btnConfirm = document.getElementById('btnConfirm');
-    const btnReject = document.getElementById('btnReject');
-    const pinBoxes = document.querySelectorAll('.pin-box');
-    const btnManualSubmit = document.getElementById('btnManualSubmit');
+    let currentLang = localStorage.getItem('zeph_lang') || 'ru';
+    let currentTheme = localStorage.getItem('zeph_theme') || 'dark';
+    let currentView = 'menu';
 
-    // BlueMap Elements
-    const btnLaunchMapDirect = document.getElementById('btnLaunchMapDirect');
-    const btnCopyMapLink = document.getElementById('btnCopyMapLink');
-    const mapCopyToast = document.getElementById('mapCopyToast');
-
-    // Placeholder Elements
-    const placeholderIcon = document.getElementById('placeholderIcon');
-    const placeholderTitle = document.getElementById('placeholderTitle');
-    const placeholderDesc = document.getElementById('placeholderDesc');
-    const btnPlaceholderBack = document.getElementById('btnPlaceholderBack');
-
-    // Result Buttons
-    const btnCloseApp = document.getElementById('btnCloseApp');
-    const btnRetry = document.getElementById('btnRetry');
-
-    // Dock Tabs
-    const dockTabs = document.querySelectorAll('.dock-tab');
+    function t(key) {
+        return I18N[currentLang]?.[key] || key;
+    }
 
     // ----------------------------------------------------
     // 4. View Switching & Router
     // ----------------------------------------------------
     function switchView(targetView) {
         triggerHaptic('light');
+        currentView = targetView;
 
         Object.keys(views).forEach(v => {
             if (views[v]) views[v].style.display = 'none';
@@ -176,8 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Header and Back Button
         if (targetView === 'menu') {
-            pageTitle.textContent = "Главное меню";
-            pageSubtitle.textContent = "Выберите нужный раздел";
+            pageTitle.textContent = t('menu_title');
+            pageSubtitle.textContent = t('menu_sub');
             btnBackToMenu.style.display = 'none';
             if (tg?.BackButton) tg.BackButton.hide();
             setActiveDockTab('home');
@@ -187,17 +236,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             switch (targetView) {
                 case 'auth':
-                    pageTitle.textContent = "Авторизация";
-                    pageSubtitle.textContent = "Подтверждение игровой сессии";
+                    pageTitle.textContent = t('auth_title');
+                    pageSubtitle.textContent = t('auth_sub');
                     break;
                 case 'map':
-                    pageTitle.textContent = "Карта сервера";
-                    pageSubtitle.textContent = "Интерактивная 3D карта";
+                    pageTitle.textContent = t('map_title');
+                    pageSubtitle.textContent = t('map_sub');
                     break;
                 case 'settings':
-                    pageTitle.textContent = "Настройки";
-                    pageSubtitle.textContent = "Безопасность и параметры";
+                    pageTitle.textContent = t('settings_title');
+                    pageSubtitle.textContent = t('settings_sub');
                     setActiveDockTab('settings');
+                    break;
+                case 'profile':
+                    pageTitle.textContent = t('profile_title');
+                    pageSubtitle.textContent = t('profile_sub');
+                    setActiveDockTab('profile');
                     break;
             }
         }
@@ -253,14 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     switchView('settings');
                     break;
                 case 'profile':
-                    placeholderIcon.textContent = "👤";
-                    placeholderTitle.textContent = sessionNick ? `Профиль: ${sessionNick}` : "Профиль игрока";
-                    placeholderDesc.textContent = sessionNick 
-                        ? `Привязанный аккаунт: ${sessionNick}. Статистика и достижения появятся здесь.`
-                        : "Войдите на сервер Minecraft для синхронизации вашего профиля.";
-                    pageTitle.textContent = "Профиль";
-                    pageSubtitle.textContent = "Статистика вашего персонажа";
-                    switchView('placeholder');
+                    switchView('profile');
                     break;
             }
         });
@@ -268,6 +315,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnPlaceholderBack) {
         btnPlaceholderBack.addEventListener('click', () => switchView('menu'));
+    }
+
+    const btnProfileBack = document.getElementById('btnProfileBack');
+    if (btnProfileBack) {
+        btnProfileBack.addEventListener('click', () => switchView('menu'));
     }
 
     // ----------------------------------------------------
@@ -297,58 +349,123 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------
-    // 6b. Settings Tab Handlers
+    // 6b. Settings & Theme & Profile Handlers
     // ----------------------------------------------------
-    const settingsUserAvatar = document.getElementById('settingsUserAvatar');
-    const settingsUserName = document.getElementById('settingsUserName');
-    const settingsUserId = document.getElementById('settingsUserId');
-    const setting2FA = document.getElementById('setting2FA');
+    const profileUserAvatar = document.getElementById('profileUserAvatar');
+    const profileUserName = document.getElementById('profileUserName');
+    const profileUserId = document.getElementById('profileUserId');
+
     const settingLoginNotify = document.getElementById('settingLoginNotify');
-    const settingManualPin = document.getElementById('settingManualPin');
     const settingParticles = document.getElementById('settingParticles');
     const settingHaptic = document.getElementById('settingHaptic');
-    const btnCopyServerIpSetting = document.getElementById('btnCopyServerIpSetting');
-    const settingsCopyToast = document.getElementById('settingsCopyToast');
-    const settingServerIpDisplay = document.getElementById('settingServerIpDisplay');
     const btnClearCacheReload = document.getElementById('btnClearCacheReload');
     const langBtns = document.querySelectorAll('.lang-btn');
+    const btnThemeDark = document.getElementById('btnThemeDark');
+    const btnThemeLight = document.getElementById('btnThemeLight');
 
-    // Populate user info from Telegram SDK
+    // Populate user info into Profile view
     if (tg?.initDataUnsafe?.user) {
         const u = tg.initDataUnsafe.user;
         const displayName = [u.first_name, u.last_name].filter(Boolean).join(' ') || (u.username ? '@' + u.username : 'Игрок');
-        if (settingsUserName) settingsUserName.textContent = displayName;
-        if (settingsUserId) settingsUserId.textContent = `Telegram ID: ${u.id}`;
-        if (u.photo_url && settingsUserAvatar) settingsUserAvatar.src = u.photo_url;
+        if (profileUserName) profileUserName.textContent = displayName;
+        if (profileUserId) profileUserId.textContent = `Telegram ID: ${u.id}`;
+        if (u.photo_url && profileUserAvatar) profileUserAvatar.src = u.photo_url;
     } else if (sessionNick) {
-        if (settingsUserName) settingsUserName.textContent = sessionNick;
-        if (settingsUserId) settingsUserId.textContent = 'Синхронизирован с Minecraft';
-        if (settingsUserAvatar) settingsUserAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(sessionNick)}/100`;
+        if (profileUserName) profileUserName.textContent = sessionNick;
+        if (profileUserId) profileUserId.textContent = 'Синхронизирован с Minecraft';
+        if (profileUserAvatar) profileUserAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(sessionNick)}/100`;
     }
 
-    // Toggle 2FA
-    if (setting2FA) {
-        setting2FA.checked = localStorage.getItem('zeph_setting_2fa') !== 'false';
-        setting2FA.addEventListener('change', () => {
-            localStorage.setItem('zeph_setting_2fa', setting2FA.checked);
+    // Theme Switcher (Dark / Light)
+    function applyTheme(theme) {
+        currentTheme = theme;
+        localStorage.setItem('zeph_theme', theme);
+        if (theme === 'light') {
+            document.body.classList.add('theme-light');
+            if (btnThemeLight) btnThemeLight.classList.add('active');
+            if (btnThemeDark) btnThemeDark.classList.remove('active');
+            if (tg?.setHeaderColor) tg.setHeaderColor('#f1f5f9');
+            if (tg?.setBackgroundColor) tg.setBackgroundColor('#f1f5f9');
+        } else {
+            document.body.classList.remove('theme-light');
+            if (btnThemeDark) btnThemeDark.classList.add('active');
+            if (btnThemeLight) btnThemeLight.classList.remove('active');
+            if (tg?.setHeaderColor) tg.setHeaderColor('#0a0d14');
+            if (tg?.setBackgroundColor) tg.setBackgroundColor('#0a0d14');
+        }
+    }
+
+    if (btnThemeDark) {
+        btnThemeDark.addEventListener('click', () => {
             triggerHaptic('selection');
+            applyTheme('dark');
         });
     }
+
+    if (btnThemeLight) {
+        btnThemeLight.addEventListener('click', () => {
+            triggerHaptic('selection');
+            applyTheme('light');
+        });
+    }
+
+    applyTheme(currentTheme);
+
+    // Language Switcher (RU / EN)
+    function applyLanguage(lang) {
+        if (!I18N[lang]) lang = 'ru';
+        currentLang = lang;
+        localStorage.setItem('zeph_lang', lang);
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (I18N[lang][key]) {
+                el.textContent = I18N[lang][key];
+            }
+        });
+
+        langBtns.forEach(b => {
+            b.classList.toggle('active', b.dataset.lang === lang);
+        });
+
+        // Update active view title & subtitle
+        if (currentView === 'menu') {
+            pageTitle.textContent = t('menu_title');
+            pageSubtitle.textContent = t('menu_sub');
+        } else if (currentView === 'auth') {
+            pageTitle.textContent = t('auth_title');
+            pageSubtitle.textContent = t('auth_sub');
+        } else if (currentView === 'map') {
+            pageTitle.textContent = t('map_title');
+            pageSubtitle.textContent = t('map_sub');
+        } else if (currentView === 'settings') {
+            pageTitle.textContent = t('settings_title');
+            pageSubtitle.textContent = t('settings_sub');
+        } else if (currentView === 'profile') {
+            pageTitle.textContent = t('profile_title');
+            pageSubtitle.textContent = t('profile_sub');
+        } else if (currentView === 'placeholder') {
+            pageTitle.textContent = t('shop_title');
+            pageSubtitle.textContent = t('shop_sub');
+            placeholderTitle.textContent = t('shop_placeholder_title');
+            placeholderDesc.textContent = t('shop_placeholder_desc');
+        }
+    }
+
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            triggerHaptic('selection');
+            applyLanguage(btn.dataset.lang);
+        });
+    });
+
+    applyLanguage(currentLang);
 
     // Toggle Login Notifications
     if (settingLoginNotify) {
         settingLoginNotify.checked = localStorage.getItem('zeph_setting_notify') !== 'false';
         settingLoginNotify.addEventListener('change', () => {
             localStorage.setItem('zeph_setting_notify', settingLoginNotify.checked);
-            triggerHaptic('selection');
-        });
-    }
-
-    // Toggle Manual PIN
-    if (settingManualPin) {
-        settingManualPin.checked = localStorage.getItem('zeph_setting_pin') !== 'false';
-        settingManualPin.addEventListener('change', () => {
-            localStorage.setItem('zeph_setting_pin', settingManualPin.checked);
             triggerHaptic('selection');
         });
     }
@@ -380,21 +497,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Copy Server IP
-    if (btnCopyServerIpSetting) {
-        const ipToCopy = CONFIG.serverIp || 'play.zephyrius.ru';
-        if (settingServerIpDisplay) settingServerIpDisplay.textContent = ipToCopy;
-        btnCopyServerIpSetting.addEventListener('click', () => {
-            triggerHaptic('light');
-            navigator.clipboard.writeText(ipToCopy).then(() => {
-                if (settingsCopyToast) {
-                    settingsCopyToast.style.display = 'block';
-                    setTimeout(() => { settingsCopyToast.style.display = 'none'; }, 2000);
-                }
-            }).catch(() => {});
-        });
-    }
-
     // Clear cache & hard reload
     if (btnClearCacheReload) {
         btnClearCacheReload.addEventListener('click', () => {
@@ -403,15 +505,6 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = newUrl;
         });
     }
-
-    // Language buttons
-    langBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            langBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            triggerHaptic('selection');
-        });
-    });
 
     // ----------------------------------------------------
     // 7. Session Detection (QR / Link)
