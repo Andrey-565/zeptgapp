@@ -3,84 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Minecraft Auth - Mini App</title>
+    <title>Zephyrius Network - Mini App</title>
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Background Canvas for Atmospheric Particles -->
+    <canvas id="bgCanvas"></canvas>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
     <div class="app-container">
-        <!-- Header -->
+        <!-- Top Navigation Bar -->
         <header class="header">
+            <button class="nav-back-btn" id="btnBackToMenu" style="display: none;">
+                <span>←</span> Меню
+            </button>
             <div class="server-badge">
-                <span class="pulse-dot"></span> <span id="serverName">MINECRAFT SERVER</span>
+                <span class="pulse-dot"></span>
+                <span id="serverName">ZEPHYRIUS NETWORK</span>
             </div>
-            <h1>Авторизация</h1>
-            <p class="subtitle" id="headerSubtitle">Подтверждение входа в игру</p>
+            <h1 id="pageTitle">Главное меню</h1>
+            <p class="subtitle" id="pageSubtitle">Выберите нужный раздел</p>
         </header>
 
-        <!-- Main Card Container -->
-        <main class="card" id="mainCard">
-            <!-- Loading View -->
-            <div class="view" id="loaderView">
-                <div class="spinner"></div>
-                <p class="hint-text">Подключение к сессии...</p>
-            </div>
+        <!-- Main Views Container -->
+        <main class="content-wrapper">
 
-            <!-- Auto-Detect Verification View (Когда есть код в ссылке) -->
-            <div class="view" id="confirmView" style="display: none;">
-                <div class="avatar-wrapper">
-                    <img id="playerAvatar" src="https://mc-heads.net/avatar/Steve/120" alt="Avatar" class="avatar">
-                    <div class="shield-badge">🛡️</div>
-                </div>
-
-                <h2 id="playerName">Игрок</h2>
-                <div class="status-pill" id="statusPill">Подтверждение сессии</div>
-
-                <div class="info-box">
-                    <div class="info-row">
-                        <span class="info-label">🔑 Код сессии:</span>
-                        <span class="code-badge" id="sessionCodeBadge">------</span>
+            <!-- ================= VIEW 1: ГЛАВНОЕ МЕНЮ ================= -->
+            <section class="view active-view" id="menuView">
+                <!-- Session Alert Banner (показывается, если открыто по QR/коду авторизации) -->
+                <div class="alert-banner" id="activeSessionBanner" style="display: none;">
+                    <div class="alert-icon">⚡</div>
+                    <div class="alert-info">
+                        <strong>Ожидает подтверждения</strong>
+                        <span>Код сессии: <code id="bannerCode">------</code></span>
                     </div>
-                    <div class="info-row" id="ipRow" style="display: none;">
-                        <span class="info-label">🌐 IP-адрес:</span>
-                        <span class="info-val" id="playerIp">0.0.0.0</span>
+                    <button class="btn btn-sm btn-accent" id="btnOpenAuthFromBanner">Войти</button>
+                </div>
+
+                <!-- Меню Кнопки / Карточки -->
+                <div class="menu-grid">
+                    <!-- Кнопка 1: Авторизация -->
+                    <div class="menu-card card-auth" id="menuBtnAuth">
+                        <div class="card-icon-wrap">
+                            <span class="card-icon">🔑</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title-row">
+                                <h3>Авторизация</h3>
+                                <span class="badge badge-accent" id="authBadge" style="display: none;">Запрос</span>
+                            </div>
+                            <p>Подтвердить вход на сервер или ввести 6-значный PIN-код</p>
+                        </div>
+                        <span class="card-arrow">→</span>
+                    </div>
+
+                    <!-- Кнопка 2: Онлайн игроков -->
+                    <div class="menu-card card-online" id="menuBtnOnline">
+                        <div class="card-icon-wrap">
+                            <span class="card-icon">👥</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title-row">
+                                <h3>Онлайн игроков</h3>
+                                <span class="badge badge-online" id="onlineBadge">В сети</span>
+                            </div>
+                            <p>Статистика серверов: <strong id="menuOnlineCount">Загрузка...</strong></p>
+                        </div>
+                        <span class="card-arrow">→</span>
+                    </div>
+
+                    <!-- Кнопка 3: Карта сервера (BlueMap) -->
+                    <div class="menu-card card-map" id="menuBtnMap">
+                        <div class="card-icon-wrap">
+                            <span class="card-icon">🗺️</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title-row">
+                                <h3>Карта сервера</h3>
+                                <span class="badge badge-3d">3D BlueMap</span>
+                            </div>
+                            <p>Интерактивная 3D карта основного мира в реальном времени</p>
+                        </div>
+                        <span class="card-arrow">→</span>
+                    </div>
+
+                    <!-- Кнопка 4: Информация о сервере -->
+                    <div class="menu-card card-info" id="menuBtnInfo">
+                        <div class="card-icon-wrap">
+                            <span class="card-icon">ℹ️</span>
+                        </div>
+                        <div class="card-content">
+                            <h3>Информация</h3>
+                            <p>IP адрес для подключения, версия и помощь</p>
+                        </div>
+                        <span class="card-arrow">→</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= VIEW 2: АВТОРИЗАЦИЯ ================= -->
+            <section class="view" id="authView" style="display: none;">
+                <!-- Автоматическое обнаружение сессии -->
+                <div id="authConfirmBox" style="display: none;">
+                    <div class="avatar-wrapper">
+                        <img id="playerAvatar" src="https://mc-heads.net/avatar/Steve/120" alt="Avatar" class="avatar">
+                        <div class="shield-badge">🛡️</div>
+                    </div>
+
+                    <h2 id="playerName">Игрок</h2>
+                    <div class="status-pill" id="statusPill">Подтверждение сессии</div>
+
+                    <div class="info-box">
+                        <div class="info-row">
+                            <span class="info-label">🔑 Код сессии:</span>
+                            <span class="code-badge" id="sessionCodeBadge">------</span>
+                        </div>
+                        <div class="info-row" id="ipRow" style="display: none;">
+                            <span class="info-label">🌐 IP-адрес:</span>
+                            <span class="info-val" id="playerIp">0.0.0.0</span>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" id="btnConfirm">
+                            <span class="btn-icon">🎮</span> Подтвердить вход
+                        </button>
+                        <button class="btn btn-danger" id="btnReject">
+                            Это не я (Отклонить)
+                        </button>
                     </div>
                 </div>
 
-                <div class="actions">
-                    <button class="btn btn-primary" id="btnConfirm">
-                        <span class="btn-icon">🎮</span> Подтвердить вход
-                    </button>
-                    <button class="btn btn-danger" id="btnReject">
-                        Это не я (Отклонить)
+                <!-- Ручной ввод PIN-кода (если код не в ссылке) -->
+                <div id="authManualBox">
+                    <div class="manual-icon">⌨️</div>
+                    <h2>Ввод кода авторизации</h2>
+                    <p class="hint-text">Введите 6-значный код с экрана Minecraft сервера:</p>
+
+                    <div class="pin-inputs" id="pinInputs">
+                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric" autofocus>
+                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                    </div>
+
+                    <button class="btn btn-primary" id="btnManualSubmit" disabled>
+                        Подтвердить по коду
                     </button>
                 </div>
-            </div>
+            </section>
 
-            <!-- Manual PIN Entry View (Если код не передан в ссылке) -->
-            <div class="view" id="manualView" style="display: none;">
-                <div class="manual-icon">⌨️</div>
-                <h2>Введите код</h2>
-                <p class="hint-text">Введите 6-значный код авторизации с экрана сервера:</p>
+            <!-- ================= VIEW 3: ОНЛАЙН ИГРОКОВ ================= -->
+            <section class="view" id="onlineView" style="display: none;">
+                <div class="online-card">
+                    <div class="online-header">
+                        <div class="online-status-icon">🟢</div>
+                        <div class="online-title-block">
+                            <span class="online-meta-label">ОБЩИЙ ОНЛАЙН СЕТИ</span>
+                            <div class="online-numbers">
+                                <span class="big-online" id="statOnlineCount">1</span>
+                                <span class="max-online" id="statMaxCount">/ 100</span>
+                            </div>
+                        </div>
+                        <button class="btn-refresh" id="btnRefreshOnline" title="Обновить">🔄</button>
+                    </div>
 
-                <div class="pin-inputs" id="pinInputs">
-                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric" autofocus>
-                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
-                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
-                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
-                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
-                    <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="onlineProgressFill" style="width: 5%;"></div>
+                    </div>
+
+                    <div class="servers-list">
+                        <div class="server-item">
+                            <div class="server-item-left">
+                                <span class="server-item-icon">🌲</span>
+                                <div>
+                                    <div class="server-item-name">Основной сервер (Main)</div>
+                                    <div class="server-item-desc">Выживание, Кровавая луна</div>
+                                </div>
+                            </div>
+                            <span class="server-item-badge badge-active">Онлайн</span>
+                        </div>
+
+                        <div class="server-item">
+                            <div class="server-item-left">
+                                <span class="server-item-icon">🏰</span>
+                                <div>
+                                    <div class="server-item-name">Хаб авторизации (Hub)</div>
+                                    <div class="server-item-desc">Вход и привязка Telegram</div>
+                                </div>
+                            </div>
+                            <span class="server-item-badge badge-active">Онлайн</span>
+                        </div>
+
+                        <div class="server-item">
+                            <div class="server-item-left">
+                                <span class="server-item-icon">⚡</span>
+                                <div>
+                                    <div class="server-item-name">Velocity Proxy</div>
+                                    <div class="server-item-desc">Защита и мгновенная маршрутизация</div>
+                                </div>
+                            </div>
+                            <span class="server-item-badge badge-active">Порт 25565</span>
+                        </div>
+                    </div>
                 </div>
+            </section>
 
-                <button class="btn btn-primary" id="btnManualSubmit" disabled>
-                    Войти по коду
-                </button>
-            </div>
+            <!-- ================= VIEW 4: КАРТА СЕРВЕРА (BLUEMAP) ================= -->
+            <section class="view" id="mapView" style="display: none;">
+                <div class="map-card">
+                    <div class="map-toolbar">
+                        <span class="map-indicator">🌐 3D Карта мира</span>
+                        <a href="#" target="_blank" class="btn btn-sm btn-secondary" id="btnOpenMapExternal">
+                            Во весь экран ↗
+                        </a>
+                    </div>
+                    <div class="map-frame-wrapper">
+                        <iframe id="mapFrame" src="about:blank" frameborder="0" allowfullscreen></iframe>
+                        <div class="map-loader" id="mapLoader">
+                            <div class="spinner"></div>
+                            <p>Загрузка 3D карты BlueMap...</p>
+                        </div>
+                    </div>
+                    <p class="map-hint">Используйте касания для вращения и масштабирования карты мира.</p>
+                </div>
+            </section>
 
+            <!-- ================= VIEW 5: О СЕРВЕРЕ ================= -->
+            <section class="view" id="infoView" style="display: none;">
+                <div class="info-card">
+                    <div class="info-header-icon">⚔️</div>
+                    <h2>Подключение к игре</h2>
+                    <p class="hint-text">Скопируйте IP и добавьте сервер в список ваших миров:</p>
+
+                    <div class="ip-copy-box" id="btnCopyIp">
+                        <div class="ip-copy-text">
+                            <span class="ip-label">IP СЕРВЕРА:</span>
+                            <span class="ip-value" id="displayServerIp">localhost</span>
+                        </div>
+                        <button class="btn btn-sm btn-primary" id="btnCopyIpBtn">Копировать</button>
+                    </div>
+                    <div class="copy-toast" id="copyToast" style="display: none;">✔ IP скопирован в буфер!</div>
+
+                    <div class="server-specs">
+                        <div class="spec-row">
+                            <span>🎮 Версия Minecraft:</span>
+                            <strong>1.21.x (Java Edition)</strong>
+                        </div>
+                        <div class="spec-row">
+                            <span>🛡️ Авторизация:</span>
+                            <strong>Беспарольная (Telegram 2FA)</strong>
+                        </div>
+                        <div class="spec-row">
+                            <span>🌕 Особенности:</span>
+                            <strong>Кровавая луна, BlueMap 3D, Корпротект</strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= RESULT VIEWS ================= -->
             <!-- Success View -->
             <div class="view result-view" id="successView" style="display: none;">
                 <div class="icon-circle success-circle">✓</div>
@@ -98,17 +288,13 @@
             <div class="view result-view" id="errorView" style="display: none;">
                 <div class="icon-circle error-circle">✕</div>
                 <h2 id="errorTitle">Вход отклонён</h2>
-                <p id="errorDesc" class="hint-text">Сессия не найдена или время ожидания истекло.</p>
+                <p class="error-desc" id="errorDesc">Сессия аннулирована.</p>
                 <button class="btn btn-secondary" id="btnRetry">
-                    Попробовать снова
+                    В главное меню
                 </button>
             </div>
-        </main>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <span>Защита аккаунта Minecraft через Telegram 2FA</span>
-        </footer>
+        </main>
     </div>
 
     <!-- Scripts -->
