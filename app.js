@@ -10,7 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tg.setBackgroundColor) tg.setBackgroundColor('#0a0d14');
     }
 
+    let isHapticEnabled = localStorage.getItem('zeph_setting_haptic') !== 'false';
+
     function triggerHaptic(type = 'light') {
+        if (!isHapticEnabled) return;
         try {
             if (tg?.HapticFeedback) {
                 if (type === 'success' || type === 'warning' || type === 'error') {
@@ -72,15 +75,24 @@ document.addEventListener('DOMContentLoaded', () => {
         particles.push(p);
     }
 
+    let particlesActive = localStorage.getItem('zeph_setting_particles') !== 'false';
+    let particleAnimFrame = null;
+
     function animateParticles() {
+        if (!particlesActive) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles.forEach(p => {
             p.update();
             p.draw();
         });
-        requestAnimationFrame(animateParticles);
+        particleAnimFrame = requestAnimationFrame(animateParticles);
     }
-    animateParticles();
+
+    if (particlesActive) {
+        animateParticles();
+    } else {
+        canvas.style.display = 'none';
+    }
 
     // ----------------------------------------------------
     // 3. Elements & URL Query Parsing
@@ -99,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         menu: document.getElementById('menuView'),
         auth: document.getElementById('authView'),
         map: document.getElementById('mapView'),
+        settings: document.getElementById('settingsView'),
         placeholder: document.getElementById('placeholderView'),
         success: document.getElementById('successView'),
         error: document.getElementById('errorView')
@@ -181,6 +194,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     pageTitle.textContent = "Карта сервера";
                     pageSubtitle.textContent = "Интерактивная 3D карта";
                     break;
+                case 'settings':
+                    pageTitle.textContent = "Настройки";
+                    pageSubtitle.textContent = "Безопасность и параметры";
+                    setActiveDockTab('settings');
+                    break;
             }
         }
     }
@@ -232,12 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     switchView('placeholder');
                     break;
                 case 'settings':
-                    placeholderIcon.textContent = "⚙️";
-                    placeholderTitle.textContent = "Настройки";
-                    placeholderDesc.textContent = "Управление уведомлениями, темой оформления и безопасностью.";
-                    pageTitle.textContent = "Настройки";
-                    pageSubtitle.textContent = "Параметры приложения";
-                    switchView('placeholder');
+                    switchView('settings');
                     break;
                 case 'profile':
                     placeholderIcon.textContent = "👤";
@@ -282,6 +295,123 @@ document.addEventListener('DOMContentLoaded', () => {
             }).catch(() => {});
         });
     }
+
+    // ----------------------------------------------------
+    // 6b. Settings Tab Handlers
+    // ----------------------------------------------------
+    const settingsUserAvatar = document.getElementById('settingsUserAvatar');
+    const settingsUserName = document.getElementById('settingsUserName');
+    const settingsUserId = document.getElementById('settingsUserId');
+    const setting2FA = document.getElementById('setting2FA');
+    const settingLoginNotify = document.getElementById('settingLoginNotify');
+    const settingManualPin = document.getElementById('settingManualPin');
+    const settingParticles = document.getElementById('settingParticles');
+    const settingHaptic = document.getElementById('settingHaptic');
+    const btnCopyServerIpSetting = document.getElementById('btnCopyServerIpSetting');
+    const settingsCopyToast = document.getElementById('settingsCopyToast');
+    const settingServerIpDisplay = document.getElementById('settingServerIpDisplay');
+    const btnClearCacheReload = document.getElementById('btnClearCacheReload');
+    const langBtns = document.querySelectorAll('.lang-btn');
+
+    // Populate user info from Telegram SDK
+    if (tg?.initDataUnsafe?.user) {
+        const u = tg.initDataUnsafe.user;
+        const displayName = [u.first_name, u.last_name].filter(Boolean).join(' ') || (u.username ? '@' + u.username : 'Игрок');
+        if (settingsUserName) settingsUserName.textContent = displayName;
+        if (settingsUserId) settingsUserId.textContent = `Telegram ID: ${u.id}`;
+        if (u.photo_url && settingsUserAvatar) settingsUserAvatar.src = u.photo_url;
+    } else if (sessionNick) {
+        if (settingsUserName) settingsUserName.textContent = sessionNick;
+        if (settingsUserId) settingsUserId.textContent = 'Синхронизирован с Minecraft';
+        if (settingsUserAvatar) settingsUserAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(sessionNick)}/100`;
+    }
+
+    // Toggle 2FA
+    if (setting2FA) {
+        setting2FA.checked = localStorage.getItem('zeph_setting_2fa') !== 'false';
+        setting2FA.addEventListener('change', () => {
+            localStorage.setItem('zeph_setting_2fa', setting2FA.checked);
+            triggerHaptic('selection');
+        });
+    }
+
+    // Toggle Login Notifications
+    if (settingLoginNotify) {
+        settingLoginNotify.checked = localStorage.getItem('zeph_setting_notify') !== 'false';
+        settingLoginNotify.addEventListener('change', () => {
+            localStorage.setItem('zeph_setting_notify', settingLoginNotify.checked);
+            triggerHaptic('selection');
+        });
+    }
+
+    // Toggle Manual PIN
+    if (settingManualPin) {
+        settingManualPin.checked = localStorage.getItem('zeph_setting_pin') !== 'false';
+        settingManualPin.addEventListener('change', () => {
+            localStorage.setItem('zeph_setting_pin', settingManualPin.checked);
+            triggerHaptic('selection');
+        });
+    }
+
+    // Toggle Animated Background Particles
+    if (settingParticles) {
+        settingParticles.checked = particlesActive;
+        settingParticles.addEventListener('change', () => {
+            particlesActive = settingParticles.checked;
+            localStorage.setItem('zeph_setting_particles', particlesActive);
+            triggerHaptic('selection');
+            if (particlesActive) {
+                canvas.style.display = 'block';
+                animateParticles();
+            } else {
+                canvas.style.display = 'none';
+                if (particleAnimFrame) cancelAnimationFrame(particleAnimFrame);
+            }
+        });
+    }
+
+    // Toggle Haptic
+    if (settingHaptic) {
+        settingHaptic.checked = isHapticEnabled;
+        settingHaptic.addEventListener('change', () => {
+            isHapticEnabled = settingHaptic.checked;
+            localStorage.setItem('zeph_setting_haptic', isHapticEnabled);
+            if (isHapticEnabled) triggerHaptic('selection');
+        });
+    }
+
+    // Copy Server IP
+    if (btnCopyServerIpSetting) {
+        const ipToCopy = CONFIG.serverIp || 'play.zephyrius.ru';
+        if (settingServerIpDisplay) settingServerIpDisplay.textContent = ipToCopy;
+        btnCopyServerIpSetting.addEventListener('click', () => {
+            triggerHaptic('light');
+            navigator.clipboard.writeText(ipToCopy).then(() => {
+                if (settingsCopyToast) {
+                    settingsCopyToast.style.display = 'block';
+                    setTimeout(() => { settingsCopyToast.style.display = 'none'; }, 2000);
+                }
+            }).catch(() => {});
+        });
+    }
+
+    // Clear cache & hard reload
+    if (btnClearCacheReload) {
+        btnClearCacheReload.addEventListener('click', () => {
+            triggerHaptic('success');
+            const newUrl = window.location.origin + window.location.pathname + '?v=' + Date.now();
+            window.location.href = newUrl;
+        });
+    }
+
+    // Language buttons
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            langBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            triggerHaptic('selection');
+        });
+    });
 
     // ----------------------------------------------------
     // 7. Session Detection (QR / Link)

@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="style.css?v=2.2">
+    <link rel="stylesheet" href="style.css?v=2.3">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
@@ -176,7 +176,153 @@
                 </div>
             </section>
 
-            <!-- ================= VIEW 4: ПЛЕЙСХОЛДЕРЫ ДЛЯ ТАБОВ ================= -->
+            <!-- ================= VIEW 4: НАСТРОЙКИ (SETTINGS) ================= -->
+            <section class="view" id="settingsView" style="display: none;">
+                <!-- Профиль / Telegram аккаунт карточка -->
+                <div class="settings-user-card">
+                    <div class="settings-avatar-wrap">
+                        <img id="settingsUserAvatar" src="https://mc-heads.net/avatar/Steve/100" alt="Avatar" class="settings-avatar">
+                        <div class="user-status-dot"></div>
+                    </div>
+                    <div class="settings-user-info">
+                        <h3 id="settingsUserName">Игрок Zephyrius</h3>
+                        <span class="user-id-badge" id="settingsUserId">Telegram ID: —</span>
+                    </div>
+                    <div class="user-role-badge">Игрок</div>
+                </div>
+
+                <!-- Группа 1: Безопасность и вход -->
+                <div class="settings-group">
+                    <div class="settings-group-header">
+                        <span class="settings-group-icon">🛡️</span>
+                        <span>Безопасность и Вход</span>
+                    </div>
+
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title">Двухфакторная защита (2FA)</div>
+                            <div class="settings-item-desc">Подтверждение через бота при входе на сервер</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="setting2FA" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title">Уведомления о входе</div>
+                            <div class="settings-item-desc">Сообщение в боте при успешной авторизации</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="settingLoginNotify" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title">Ручной ввод PIN-кода</div>
+                            <div class="settings-item-desc">Ввод 6 цифр с экрана игры при авторизации</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="settingManualPin" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Группа 2: Графика и эффекты -->
+                <div class="settings-group">
+                    <div class="settings-group-header">
+                        <span class="settings-group-icon">✨</span>
+                        <span>Интерфейс и Эффекты</span>
+                    </div>
+
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title">Анимированный фон</div>
+                            <div class="settings-item-desc">Плавающие частицы и свечение</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="settingParticles" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title">Тактильный отклик (Haptic)</div>
+                            <div class="settings-item-desc">Вибрация при кликах и переключении меню</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="settingHaptic" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title">Язык приложения</div>
+                            <div class="settings-item-desc">Язык интерфейса Mini App</div>
+                        </div>
+                        <div class="lang-selector">
+                            <button class="lang-btn active" data-lang="ru">RU</button>
+                            <button class="lang-btn" data-lang="en">EN</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Группа 3: Сервер Zephyrius -->
+                <div class="settings-group">
+                    <div class="settings-group-header">
+                        <span class="settings-group-icon">🎮</span>
+                        <span>Сервер Zephyrius</span>
+                    </div>
+
+                    <div class="settings-item settings-item-clickable" id="btnCopyServerIpSetting">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title">IP-адрес сервера</div>
+                            <div class="settings-item-desc">Нажмите для копирования IP</div>
+                        </div>
+                        <span class="ip-capsule" id="settingServerIpDisplay">play.zephyrius.ru</span>
+                    </div>
+
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title">Версия Minecraft</div>
+                            <div class="settings-item-desc">Leaf 1.21.4 (Paper) + Velocity</div>
+                        </div>
+                        <span class="badge-tech">1.21.x</span>
+                    </div>
+                </div>
+
+                <!-- Группа 4: Очистка кэша и перезапуск -->
+                <div class="settings-group">
+                    <div class="settings-group-header">
+                        <span class="settings-group-icon">⚙️</span>
+                        <span>Система</span>
+                    </div>
+
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title">Версия приложения</div>
+                            <div class="settings-item-desc">Zephyrius Mini App</div>
+                        </div>
+                        <span class="version-tag">v2.3</span>
+                    </div>
+
+                    <div class="settings-actions">
+                        <button class="btn btn-secondary btn-clear-cache" id="btnClearCacheReload">
+                            🔄 Сбросить кэш и перезагрузить
+                        </button>
+                    </div>
+                </div>
+
+                <div class="copy-toast" id="settingsCopyToast" style="display: none;">✔ IP скопирован в буфер обмена!</div>
+            </section>
+
+            <!-- ================= VIEW 5: ПЛЕЙСХОЛДЕРЫ ДЛЯ ТАБОВ ================= -->
             <section class="view" id="placeholderView" style="display: none;">
                 <div class="placeholder-card">
                     <div class="placeholder-icon" id="placeholderIcon">✨</div>
@@ -260,7 +406,7 @@
     </nav>
 
     <!-- Scripts -->
-    <script src="config.js?v=2.2"></script>
-    <script src="app.js?v=2.2"></script>
+    <script src="config.js?v=2.3"></script>
+    <script src="app.js?v=2.3"></script>
 </body>
 </html>
