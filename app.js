@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Parse session code from URL query or Telegram start param
     const urlParams = new URLSearchParams(window.location.search);
     let code = urlParams.get('code') || urlParams.get('tgWebAppStartParam');
+    let nick = urlParams.get('nick');
+    let ip = urlParams.get('ip');
 
     const loaderView = document.getElementById('loaderView');
     const confirmView = document.getElementById('confirmView');
@@ -59,6 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadSessionData(sessionCode) {
         sessionCodeBadge.textContent = sessionCode;
+
+        if (nick) {
+            playerName.textContent = nick;
+            playerAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(nick)}/120`;
+        }
+        if (ip) {
+            playerIp.textContent = ip;
+            ipRow.style.display = 'flex';
+        }
 
         // If backend API URL is configured, fetch details
         if (CONFIG.apiUrl && CONFIG.apiUrl.startsWith("http")) {
@@ -126,8 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ code: currentCode })
             }).catch(() => {});
         } else if (CONFIG.botUsername) {
+            const rejectLink = `https://t.me/${CONFIG.botUsername}?start=reject_${currentCode}`;
             if (tg?.openTelegramLink) {
-                tg.openTelegramLink(`https://t.me/${CONFIG.botUsername}?start=reject_${currentCode}`);
+                tg.openTelegramLink(rejectLink);
+            } else {
+                window.location.href = rejectLink;
             }
         }
 
@@ -190,10 +204,13 @@ document.addEventListener('DOMContentLoaded', () => {
             sent = false;
         }
 
-        // If sendData was not supported (e.g. inline webapp), open bot direct callback
+        // If sendData was not supported (e.g. inline webapp or browser), open bot direct callback
         if (!sent && CONFIG.botUsername) {
+            const botLink = `https://t.me/${CONFIG.botUsername}?start=auth_${targetCode}`;
             if (tg?.openTelegramLink) {
-                tg.openTelegramLink(`https://t.me/${CONFIG.botUsername}?start=auth_${targetCode}`);
+                tg.openTelegramLink(botLink);
+            } else {
+                window.location.href = botLink;
             }
         }
 
