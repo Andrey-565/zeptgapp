@@ -144,6 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnManualSubmit = document.getElementById('btnManualSubmit');
     const btnPastePin = document.getElementById('btnPastePin');
     const btnClearPin = document.getElementById('btnClearPin');
+    const pinErrorMsg = document.getElementById('pinErrorMsg');
+    const pinErrorText = document.getElementById('pinErrorText');
 
     // Profile elements
     const profileIpAlertCard = document.getElementById('profileIpAlertCard');
@@ -739,6 +741,8 @@ document.addEventListener('DOMContentLoaded', () => {
         boxes.forEach((box, index) => {
             box.value = '';
             box.addEventListener('input', (e) => {
+                if (pinErrorMsg) pinErrorMsg.style.display = 'none';
+                boxes.forEach(b => b.classList.remove('error'));
                 const val = e.target.value.replace(/[^0-9]/g, '');
                 if (val.length > 1) {
                     fillCode(val);
@@ -878,18 +882,132 @@ document.addEventListener('DOMContentLoaded', () => {
         rejectSession(currentCode);
     });
 
-    function submitVerification(targetCode) {
+    function showPinError(message) {
+        triggerHaptic('error');
+        if (pinErrorMsg && pinErrorText) {
+            pinErrorText.textContent = message || "Неверный код авторизации! Код не найден на сервере.";
+            pinErrorMsg.style.display = 'flex';
+        }
+        const boxes = document.querySelectorAll('.pin-box');
+        boxes.forEach(b => {
+            b.classList.add('error');
+        });
+        if (btnManualSubmit) {
+            btnManualSubmit.disabled = false;
+            btnManualSubmit.innerHTML = '<span class="btn-icon">🔗</span> Подтвердить по коду';
+        }
+        if (btnConfirm) {
+            btnConfirm.disabled = false;
+            btnConfirm.innerHTML = '<span class="btn-icon">🎮</span> Подтвердить вход';
+        }
+    }
+
+    async function submitVerification(targetCode) {
+        if (!targetCode || targetCode.length !== 6) {
+            showPinError("Код должен состоять из 6 цифр!");
+            return;
+        }
+
         if (btnConfirm) {
             btnConfirm.disabled = true;
-            btnConfirm.textContent = "Подтверждение...";
+            btnConfirm.textContent = "Проверка...";
+        }
+        if (btnManualSubmit) {
+            btnManualSubmit.disabled = true;
+            btnManualSubmit.textContent = "Проверка...";
         }
         triggerHaptic('medium');
+
+        // Check if sessionCode was in URL
+        const hasSessionUrl = sessionCode && sessionCode.trim().length === 6;
+        if (hasSessionUrl && targetCode !== sessionCode.trim()) {
+            showPinError("Неверный код! Код не совпадает с активной сессией на сервере.");
+            return;
+        }
 
         const tgUser = tg?.initDataUnsafe?.user;
         const tgId = tgUser?.id || 0;
         const tgUsername = tgUser?.username || '';
 
-        let sent = false;
+        // Check API URL if available
+        const apiUrl = CONFIG.apiUrl || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? `${window.location.protocol}//${window.location.hostname}:8088` : '');
+
+        if (apiUrl) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3500);
+
+                const response = await fetch(`${apiUrl}/api/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    signal: controller.signal,
+                    body: JSON.stringify({
+                        code: targetCode,
+                        telegram_id: tgId,
+                        username: tgUsername
+                    })
+                });
+                clearTimeout(timeoutId);
+
+                const data = await response.json();
+                if (data.success) {
+                    const linkedNick = data.player || sessionNick;
+                    const trustedIp = data.trustedIp || sessionIp;
+                    if (linkedNick) {
+                        localStorage.setItem('zeph_linked_nick', linkedNick);
+                        updateProfileUI(linkedNick, trustedIp);
+                    }
+                    triggerHaptic('success');
+                    switchView('success');
+                    return;
+                } else {
+                    // API explicitly returned error / code not found!
+                    showPinError(data.error || "Неверный код авторизации! Код не найден на сервере.");
+                    return;
+                }
+            } catch (err) {
+                console.warn('API verify failed or unreachable:', err);
+            }
+        }
+
+        // If not verified via API:
+        // Scenario A: Opened via verified session link (code was in URL and matches)
+        if (hasSessionUrl && targetCode === sessionCode.trim()) {
+            let sent = false;
+            try {
+                if (tg?.sendData) {
+                    tg.sendData(JSON.stringify({
+                        action: "auth",
+                        code: targetCode,
+                        telegram_id: tgId,
+                        username: tgUsername
+                    }));
+                    sent = true;
+                }
+            } catch (_) {}
+
+            const botLink = `https://t.me/${CONFIG.botUsername}?start=auth_${targetCode}`;
+            if (!sent && CONFIG.botUsername) {
+                if (tg?.openTelegramLink) {
+                    tg.openTelegramLink(botLink);
+                } else {
+                    window.location.href = botLink;
+                }
+            }
+
+            if (sessionNick) {
+                localStorage.setItem('zeph_linked_nick', sessionNick);
+                updateProfileUI(sessionNick, sessionIp);
+            }
+
+            triggerHaptic('success');
+            switchView('success');
+            return;
+        }
+
+        // Scenario B: Code entered manually and API is not reachable
+        // Forward code to Bot for authoritative validation - DO NOT blindly show success!
+        let sentData = false;
         try {
             if (tg?.sendData) {
                 tg.sendData(JSON.stringify({
@@ -898,28 +1016,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     telegram_id: tgId,
                     username: tgUsername
                 }));
-                sent = true;
+                sentData = true;
             }
-        } catch (_) {
-            sent = false;
-        }
-
-        // Also call backend API if configured
-        const apiUrl = CONFIG.apiUrl || (window.location.hostname === 'localhost' ? 'http://localhost:8088' : '');
-        if (apiUrl) {
-            fetch(`${apiUrl}/api/verify`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    code: targetCode,
-                    telegram_id: tgId,
-                    username: tgUsername
-                })
-            }).catch(() => {});
-        }
+        } catch (_) {}
 
         const botLink = `https://t.me/${CONFIG.botUsername}?start=auth_${targetCode}`;
-        if (!sent && CONFIG.botUsername) {
+        if (!sentData && CONFIG.botUsername) {
             if (tg?.openTelegramLink) {
                 tg.openTelegramLink(botLink);
             } else {
@@ -927,13 +1029,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        if (sessionNick) {
-            localStorage.setItem('zeph_linked_nick', sessionNick);
-            updateProfileUI(sessionNick, sessionIp);
+        // Show pending notice card directing user to Telegram bot chat
+        if (authManualBox) {
+            authManualBox.innerHTML = `
+                <div class="pending-notice-card">
+                    <div class="pending-notice-icon">⏳</div>
+                    <h3>Код отправлен боту</h3>
+                    <p>Код <code>${targetCode}</code> отправлен боту <strong>@${CONFIG.botUsername}</strong> для проверки.</p>
+                    <p style="color: #94a3b8; font-size: 13px; margin: 12px 0;">Если код верный, бот подтвердит авторизацию на сервере. Проверьте результат в диалоге с ботом!</p>
+                    <button class="btn btn-primary btn-block" onclick="window.location.reload()">
+                        Ввести другой код
+                    </button>
+                </div>
+            `;
         }
-
-        triggerHaptic('success');
-        switchView('success');
     }
 
     function rejectSession(targetCode) {
