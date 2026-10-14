@@ -438,12 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------
-    // 6b. Settings & Theme & Profile Handlers
+    // 6b. Settings & Theme Handlers
     // ----------------------------------------------------
-    const profileUserAvatar = document.getElementById('profileUserAvatar');
-    const profileUserName = document.getElementById('profileUserName');
-    const profileUserId = document.getElementById('profileUserId');
-
     const settingLoginNotify = document.getElementById('settingLoginNotify');
     const settingParticles = document.getElementById('settingParticles');
     const settingHaptic = document.getElementById('settingHaptic');
@@ -451,19 +447,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const langBtns = document.querySelectorAll('.lang-btn');
     const btnThemeDark = document.getElementById('btnThemeDark');
     const btnThemeLight = document.getElementById('btnThemeLight');
-
-    // Populate user info into Profile view
-    if (tg?.initDataUnsafe?.user) {
-        const u = tg.initDataUnsafe.user;
-        const displayName = [u.first_name, u.last_name].filter(Boolean).join(' ') || (u.username ? '@' + u.username : 'Игрок');
-        if (profileUserName) profileUserName.textContent = displayName;
-        if (profileUserId) profileUserId.textContent = `Telegram ID: ${u.id}`;
-        if (u.photo_url && profileUserAvatar) profileUserAvatar.src = u.photo_url;
-    } else if (sessionNick) {
-        if (profileUserName) profileUserName.textContent = sessionNick;
-        if (profileUserId) profileUserId.textContent = 'Синхронизирован с Minecraft';
-        if (profileUserAvatar) profileUserAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(sessionNick)}/100`;
-    }
 
     // Theme Switcher (Dark / Light)
     function applyTheme(theme) {
