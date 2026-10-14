@@ -118,21 +118,36 @@
 
                 <!-- Ручной ввод PIN-кода (если код не в ссылке) -->
                 <div id="authManualBox">
-                    <div class="manual-icon">⌨️</div>
+                    <div class="manual-icon-wrap">
+                        <div class="manual-icon-glow"></div>
+                        <span class="manual-icon">⌨️</span>
+                    </div>
                     <h2>Ввод кода авторизации</h2>
                     <p class="hint-text">Введите 6-значный код с экрана Minecraft сервера:</p>
 
-                    <div class="pin-inputs" id="pinInputs">
-                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric" autofocus>
-                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
-                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
-                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
-                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
-                        <input type="text" maxlength="1" class="pin-box" inputmode="numeric">
+                    <div class="pin-container">
+                        <div class="pin-inputs" id="pinInputs">
+                            <input type="text" maxlength="1" class="pin-box" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autofocus>
+                            <input type="text" maxlength="1" class="pin-box" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+                            <input type="text" maxlength="1" class="pin-box" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+                            <span class="pin-separator"></span>
+                            <input type="text" maxlength="1" class="pin-box" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+                            <input type="text" maxlength="1" class="pin-box" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+                            <input type="text" maxlength="1" class="pin-box" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+                        </div>
+
+                        <div class="pin-tools">
+                            <button type="button" class="btn-pin-tool" id="btnPastePin">
+                                <span>📋</span> Вставить из буфера
+                            </button>
+                            <button type="button" class="btn-pin-tool" id="btnClearPin">
+                                <span>✕</span> Очистить
+                            </button>
+                        </div>
                     </div>
 
-                    <button class="btn btn-primary" id="btnManualSubmit" disabled>
-                        Подтвердить по коду
+                    <button class="btn btn-primary btn-glow" id="btnManualSubmit" disabled>
+                        <span class="btn-icon">🔗</span> Подтвердить по коду
                     </button>
                 </div>
             </section>
@@ -306,23 +321,92 @@
 
             <!-- ================= VIEW 5: ПРОФИЛЬ (PROFILE) ================= -->
             <section class="view" id="profileView" style="display: none;">
-                <div class="settings-user-card">
-                    <div class="settings-avatar-wrap">
-                        <img id="profileUserAvatar" src="https://mc-heads.net/avatar/Steve/100" alt="Avatar" class="settings-avatar">
-                        <div class="user-status-dot"></div>
+                <!-- Карточка подтверждения: Вход с нового IP -->
+                <div class="ip-approval-card" id="profileIpAlertCard" style="display: none;">
+                    <div class="ip-card-header">
+                        <div class="ip-card-icon-wrap">
+                            <span class="ip-card-icon">⚠️</span>
+                        </div>
+                        <div class="ip-card-title-wrap">
+                            <h3>Вход с нового IP-адреса</h3>
+                            <span class="ip-card-subtitle">Обнаружена новая попытка входа</span>
+                        </div>
                     </div>
-                    <div class="settings-user-info">
-                        <h3 id="profileUserName">Игрок Zephyrius</h3>
-                        <span class="user-id-badge" id="profileUserId">Telegram ID: —</span>
+
+                    <div class="ip-card-details">
+                        <div class="ip-detail-row">
+                            <span class="ip-detail-label">👤 Никнейм:</span>
+                            <span class="ip-detail-val font-mono" id="profileAlertNick">Player</span>
+                        </div>
+                        <div class="ip-detail-row">
+                            <span class="ip-detail-label">🌐 Новый IP:</span>
+                            <span class="ip-detail-val ip-highlight font-mono" id="profileAlertIp">0.0.0.0</span>
+                        </div>
+                        <div class="ip-detail-row" id="profileAlertCodeRow">
+                            <span class="ip-detail-label">🔑 Код сессии:</span>
+                            <span class="code-badge font-mono" id="profileAlertCode">------</span>
+                        </div>
                     </div>
-                    <div class="user-role-badge">Игрок</div>
+
+                    <div class="ip-card-actions">
+                        <button class="btn btn-primary btn-glow" id="btnProfileApproveIp">
+                            <span class="btn-icon">✔</span> Подтвердить вход
+                        </button>
+                        <button class="btn btn-danger" id="btnProfileRejectIp">
+                            ✖ Отклонить (Не я)
+                        </button>
+                    </div>
                 </div>
 
-                <div class="placeholder-card" style="padding-top: 10px;">
-                    <div class="placeholder-box">
-                        <div class="pulse-dot"></div>
-                        <span data-i18n="profile_sync_desc">Синхронизация профиля и статистика скоро</span>
+                <!-- Основная карточка профиля -->
+                <div class="profile-hero-card">
+                    <div class="profile-avatar-wrap">
+                        <img id="profileUserAvatar" src="https://mc-heads.net/avatar/Steve/120" alt="Avatar" class="profile-avatar">
+                        <div class="profile-status-badge">
+                            <span class="pulse-dot"></span>
+                        </div>
                     </div>
+                    <div class="profile-details">
+                        <div class="profile-nick-row">
+                            <h2 id="profileMcNick">Steve</h2>
+                            <span class="badge badge-verified" id="badgeNickLinked">✔ Привязан</span>
+                        </div>
+                        <div class="profile-meta-row">
+                            <span class="profile-tg-user" id="profileTgUser">@username</span>
+                            <span class="profile-tg-id" id="profileUserId">Telegram ID: —</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Блок деталей аккаунта -->
+                <div class="profile-info-grid">
+                    <div class="profile-info-item">
+                        <span class="info-item-icon">🛡️</span>
+                        <div class="info-item-content">
+                            <span class="info-item-title">Доверенный IP</span>
+                            <span class="info-item-val font-mono" id="profileTrustedIp">Не установлен</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-item">
+                        <span class="info-item-icon">⚡</span>
+                        <div class="info-item-content">
+                            <span class="info-item-title">Статус входа</span>
+                            <span class="info-item-val text-emerald" id="profileAuthStatus">Вход без пароля</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Если аккаунт еще не привязан: плашка для привязки -->
+                <div class="unlinked-card" id="profileUnlinkedCard" style="display: none;">
+                    <div class="unlinked-icon">🔗</div>
+                    <h3>Minecraft аккаунт не привязан</h3>
+                    <p>Зайдите на сервер Minecraft, скопируйте 6-значный код и подтвердите привязку.</p>
+                    <button class="btn btn-primary btn-sm" id="btnProfileGoLink">
+                        Ввести код привязки
+                    </button>
+                </div>
+
+                <div class="actions" style="margin-top: 15px;">
                     <button class="btn btn-secondary" id="btnProfileBack" data-i18n="btn_back">
                         ← В главное меню
                     </button>

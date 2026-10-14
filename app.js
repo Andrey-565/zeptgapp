@@ -142,6 +142,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnReject = document.getElementById('btnReject');
     const pinBoxes = document.querySelectorAll('.pin-box');
     const btnManualSubmit = document.getElementById('btnManualSubmit');
+    const btnPastePin = document.getElementById('btnPastePin');
+    const btnClearPin = document.getElementById('btnClearPin');
+
+    // Profile elements
+    const profileIpAlertCard = document.getElementById('profileIpAlertCard');
+    const profileAlertNick = document.getElementById('profileAlertNick');
+    const profileAlertIp = document.getElementById('profileAlertIp');
+    const profileAlertCode = document.getElementById('profileAlertCode');
+    const btnProfileApproveIp = document.getElementById('btnProfileApproveIp');
+    const btnProfileRejectIp = document.getElementById('btnProfileRejectIp');
+
+    const profileUserAvatar = document.getElementById('profileUserAvatar');
+    const profileMcNick = document.getElementById('profileMcNick');
+    const badgeNickLinked = document.getElementById('badgeNickLinked');
+    const profileTgUser = document.getElementById('profileTgUser');
+    const profileUserId = document.getElementById('profileUserId');
+    const profileTrustedIp = document.getElementById('profileTrustedIp');
+    const profileAuthStatus = document.getElementById('profileAuthStatus');
+    const profileUnlinkedCard = document.getElementById('profileUnlinkedCard');
+    const btnProfileGoLink = document.getElementById('btnProfileGoLink');
 
     // BlueMap Elements
     const btnLaunchMapDirect = document.getElementById('btnLaunchMapDirect');
@@ -576,29 +596,287 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------
-    // 7. Session Detection (QR / Link)
+    // 7. Profile Initialization & IP Approval Logic
     // ----------------------------------------------------
-    if (sessionCode && sessionCode.trim().length > 0) {
+    function initProfileData() {
+        const tgUser = tg?.initDataUnsafe?.user;
+        const tgId = tgUser?.id || 0;
+        const tgUsername = tgUser?.username || '';
+        const tgDisplayName = tgUser ? [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ') : 'Игрок';
+
+        if (profileTgUser) {
+            profileTgUser.textContent = tgUsername ? '@' + tgUsername : tgDisplayName;
+        }
+        if (profileUserId) {
+            profileUserId.textContent = tgId ? `ID: ${tgId}` : 'ID: —';
+        }
+
+        let savedNick = localStorage.getItem('zeph_linked_nick') || sessionNick || '';
+        let savedIp = localStorage.getItem('zeph_trusted_ip') || '';
+
+        // If opened with IP change session
+        const isIpChangeParam = urlParams.get('isIpChange') === 'true' || urlParams.get('tab') === 'profile';
+        if (sessionIp && (isIpChangeParam || sessionCode)) {
+            showProfileIpAlert(sessionNick || savedNick, sessionIp, sessionCode);
+        }
+
+        updateProfileUI(savedNick, savedIp);
+
+        // Fetch profile from backend API if available
+        const apiUrl = CONFIG.apiUrl || (window.location.hostname === 'localhost' ? 'http://localhost:8088' : '');
+        if (apiUrl && (tgId || savedNick)) {
+            fetch(`${apiUrl}/api/profile?tg_id=${tgId}&nick=${encodeURIComponent(savedNick)}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.linked) {
+                        localStorage.setItem('zeph_linked_nick', data.nick);
+                        if (data.trustedIp) localStorage.setItem('zeph_trusted_ip', data.trustedIp);
+                        updateProfileUI(data.nick, data.trustedIp);
+                    }
+                    if (data.pendingSession && data.pendingSession.isIpChange) {
+                        showProfileIpAlert(data.pendingSession.player, data.pendingSession.ip, data.pendingSession.code);
+                    }
+                })
+                .catch(() => {});
+        }
+    }
+
+    function updateProfileUI(nick, trustedIp) {
+        if (nick) {
+            if (profileMcNick) profileMcNick.textContent = nick;
+            if (profileUserAvatar) profileUserAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(nick)}/120`;
+            if (badgeNickLinked) {
+                badgeNickLinked.style.display = 'inline-block';
+                badgeNickLinked.textContent = '✔ Привязан';
+            }
+            if (profileTrustedIp) profileTrustedIp.textContent = trustedIp || 'Защищён (текущий IP)';
+            if (profileAuthStatus) profileAuthStatus.textContent = 'Вход без пароля';
+            if (profileUnlinkedCard) profileUnlinkedCard.style.display = 'none';
+        } else {
+            if (profileMcNick) profileMcNick.textContent = 'Не привязан';
+            if (profileUserAvatar) profileUserAvatar.src = 'https://mc-heads.net/avatar/Steve/120';
+            if (badgeNickLinked) badgeNickLinked.style.display = 'none';
+            if (profileTrustedIp) profileTrustedIp.textContent = 'Не установлен';
+            if (profileAuthStatus) profileAuthStatus.textContent = 'Требуется привязка';
+            if (profileUnlinkedCard) profileUnlinkedCard.style.display = 'block';
+        }
+    }
+
+    function showProfileIpAlert(nick, ip, code) {
+        if (!profileIpAlertCard) return;
+        profileIpAlertCard.style.display = 'block';
+        if (profileAlertNick) profileAlertNick.textContent = nick || 'Игрок';
+        if (profileAlertIp) profileAlertIp.textContent = ip || '0.0.0.0';
+        if (profileAlertCode) profileAlertCode.textContent = code || '------';
+
+        // Also display alert banner on Menu
+        if (activeSessionBanner) {
+            activeSessionBanner.style.display = 'flex';
+            bannerCode.textContent = code || 'IP ALERT';
+        }
+    }
+
+    if (btnProfileApproveIp) {
+        btnProfileApproveIp.addEventListener('click', () => {
+            triggerHaptic('medium');
+            const code = profileAlertCode ? profileAlertCode.textContent.trim() : sessionCode;
+            const newIp = profileAlertIp ? profileAlertIp.textContent.trim() : '';
+            const nick = profileAlertNick ? profileAlertNick.textContent.trim() : '';
+
+            btnProfileApproveIp.disabled = true;
+            btnProfileApproveIp.textContent = 'Подтверждение...';
+
+            submitVerification(code);
+
+            if (newIp) {
+                localStorage.setItem('zeph_trusted_ip', newIp);
+                if (profileTrustedIp) profileTrustedIp.textContent = newIp;
+            }
+            if (nick) {
+                localStorage.setItem('zeph_linked_nick', nick);
+                updateProfileUI(nick, newIp);
+            }
+
+            profileIpAlertCard.innerHTML = `
+                <div style="text-align: center; padding: 12px 6px;">
+                    <div style="font-size: 28px; margin-bottom: 6px;">✔</div>
+                    <h3 style="color: #34d399; margin-bottom: 4px;">Вход успешно подтверждён!</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin: 0;">Доступ к серверу разблокирован. Приятной игры!</p>
+                </div>
+            `;
+            profileIpAlertCard.style.borderColor = 'rgba(16, 185, 129, 0.6)';
+            profileIpAlertCard.style.animation = 'none';
+        });
+    }
+
+    if (btnProfileRejectIp) {
+        btnProfileRejectIp.addEventListener('click', () => {
+            if (!confirm("Вы уверены, что хотите отклонить вход? Игрок будет отключён от сервера.")) return;
+            triggerHaptic('warning');
+            const code = profileAlertCode ? profileAlertCode.textContent.trim() : sessionCode;
+            rejectSession(code);
+            if (profileIpAlertCard) profileIpAlertCard.style.display = 'none';
+        });
+    }
+
+    if (btnProfileGoLink) {
+        btnProfileGoLink.addEventListener('click', () => {
+            switchView('auth');
+        });
+    }
+
+    initProfileData();
+
+    // ----------------------------------------------------
+    // 8. Redesigned PIN Code Inputs
+    // ----------------------------------------------------
+    function setupPinInputs() {
+        const boxes = Array.from(document.querySelectorAll('.pin-box'));
+        if (boxes.length === 0) return;
+
+        function fillCode(digits) {
+            digits = String(digits).replace(/\D/g, '').slice(0, 6);
+            boxes.forEach((box, i) => {
+                box.value = digits[i] || '';
+                if (box.value) {
+                    box.classList.add('filled');
+                } else {
+                    box.classList.remove('filled');
+                }
+            });
+            const firstEmpty = boxes.find(b => !b.value);
+            if (firstEmpty) {
+                firstEmpty.focus();
+            } else if (boxes[5]) {
+                boxes[5].focus();
+            }
+            checkPin();
+        }
+
+        boxes.forEach((box, index) => {
+            box.value = '';
+            box.addEventListener('input', (e) => {
+                const val = e.target.value.replace(/[^0-9]/g, '');
+                if (val.length > 1) {
+                    fillCode(val);
+                    return;
+                }
+                box.value = val;
+                if (val) {
+                    box.classList.add('filled');
+                    triggerHaptic('light');
+                    if (index < boxes.length - 1) {
+                        boxes[index + 1].focus();
+                    }
+                } else {
+                    box.classList.remove('filled');
+                }
+                checkPin();
+            });
+
+            box.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace') {
+                    if (!box.value && index > 0) {
+                        boxes[index - 1].focus();
+                        boxes[index - 1].value = '';
+                        boxes[index - 1].classList.remove('filled');
+                        checkPin();
+                    } else {
+                        box.classList.remove('filled');
+                    }
+                } else if (e.key === 'ArrowLeft' && index > 0) {
+                    boxes[index - 1].focus();
+                } else if (e.key === 'ArrowRight' && index < boxes.length - 1) {
+                    boxes[index + 1].focus();
+                }
+            });
+
+            box.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData('text');
+                fillCode(text);
+                triggerHaptic('selection');
+            });
+        });
+
+        if (btnPastePin) {
+            btnPastePin.addEventListener('click', async () => {
+                triggerHaptic('light');
+                try {
+                    const text = await navigator.clipboard.readText();
+                    if (text) {
+                        fillCode(text);
+                    }
+                } catch (err) {
+                    const manualPaste = prompt('Вставьте 6-значный код:');
+                    if (manualPaste) fillCode(manualPaste);
+                }
+            });
+        }
+
+        if (btnClearPin) {
+            btnClearPin.addEventListener('click', () => {
+                triggerHaptic('light');
+                fillCode('');
+                if (boxes[0]) boxes[0].focus();
+            });
+        }
+    }
+
+    function checkPin() {
+        const boxes = Array.from(document.querySelectorAll('.pin-box'));
+        let pin = '';
+        boxes.forEach(b => pin += b.value);
+        if (btnManualSubmit) {
+            btnManualSubmit.disabled = (pin.length !== 6);
+        }
+    }
+
+    if (btnManualSubmit) {
+        btnManualSubmit.addEventListener('click', () => {
+            const boxes = Array.from(document.querySelectorAll('.pin-box'));
+            let pin = '';
+            boxes.forEach(b => pin += b.value);
+            if (pin.length === 6) {
+                if (sessionCodeBadge) sessionCodeBadge.textContent = pin;
+                submitVerification(pin);
+            }
+        });
+    }
+
+    // ----------------------------------------------------
+    // 9. Session Routing & Submission Logic
+    // ----------------------------------------------------
+    const targetTab = urlParams.get('tab');
+    if (targetTab === 'profile') {
+        switchView('profile');
+    } else if (sessionCode && sessionCode.trim().length > 0) {
         const cleanCode = sessionCode.trim();
+        const isIpChangeParam = urlParams.get('isIpChange') === 'true' || urlParams.get('ip');
 
-        activeSessionBanner.style.display = 'flex';
-        bannerCode.textContent = cleanCode;
-        authBadge.style.display = 'inline-block';
+        if (isIpChangeParam) {
+            showProfileIpAlert(sessionNick, sessionIp, cleanCode);
+            switchView('profile');
+        } else {
+            activeSessionBanner.style.display = 'flex';
+            bannerCode.textContent = cleanCode;
+            authBadge.style.display = 'inline-block';
 
-        authConfirmBox.style.display = 'block';
-        authManualBox.style.display = 'none';
-        sessionCodeBadge.textContent = cleanCode;
+            authConfirmBox.style.display = 'block';
+            authManualBox.style.display = 'none';
+            sessionCodeBadge.textContent = cleanCode;
 
-        if (sessionNick) {
-            playerName.textContent = sessionNick;
-            playerAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(sessionNick)}/120`;
+            if (sessionNick) {
+                playerName.textContent = sessionNick;
+                playerAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(sessionNick)}/120`;
+            }
+            if (sessionIp) {
+                playerIp.textContent = sessionIp;
+                ipRow.style.display = 'flex';
+            }
+
+            switchView('auth');
         }
-        if (sessionIp) {
-            playerIp.textContent = sessionIp;
-            ipRow.style.display = 'flex';
-        }
-
-        switchView('auth');
     } else {
         authConfirmBox.style.display = 'none';
         authManualBox.style.display = 'block';
@@ -606,9 +884,6 @@ document.addEventListener('DOMContentLoaded', () => {
         switchView('menu');
     }
 
-    // ----------------------------------------------------
-    // 8. Auth Confirmation & Rejection Logic
-    // ----------------------------------------------------
     btnConfirm.addEventListener('click', () => {
         submitVerification(sessionCodeBadge.textContent);
     });
@@ -616,32 +891,48 @@ document.addEventListener('DOMContentLoaded', () => {
     btnReject.addEventListener('click', () => {
         if (!confirm("Вы уверены, что хотите отклонить вход?")) return;
         triggerHaptic('warning');
-
         const currentCode = sessionCodeBadge.textContent;
-        const rejectLink = `https://t.me/${CONFIG.botUsername}?start=reject_${currentCode}`;
-
-        if (tg?.openTelegramLink) {
-            tg.openTelegramLink(rejectLink);
-        } else {
-            window.location.href = rejectLink;
-        }
-
-        switchView('error');
+        rejectSession(currentCode);
     });
 
     function submitVerification(targetCode) {
-        btnConfirm.disabled = true;
-        btnConfirm.textContent = "Подтверждение...";
+        if (btnConfirm) {
+            btnConfirm.disabled = true;
+            btnConfirm.textContent = "Подтверждение...";
+        }
         triggerHaptic('medium');
+
+        const tgUser = tg?.initDataUnsafe?.user;
+        const tgId = tgUser?.id || 0;
+        const tgUsername = tgUser?.username || '';
 
         let sent = false;
         try {
             if (tg?.sendData) {
-                tg.sendData(JSON.stringify({ action: "auth", code: targetCode }));
+                tg.sendData(JSON.stringify({
+                    action: "auth",
+                    code: targetCode,
+                    telegram_id: tgId,
+                    username: tgUsername
+                }));
                 sent = true;
             }
         } catch (_) {
             sent = false;
+        }
+
+        // Also call backend API if configured
+        const apiUrl = CONFIG.apiUrl || (window.location.hostname === 'localhost' ? 'http://localhost:8088' : '');
+        if (apiUrl) {
+            fetch(`${apiUrl}/api/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    code: targetCode,
+                    telegram_id: tgId,
+                    username: tgUsername
+                })
+            }).catch(() => {});
         }
 
         const botLink = `https://t.me/${CONFIG.botUsername}?start=auth_${targetCode}`;
@@ -653,44 +944,44 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        if (sessionNick) {
+            localStorage.setItem('zeph_linked_nick', sessionNick);
+            updateProfileUI(sessionNick, sessionIp);
+        }
+
         triggerHaptic('success');
         switchView('success');
     }
 
-    // Manual PIN Inputs
-    function setupPinInputs() {
-        pinBoxes.forEach((box, index) => {
-            box.value = '';
-            box.addEventListener('input', (e) => {
-                const val = e.target.value.replace(/[^0-9]/g, '');
-                e.target.value = val;
-                if (val && index < pinBoxes.length - 1) {
-                    pinBoxes[index + 1].focus();
-                }
-                checkPin();
-            });
-            box.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && !box.value && index > 0) {
-                    pinBoxes[index - 1].focus();
-                }
-            });
-        });
-    }
+    function rejectSession(targetCode) {
+        let sent = false;
+        try {
+            if (tg?.sendData) {
+                tg.sendData(JSON.stringify({ action: "reject", code: targetCode }));
+                sent = true;
+            }
+        } catch (_) {}
 
-    function checkPin() {
-        let pin = '';
-        pinBoxes.forEach(b => pin += b.value);
-        btnManualSubmit.disabled = (pin.length !== 6);
-    }
-
-    btnManualSubmit.addEventListener('click', () => {
-        let pin = '';
-        pinBoxes.forEach(b => pin += b.value);
-        if (pin.length === 6) {
-            sessionCodeBadge.textContent = pin;
-            submitVerification(pin);
+        const apiUrl = CONFIG.apiUrl || (window.location.hostname === 'localhost' ? 'http://localhost:8088' : '');
+        if (apiUrl) {
+            fetch(`${apiUrl}/api/reject`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: targetCode })
+            }).catch(() => {});
         }
-    });
+
+        const rejectLink = `https://t.me/${CONFIG.botUsername}?start=reject_${targetCode}`;
+        if (!sent && CONFIG.botUsername) {
+            if (tg?.openTelegramLink) {
+                tg.openTelegramLink(rejectLink);
+            } else {
+                window.location.href = rejectLink;
+            }
+        }
+
+        switchView('error');
+    }
 
     // Result Button Handlers
     if (btnCloseApp) {
