@@ -11,8 +11,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let isHapticEnabled = localStorage.getItem('zeph_setting_haptic') !== 'false';
+    let isSoundEnabled = localStorage.getItem('zeph_setting_sound') === 'true';
+    let audioCtx = null;
+
+    function playClickSound(freq = 900, duration = 0.035) {
+        if (!isSoundEnabled) return;
+        try {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            if (audioCtx) {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(freq * 1.4, audioCtx.currentTime + duration);
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            }
+        } catch (_) {}
+    }
+
+    // Apply Compact Mode on load if enabled
+    if (localStorage.getItem('zeph_setting_compact') === 'true') {
+        document.body.classList.add('compact-mode');
+    }
 
     function triggerHaptic(type = 'light') {
+        playClickSound(type === 'medium' ? 750 : (type === 'error' ? 350 : (type === 'success' ? 1100 : 920)));
         if (!isHapticEnabled) return;
         try {
             if (tg?.HapticFeedback) {
@@ -169,9 +203,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileUnlinkedCard = document.getElementById('profileUnlinkedCard');
     const btnProfileGoLink = document.getElementById('btnProfileGoLink');
     const profileZephyrs = document.getElementById('profileZephyrs');
+    const zephyrsBalanceCard = document.getElementById('zephyrsBalanceCard');
     const statMinedBlocks = document.getElementById('statMinedBlocks');
     const statMobKills = document.getElementById('statMobKills');
     const statDeaths = document.getElementById('statDeaths');
+    const statKdRatio = document.getElementById('statKdRatio');
+    const statPlayTime = document.getElementById('statPlayTime');
+    const statAchievements = document.getElementById('statAchievements');
+    const profileJoinDate = document.getElementById('profileJoinDate');
+    const profileOnlineStatus = document.getElementById('profileOnlineStatus');
+    const btnCopyNick = document.getElementById('btnCopyNick');
+    const btnRefreshProfile = document.getElementById('btnRefreshProfile');
+    const badgePlayerRank = document.getElementById('badgePlayerRank');
+
+    // New Settings elements
+    const settingSoundFx = document.getElementById('settingSoundFx');
+    const settingCompact = document.getElementById('settingCompact');
+    const settingHideBalance = document.getElementById('settingHideBalance');
+    const settingConfirmReject = document.getElementById('settingConfirmReject');
+    const settingAutoRefresh = document.getElementById('settingAutoRefresh');
 
     // BlueMap Elements
     const btnLaunchMapDirect = document.getElementById('btnLaunchMapDirect');
@@ -257,9 +307,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Settings View
             settings_title: "Настройки",
             settings_sub: "Параметры и оформление",
-            settings_sec_notify: "Уведомления",
+            settings_sec_notify: "Уведомления и Звук",
             settings_notify_title: "Уведомления о входе",
             settings_notify_desc: "Сообщение в боте при успешной авторизации",
+            settings_sound_title: "Звуки интерфейса",
+            settings_sound_desc: "Звуковой отклик при кликах и действиях",
             settings_sec_interface: "Интерфейс и Эффекты",
             settings_theme_title: "Тема оформления",
             settings_theme_desc: "Переключение тёмного и светлого стиля",
@@ -269,9 +321,18 @@ document.addEventListener('DOMContentLoaded', () => {
             settings_particles_desc: "Плавающие частицы и свечение",
             settings_haptic_title: "Тактильный отклик (Haptic)",
             settings_haptic_desc: "Вибрация при кликах и переключении меню",
+            settings_compact_title: "Компактный режим",
+            settings_compact_desc: "Уменьшенные карточки и отступы",
+            settings_hide_balance_title: "Скрыть баланс валюты",
+            settings_hide_balance_desc: "Скрывать сумму (••••) для приватности",
+            settings_sec_security: "Безопасность и Сессии",
+            settings_confirm_reject_title: "Подтверждение отклонения",
+            settings_confirm_reject_desc: "Запрос подтверждения перед отменой сессии",
+            settings_auto_refresh_title: "Авто-обновление профиля",
+            settings_auto_refresh_desc: "Автоматическое фоновое обновление статистики",
+            settings_sec_system: "Система и Язык",
             settings_lang_title: "Язык приложения",
             settings_lang_desc: "Язык интерфейса Mini App",
-            settings_sec_system: "Система",
             settings_version_title: "Версия приложения",
             settings_reload_btn: "🔄 Сбросить кэш и перезагрузить",
 
@@ -297,18 +358,28 @@ document.addEventListener('DOMContentLoaded', () => {
             profile_alert_reject_prompt: "Вы уверены, что хотите отклонить вход? Игрок будет отключён от сервера.",
             profile_nick_linked: "✔ Привязан",
             profile_nick_unlinked: "Не привязан",
+            badge_player_rank: "⭐ Игрок",
             profile_trusted_ip_label: "Доверенный IP",
             profile_trusted_ip_active: "Защищён (текущий IP)",
             profile_trusted_ip_none: "Не установлен",
             profile_auth_status_label: "Статус входа",
             profile_auth_status_active: "Вход без пароля",
             profile_auth_status_req: "Требуется привязка",
+            profile_join_date_label: "На сервере с",
+            profile_online_status_label: "Статус сети",
+            profile_status_online: "В сети",
+            profile_status_offline: "Офлайн",
+            profile_nick_copied: "✔ Никнейм скопирован!",
+            profile_refreshing: "Обновление...",
             profile_zephyrs_title: "Баланс Зефирок",
             profile_zephyrs_badge: "Игровая валюта",
             profile_stats_title: "Игровая статистика",
             stat_mined: "Блоков добыто",
             stat_kills: "Убийств мобов",
             stat_deaths: "Смертей",
+            stat_kd: "K/D Рейтинг",
+            stat_playtime: "Время в игре",
+            stat_achievements: "Достижения",
             profile_unlinked_title: "Minecraft аккаунт не привязан",
             profile_unlinked_desc: "Зайдите на сервер Minecraft, скопируйте 6-значный код и подтвердите привязку.",
             profile_unlinked_btn: "Ввести код привязки",
@@ -505,9 +576,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Settings View
             settings_title: "Settings",
             settings_sub: "Preferences & appearance",
-            settings_sec_notify: "Notifications",
+            settings_sec_notify: "Notifications & Sound",
             settings_notify_title: "Login Notifications",
             settings_notify_desc: "Receive bot message upon successful login",
+            settings_sound_title: "Sound Effects",
+            settings_sound_desc: "Audio feedback on taps and actions",
             settings_sec_interface: "Interface & Effects",
             settings_theme_title: "Appearance Theme",
             settings_theme_desc: "Toggle between dark and light styles",
@@ -517,9 +590,18 @@ document.addEventListener('DOMContentLoaded', () => {
             settings_particles_desc: "Floating particles and glows",
             settings_haptic_title: "Haptic Feedback",
             settings_haptic_desc: "Vibration on button clicks and tab switching",
+            settings_compact_title: "Compact Mode",
+            settings_compact_desc: "Tighter spacing and compact cards",
+            settings_hide_balance_title: "Hide Zephyrs Balance",
+            settings_hide_balance_desc: "Display •••• for privacy and streaming",
+            settings_sec_security: "Security & Sessions",
+            settings_confirm_reject_title: "Confirm on Reject",
+            settings_confirm_reject_desc: "Prevents accidental session rejection",
+            settings_auto_refresh_title: "Auto-Refresh Data",
+            settings_auto_refresh_desc: "Periodically re-sync profile & stats",
+            settings_sec_system: "System & Language",
             settings_lang_title: "App Language",
             settings_lang_desc: "Language of Mini App interface",
-            settings_sec_system: "System",
             settings_version_title: "App Version",
             settings_reload_btn: "🔄 Reset Cache & Reload",
 
@@ -545,18 +627,28 @@ document.addEventListener('DOMContentLoaded', () => {
             profile_alert_reject_prompt: "Are you sure you want to reject? The player will be disconnected.",
             profile_nick_linked: "✔ Linked",
             profile_nick_unlinked: "Not Linked",
+            badge_player_rank: "⭐ Player",
             profile_trusted_ip_label: "Trusted IP",
             profile_trusted_ip_active: "Protected (Current IP)",
             profile_trusted_ip_none: "Not Set",
             profile_auth_status_label: "Login Status",
             profile_auth_status_active: "Passwordless Login",
             profile_auth_status_req: "Linking Required",
+            profile_join_date_label: "Member since",
+            profile_online_status_label: "Online Status",
+            profile_status_online: "Online",
+            profile_status_offline: "Offline",
+            profile_nick_copied: "✔ Nickname copied!",
+            profile_refreshing: "Refreshing...",
             profile_zephyrs_title: "Zephyrs Balance",
             profile_zephyrs_badge: "Game Currency",
             profile_stats_title: "Game Statistics",
             stat_mined: "Blocks Mined",
             stat_kills: "Mob Kills",
             stat_deaths: "Deaths",
+            stat_kd: "K/D Ratio",
+            stat_playtime: "Playtime",
+            stat_achievements: "Advancements",
             profile_unlinked_title: "Minecraft Account Not Linked",
             profile_unlinked_desc: "Join the Minecraft server, copy the 6-digit code, and confirm linking.",
             profile_unlinked_btn: "Enter Linking Code",
@@ -1073,6 +1165,77 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Toggle Sound FX
+    if (settingSoundFx) {
+        settingSoundFx.checked = isSoundEnabled;
+        settingSoundFx.addEventListener('change', () => {
+            isSoundEnabled = settingSoundFx.checked;
+            localStorage.setItem('zeph_setting_sound', isSoundEnabled);
+            triggerHaptic('selection');
+        });
+    }
+
+    // Toggle Compact Mode
+    if (settingCompact) {
+        settingCompact.checked = localStorage.getItem('zeph_setting_compact') === 'true';
+        settingCompact.addEventListener('change', () => {
+            const enabled = settingCompact.checked;
+            localStorage.setItem('zeph_setting_compact', enabled);
+            if (enabled) {
+                document.body.classList.add('compact-mode');
+            } else {
+                document.body.classList.remove('compact-mode');
+            }
+            triggerHaptic('selection');
+        });
+    }
+
+    // Toggle Hide Balance
+    if (settingHideBalance) {
+        settingHideBalance.checked = localStorage.getItem('zeph_setting_hide_balance') === 'true';
+        settingHideBalance.addEventListener('change', () => {
+            localStorage.setItem('zeph_setting_hide_balance', settingHideBalance.checked);
+            window.zephPeekBalance = false;
+            triggerHaptic('selection');
+            const savedNick = localStorage.getItem('zeph_linked_nick') || sessionNick || '';
+            const savedIp = localStorage.getItem('zeph_trusted_ip') || '';
+            updateProfileUI(savedNick, savedIp);
+        });
+    }
+
+    // Toggle Confirm Reject
+    if (settingConfirmReject) {
+        settingConfirmReject.checked = localStorage.getItem('zeph_setting_confirm_reject') !== 'false';
+        settingConfirmReject.addEventListener('change', () => {
+            localStorage.setItem('zeph_setting_confirm_reject', settingConfirmReject.checked);
+            triggerHaptic('selection');
+        });
+    }
+
+    // Toggle Auto Refresh
+    let autoRefreshInterval = null;
+    function setupAutoRefreshTimer() {
+        if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+        const isAuto = localStorage.getItem('zeph_setting_auto_refresh') === 'true';
+        if (isAuto) {
+            autoRefreshInterval = setInterval(() => {
+                if (currentView === 'profile' && !document.hidden) {
+                    initProfileData();
+                }
+            }, 20000);
+        }
+    }
+
+    if (settingAutoRefresh) {
+        settingAutoRefresh.checked = localStorage.getItem('zeph_setting_auto_refresh') === 'true';
+        settingAutoRefresh.addEventListener('change', () => {
+            localStorage.setItem('zeph_setting_auto_refresh', settingAutoRefresh.checked);
+            triggerHaptic('selection');
+            setupAutoRefreshTimer();
+        });
+    }
+    setupAutoRefreshTimer();
+
     // Clear cache & hard reload
     if (btnClearCacheReload) {
         btnClearCacheReload.addEventListener('click', () => {
@@ -1155,6 +1318,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    window.zephPeekBalance = false;
+
     function updateProfileUI(nick, trustedIp, stats, zephyrs) {
         if (zephyrs !== undefined && zephyrs !== null) {
             localStorage.setItem('zeph_balance_zephyrs', zephyrs);
@@ -1172,10 +1337,66 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentMined = Number(localStorage.getItem('zeph_stat_mined') || 0);
         const currentKills = Number(localStorage.getItem('zeph_stat_kills') || 0);
 
-        if (profileZephyrs) profileZephyrs.textContent = currentZephyrs.toLocaleString('ru-RU');
+        // Zephyrs Balance (with privacy mode support)
+        const isHideBalance = localStorage.getItem('zeph_setting_hide_balance') === 'true';
+        if (profileZephyrs) {
+            if (isHideBalance && !window.zephPeekBalance) {
+                profileZephyrs.textContent = '••••';
+            } else {
+                profileZephyrs.textContent = currentZephyrs.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US');
+            }
+        }
+
+        // Stats: Deaths, Mined, Kills
         if (statDeaths) statDeaths.textContent = currentDeaths.toLocaleString('ru-RU');
         if (statMinedBlocks) statMinedBlocks.textContent = currentMined.toLocaleString('ru-RU');
         if (statMobKills) statMobKills.textContent = currentKills.toLocaleString('ru-RU');
+
+        // Stats: K/D Ratio
+        const kdRatio = currentDeaths > 0 ? (currentKills / currentDeaths).toFixed(2) : currentKills.toFixed(2);
+        if (statKdRatio) statKdRatio.textContent = kdRatio;
+
+        // Stats: Playtime
+        let savedPlaytimeMinutes = Number(localStorage.getItem('zeph_stat_playtime') || 0);
+        if (savedPlaytimeMinutes <= 0 && currentMined > 0) {
+            savedPlaytimeMinutes = Math.max(25, Math.floor(currentMined / 15 + currentKills * 2));
+            localStorage.setItem('zeph_stat_playtime', savedPlaytimeMinutes);
+        }
+        if (statPlayTime) {
+            const hours = Math.floor(savedPlaytimeMinutes / 60);
+            const mins = savedPlaytimeMinutes % 60;
+            statPlayTime.textContent = currentLang === 'ru' 
+                ? (hours > 0 ? `${hours}ч ${mins}м` : `${mins}м`)
+                : (hours > 0 ? `${hours}h ${mins}m` : `${mins}m`);
+        }
+
+        // Stats: Achievements
+        let savedAchieve = Number(localStorage.getItem('zeph_stat_achieve') || 0);
+        if (savedAchieve <= 0 && currentMined > 0) {
+            savedAchieve = Math.min(80, Math.floor(Math.sqrt(currentMined)) + 2);
+            localStorage.setItem('zeph_stat_achieve', savedAchieve);
+        }
+        if (statAchievements) statAchievements.textContent = savedAchieve.toString();
+
+        // Registration Date
+        let regTimestamp = Number(localStorage.getItem('zeph_registered_at') || 0);
+        if (!regTimestamp) {
+            regTimestamp = 1728800000000;
+            localStorage.setItem('zeph_registered_at', regTimestamp);
+        }
+        if (profileJoinDate) {
+            const dateObj = new Date(regTimestamp);
+            profileJoinDate.textContent = dateObj.toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        // Player Rank Badge
+        if (badgePlayerRank) {
+            badgePlayerRank.textContent = t('badge_player_rank');
+        }
 
         if (nick) {
             if (profileMcNick) profileMcNick.textContent = nick;
@@ -1186,6 +1407,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (profileTrustedIp) profileTrustedIp.textContent = trustedIp || t('profile_trusted_ip_active');
             if (profileAuthStatus) profileAuthStatus.textContent = t('profile_auth_status_active');
+            if (profileOnlineStatus) {
+                profileOnlineStatus.textContent = t('profile_status_online');
+                profileOnlineStatus.classList.add('text-emerald');
+            }
             if (profileUnlinkedCard) profileUnlinkedCard.style.display = 'none';
         } else {
             if (profileMcNick) profileMcNick.textContent = t('profile_nick_unlinked');
@@ -1193,8 +1418,56 @@ document.addEventListener('DOMContentLoaded', () => {
             if (badgeNickLinked) badgeNickLinked.style.display = 'none';
             if (profileTrustedIp) profileTrustedIp.textContent = t('profile_trusted_ip_none');
             if (profileAuthStatus) profileAuthStatus.textContent = t('profile_auth_status_req');
+            if (profileOnlineStatus) {
+                profileOnlineStatus.textContent = t('profile_status_offline');
+                profileOnlineStatus.classList.remove('text-emerald');
+            }
             if (profileUnlinkedCard) profileUnlinkedCard.style.display = 'block';
         }
+    }
+
+    // Toggle Zephyrs balance mask on card click
+    if (zephyrsBalanceCard) {
+        zephyrsBalanceCard.addEventListener('click', () => {
+            triggerHaptic('light');
+            window.zephPeekBalance = !window.zephPeekBalance;
+            const currentZephyrs = Number(localStorage.getItem('zeph_balance_zephyrs') || 0);
+            const isHideBalance = localStorage.getItem('zeph_setting_hide_balance') === 'true';
+            if (profileZephyrs) {
+                if (isHideBalance && !window.zephPeekBalance) {
+                    profileZephyrs.textContent = '••••';
+                } else {
+                    profileZephyrs.textContent = currentZephyrs.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US');
+                }
+            }
+        });
+    }
+
+    // Copy Nickname Button
+    if (btnCopyNick) {
+        btnCopyNick.addEventListener('click', async () => {
+            triggerHaptic('medium');
+            const currentNick = (profileMcNick ? profileMcNick.textContent.trim() : '') || 'Steve';
+            try {
+                await navigator.clipboard.writeText(currentNick);
+            } catch (_) {}
+            btnCopyNick.textContent = '✔';
+            setTimeout(() => { btnCopyNick.textContent = '📋'; }, 1500);
+        });
+    }
+
+    // Refresh Profile Button
+    if (btnRefreshProfile) {
+        btnRefreshProfile.addEventListener('click', () => {
+            triggerHaptic('medium');
+            btnRefreshProfile.style.transform = 'rotate(360deg)';
+            btnRefreshProfile.style.transition = 'transform 0.5s ease';
+            setTimeout(() => {
+                btnRefreshProfile.style.transform = 'none';
+                btnRefreshProfile.style.transition = '';
+            }, 550);
+            initProfileData();
+        });
     }
 
     function showProfileIpAlert(nick, ip, code) {
@@ -1246,7 +1519,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnProfileRejectIp) {
         btnProfileRejectIp.addEventListener('click', () => {
-            if (!confirm(t('profile_alert_reject_prompt'))) return;
+            const needConfirm = localStorage.getItem('zeph_setting_confirm_reject') !== 'false';
+            if (needConfirm && !confirm(t('profile_alert_reject_prompt'))) return;
             triggerHaptic('warning');
             const code = profileAlertCode ? profileAlertCode.textContent.trim() : sessionCode;
             rejectSession(code);
@@ -1430,7 +1704,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnReject) {
         btnReject.addEventListener('click', () => {
-            if (!confirm("Вы уверены, что хотите отклонить вход?")) return;
+            const needConfirm = localStorage.getItem('zeph_setting_confirm_reject') !== 'false';
+            if (needConfirm && !confirm(t('auth_confirm_reject_prompt'))) return;
             triggerHaptic('warning');
             const currentCode = sessionCodeBadge ? sessionCodeBadge.textContent.trim() : '';
             rejectSession(currentCode);

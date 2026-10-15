@@ -873,20 +873,20 @@ body {
 .profile-hero-card {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(18, 24, 38, 0.85));
     border: 1px solid rgba(16, 185, 129, 0.25);
-    border-radius: 24px;
-    padding: 18px 20px;
-    margin-bottom: 16px;
+    border-radius: 22px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
     backdrop-filter: blur(20px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
 }
 
 .profile-avatar-wrap {
     position: relative;
-    width: 64px;
-    height: 64px;
+    width: 60px;
+    height: 60px;
     flex-shrink: 0;
 }
 
@@ -927,7 +927,7 @@ body {
 }
 
 .profile-nick-row h2 {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 800;
     color: #f1f5f9;
     margin: 0;
@@ -943,11 +943,22 @@ body {
     font-weight: 700;
 }
 
+.badge-rank {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
 .profile-meta-row {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     font-size: 12px;
     color: var(--text-muted);
+    align-items: center;
 }
 
 .profile-tg-user {
@@ -955,25 +966,53 @@ body {
     font-weight: 600;
 }
 
+.profile-hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.btn-icon-action {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 15px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-icon-action:active {
+    transform: scale(0.92);
+    background: rgba(255, 255, 255, 0.15);
+}
+
 /* ================= ZEPHYRS BALANCE CARD ================= */
 .zephyrs-balance-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(135deg, rgba(244, 114, 182, 0.15), rgba(168, 85, 247, 0.12), rgba(18, 24, 38, 0.95));
-    border: 1px solid rgba(244, 114, 182, 0.35);
+    background: linear-gradient(135deg, rgba(244, 114, 182, 0.12), rgba(18, 24, 38, 0.88));
+    border: 1px solid rgba(244, 114, 182, 0.25);
     border-radius: 20px;
     padding: 14px 18px;
     margin-bottom: 14px;
     backdrop-filter: blur(16px);
-    box-shadow: 0 8px 24px rgba(244, 114, 182, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     position: relative;
     overflow: hidden;
+    cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .zephyrs-balance-card:active {
-    transform: scale(0.98);
+    transform: scale(0.985);
 }
 
 .zephyrs-balance-card::before {
@@ -983,7 +1022,7 @@ body {
     right: -20%;
     width: 140px;
     height: 140px;
-    background: radial-gradient(circle, rgba(244, 114, 182, 0.25) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(244, 114, 182, 0.18) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -997,14 +1036,29 @@ body {
     width: 44px;
     height: 44px;
     border-radius: 14px;
-    background: rgba(244, 114, 182, 0.18);
-    border: 1px solid rgba(244, 114, 182, 0.4);
+    background: rgba(244, 114, 182, 0.15);
+    border: 1px solid rgba(244, 114, 182, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
-    box-shadow: 0 0 16px rgba(244, 114, 182, 0.25);
+    box-shadow: 0 0 16px rgba(244, 114, 182, 0.2);
     flex-shrink: 0;
+}
+
+.marshmallow-icon-svg {
+    display: block;
+    filter: drop-shadow(0 2px 5px rgba(244, 114, 182, 0.4));
+    transition: transform 0.2s ease;
+}
+
+.zephyrs-balance-card:hover .marshmallow-icon-svg {
+    transform: scale(1.08) rotate(3deg);
+}
+
+.marshmallow-icon-inline {
+    display: inline-block;
+    vertical-align: -3px;
+    filter: drop-shadow(0 1px 3px rgba(244, 114, 182, 0.35));
 }
 
 .zephyrs-text {
@@ -1133,6 +1187,21 @@ body {
     background: linear-gradient(180deg, rgba(239, 68, 68, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
 }
 
+.stat-box.stat-kd {
+    border-color: rgba(245, 158, 11, 0.3);
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.stat-box.stat-time {
+    border-color: rgba(168, 85, 247, 0.3);
+    background: linear-gradient(180deg, rgba(168, 85, 247, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.stat-box.stat-achieve {
+    border-color: rgba(234, 179, 8, 0.3);
+    background: linear-gradient(180deg, rgba(234, 179, 8, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
 .stat-icon-wrap {
     width: 32px;
     height: 32px;
@@ -1153,7 +1222,7 @@ body {
 }
 
 .stat-value {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 800;
     color: #f8fafc;
     line-height: 1.1;
@@ -1167,6 +1236,21 @@ body {
     font-weight: 600;
     color: var(--text-muted);
     line-height: 1.2;
+}
+
+body.theme-light .profile-hero-card {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), #ffffff);
+    border-color: rgba(16, 185, 129, 0.25);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+}
+
+body.theme-light .profile-hero-card h2 {
+    color: var(--text-primary);
+}
+
+body.theme-light .btn-icon-action {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.08);
 }
 
 body.theme-light .zephyrs-balance-card {
@@ -1200,6 +1284,58 @@ body.theme-light .stat-box {
 
 body.theme-light .stat-value {
     color: var(--text-primary);
+}
+
+body.theme-light .profile-info-item {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+body.theme-light .info-item-val {
+    color: var(--text-primary);
+}
+
+/* ================= COMPACT MODE STYLES ================= */
+body.compact-mode .profile-hero-card {
+    padding: 12px 14px;
+    margin-bottom: 10px;
+}
+
+body.compact-mode .profile-avatar-wrap {
+    width: 48px;
+    height: 48px;
+}
+
+body.compact-mode .zephyrs-balance-card {
+    padding: 10px 14px;
+    margin-bottom: 10px;
+}
+
+body.compact-mode .profile-stats-card {
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+body.compact-mode .stat-box {
+    padding: 8px 4px;
+}
+
+body.compact-mode .stat-value {
+    font-size: 14px;
+}
+
+body.compact-mode .profile-info-grid {
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+body.compact-mode .profile-info-item {
+    padding: 10px 12px;
+}
+
+body.compact-mode .settings-item {
+    padding: 10px 14px;
 }
 
 /* ================= PROFILE INFO GRID ================= */

@@ -255,11 +255,11 @@
 
             <!-- ================= VIEW 4: НАСТРОЙКИ (SETTINGS) ================= -->
             <section class="view" id="settingsView" style="display: none;">
-                <!-- Группа 1: Уведомления -->
+                <!-- Группа 1: Уведомления и Звук -->
                 <div class="settings-group">
                     <div class="settings-group-header">
                         <span class="settings-group-icon">🔔</span>
-                        <span data-i18n="settings_sec_notify">Уведомления</span>
+                        <span data-i18n="settings_sec_notify">Уведомления и Звук</span>
                     </div>
 
                     <div class="settings-item">
@@ -269,6 +269,18 @@
                         </div>
                         <label class="toggle-switch">
                             <input type="checkbox" id="settingLoginNotify" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Звуки интерфейса -->
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title" data-i18n="settings_sound_title">Звуки интерфейса</div>
+                            <div class="settings-item-desc" data-i18n="settings_sound_desc">Звуковой отклик при кликах и действиях</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="settingSoundFx">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -317,6 +329,70 @@
                         </label>
                     </div>
 
+                    <!-- Компактный режим -->
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title" data-i18n="settings_compact_title">Компактный режим</div>
+                            <div class="settings-item-desc" data-i18n="settings_compact_desc">Уменьшенные карточки и отступы</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="settingCompact">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Скрыть баланс Зефирок -->
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title" data-i18n="settings_hide_balance_title">Скрыть баланс валюты</div>
+                            <div class="settings-item-desc" data-i18n="settings_hide_balance_desc">Скрывать сумму (••••) для приватности</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="settingHideBalance">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Группа 3: Безопасность и Сессии -->
+                <div class="settings-group">
+                    <div class="settings-group-header">
+                        <span class="settings-group-icon">🛡️</span>
+                        <span data-i18n="settings_sec_security">Безопасность и Сессии</span>
+                    </div>
+
+                    <!-- Подтверждение при отказе -->
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title" data-i18n="settings_confirm_reject_title">Подтверждение отклонения</div>
+                            <div class="settings-item-desc" data-i18n="settings_confirm_reject_desc">Запрос подтверждения перед отменой сессии</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="settingConfirmReject" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Авто-обновление данных -->
+                    <div class="settings-item">
+                        <div class="settings-item-text">
+                            <div class="settings-item-title" data-i18n="settings_auto_refresh_title">Авто-обновление профиля</div>
+                            <div class="settings-item-desc" data-i18n="settings_auto_refresh_desc">Автоматическое фоновое обновление статистики</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="settingAutoRefresh">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Группа 4: Система и Язык -->
+                <div class="settings-group">
+                    <div class="settings-group-header">
+                        <span class="settings-group-icon">⚙️</span>
+                        <span data-i18n="settings_sec_system">Система и Язык</span>
+                    </div>
+
                     <!-- Язык приложения -->
                     <div class="settings-item">
                         <div class="settings-item-text">
@@ -328,21 +404,13 @@
                             <button class="lang-btn" data-lang="en">EN</button>
                         </div>
                     </div>
-                </div>
-
-                <!-- Группа 3: Система -->
-                <div class="settings-group">
-                    <div class="settings-group-header">
-                        <span class="settings-group-icon">⚙️</span>
-                        <span data-i18n="settings_sec_system">Система</span>
-                    </div>
 
                     <div class="settings-item">
                         <div class="settings-item-text">
                             <div class="settings-item-title" data-i18n="settings_version_title">Версия приложения</div>
                             <div class="settings-item-desc">Zephyrius Mini App</div>
                         </div>
-                        <span class="version-tag">v2.4</span>
+                        <span class="version-tag">v4.2</span>
                     </div>
 
                     <div class="settings-actions">
@@ -392,7 +460,7 @@
                     </div>
                 </div>
 
-                <!-- Основная карточка профиля -->
+                <!-- Основная карточка профиля (Unified Hero Card) -->
                 <div class="profile-hero-card">
                     <div class="profile-avatar-wrap">
                         <img id="profileUserAvatar" src="https://mc-heads.net/avatar/Steve/120" alt="Avatar" class="profile-avatar">
@@ -404,19 +472,46 @@
                         <div class="profile-nick-row">
                             <h2 id="profileMcNick">Steve</h2>
                             <span class="badge badge-verified" id="badgeNickLinked" data-i18n="profile_nick_linked">✔ Привязан</span>
+                            <span class="badge badge-rank" id="badgePlayerRank" data-i18n="badge_player_rank">⭐ Игрок</span>
                         </div>
                         <div class="profile-meta-row">
                             <span class="profile-tg-user" id="profileTgUser">@username</span>
-                            <span class="profile-tg-id" id="profileUserId">Telegram ID: —</span>
+                            <span class="profile-tg-id" id="profileUserId">ID: —</span>
                         </div>
+                    </div>
+                    <div class="profile-hero-actions">
+                        <button class="btn-icon-action" id="btnCopyNick" title="Копировать ник" aria-label="Copy Nickname">
+                            📋
+                        </button>
+                        <button class="btn-icon-action" id="btnRefreshProfile" title="Обновить профиль" aria-label="Refresh Profile">
+                            🔄
+                        </button>
                     </div>
                 </div>
 
-                <!-- Карточка баланса валюты: Зефирки -->
-                <div class="zephyrs-balance-card">
+                <!-- Карточка баланса валюты: Зефирки (Кастомная векторная зефирка) -->
+                <div class="zephyrs-balance-card" id="zephyrsBalanceCard" title="Нажмите, чтобы скрыть/показать баланс">
                     <div class="zephyrs-left">
                         <div class="zephyrs-icon-bubble">
-                            <span class="zephyrs-icon">🍬</span>
+                            <svg class="marshmallow-icon-svg" viewBox="0 0 28 28" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <ellipse cx="14" cy="20.5" rx="9" ry="3.2" fill="#f472b6" fill-opacity="0.35"/>
+                                <path d="M5 9.5C5 7.2 9 5.5 14 5.5C19 5.5 23 7.2 23 9.5V17.5C23 19.8 19 21.5 14 21.5C9 21.5 5 19.8 5 17.5V9.5Z" fill="url(#zMarshGrad)"/>
+                                <ellipse cx="14" cy="9.5" rx="9" ry="3.8" fill="url(#zMarshTop)"/>
+                                <path d="M9.5 9.5C9.5 8.4 11.5 7.6 14 7.6C16.5 7.6 18.5 8.4 18.5 9.5" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+                                <path d="M7 12C7 15 7 17.5 7.6 19" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.85"/>
+                                <circle cx="19" cy="13" r="0.9" fill="#ffffff" opacity="0.9"/>
+                                <defs>
+                                    <linearGradient id="zMarshGrad" x1="5" y1="5.5" x2="23" y2="21.5" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#ffffff"/>
+                                        <stop offset="0.4" stop-color="#fdf2f8"/>
+                                        <stop offset="1" stop-color="#f472b6"/>
+                                    </linearGradient>
+                                    <linearGradient id="zMarshTop" x1="14" y1="5.5" x2="14" y2="13.3" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#ffffff"/>
+                                        <stop offset="1" stop-color="#fce7f3"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
                         </div>
                         <div class="zephyrs-text">
                             <span class="zephyrs-title" data-i18n="profile_zephyrs_title">Баланс Зефирок</span>
@@ -425,11 +520,30 @@
                     </div>
                     <div class="zephyrs-right">
                         <span class="zephyrs-amount font-mono" id="profileZephyrs">0</span>
-                        <span class="zephyrs-unit">🍬</span>
+                        <span class="zephyrs-unit">
+                            <svg class="marshmallow-icon-inline" viewBox="0 0 28 28" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <ellipse cx="14" cy="20.5" rx="9" ry="3.2" fill="#f472b6" fill-opacity="0.35"/>
+                                <path d="M5 9.5C5 7.2 9 5.5 14 5.5C19 5.5 23 7.2 23 9.5V17.5C23 19.8 19 21.5 14 21.5C9 21.5 5 19.8 5 17.5V9.5Z" fill="url(#zMarshGradInline)"/>
+                                <ellipse cx="14" cy="9.5" rx="9" ry="3.8" fill="url(#zMarshTopInline)"/>
+                                <path d="M9.5 9.5C9.5 8.4 11.5 7.6 14 7.6C16.5 7.6 18.5 8.4 18.5 9.5" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+                                <path d="M7 12C7 15 7 17.5 7.6 19" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.85"/>
+                                <defs>
+                                    <linearGradient id="zMarshGradInline" x1="5" y1="5.5" x2="23" y2="21.5" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#ffffff"/>
+                                        <stop offset="0.4" stop-color="#fdf2f8"/>
+                                        <stop offset="1" stop-color="#f472b6"/>
+                                    </linearGradient>
+                                    <linearGradient id="zMarshTopInline" x1="14" y1="5.5" x2="14" y2="13.3" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#ffffff"/>
+                                        <stop offset="1" stop-color="#fce7f3"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </span>
                     </div>
                 </div>
 
-                <!-- Карточка игровой статистики -->
+                <!-- Карточка расширенной игровой статистики (6 показателей) -->
                 <div class="profile-stats-card">
                     <div class="profile-stats-header">
                         <div class="stats-header-title">
@@ -474,10 +588,43 @@
                                 <span class="stat-label" data-i18n="stat_deaths">Смертей</span>
                             </div>
                         </div>
+
+                        <!-- K/D Рейтинг -->
+                        <div class="stat-box stat-kd">
+                            <div class="stat-icon-wrap">
+                                <span class="stat-icon">🎯</span>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value font-mono" id="statKdRatio">0.00</span>
+                                <span class="stat-label" data-i18n="stat_kd">K/D Рейтинг</span>
+                            </div>
+                        </div>
+
+                        <!-- Время в игре -->
+                        <div class="stat-box stat-time">
+                            <div class="stat-icon-wrap">
+                                <span class="stat-icon">⏱️</span>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value font-mono" id="statPlayTime">0ч</span>
+                                <span class="stat-label" data-i18n="stat_playtime">Время в игре</span>
+                            </div>
+                        </div>
+
+                        <!-- Достижений -->
+                        <div class="stat-box stat-achieve">
+                            <div class="stat-icon-wrap">
+                                <span class="stat-icon">🏆</span>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value font-mono" id="statAchievements">0</span>
+                                <span class="stat-label" data-i18n="stat_achievements">Достижения</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Блок деталей аккаунта -->
+                <!-- Блок деталей аккаунта и безопасности (2x2 Grid) -->
                 <div class="profile-info-grid">
                     <div class="profile-info-item">
                         <span class="info-item-icon">🛡️</span>
@@ -491,6 +638,20 @@
                         <div class="info-item-content">
                             <span class="info-item-title" data-i18n="profile_auth_status_label">Статус входа</span>
                             <span class="info-item-val text-emerald" id="profileAuthStatus" data-i18n="profile_auth_status_active">Вход без пароля</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-item">
+                        <span class="info-item-icon">📅</span>
+                        <div class="info-item-content">
+                            <span class="info-item-title" data-i18n="profile_join_date_label">На сервере с</span>
+                            <span class="info-item-val" id="profileJoinDate">—</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-item">
+                        <span class="info-item-icon">🟢</span>
+                        <div class="info-item-content">
+                            <span class="info-item-title" data-i18n="profile_online_status_label">Статус сети</span>
+                            <span class="info-item-val text-emerald" id="profileOnlineStatus" data-i18n="profile_status_online">В сети</span>
                         </div>
                     </div>
                 </div>
@@ -965,7 +1126,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="config.js?v=4.1"></script>
-    <script src="app.js?v=4.1"></script>
+    <script src="config.js?v=4.2"></script>
+    <script src="app.js?v=4.2"></script>
 </body>
 </html>
