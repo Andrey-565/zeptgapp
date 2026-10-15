@@ -1043,25 +1043,20 @@
                 </button>
             </div>
 
-            <!-- ================= ZEPHYRS BANKING BOTTOM SHEET (TINKOFF STYLE) ================= -->
-            <div class="bank-sheet-overlay" id="bankSheetOverlay" style="display: none;">
-                <div class="bank-sheet-backdrop" id="bankSheetBackdrop"></div>
-                <div class="bank-sheet" id="bankSheet">
-                    <div class="bank-sheet-handle-wrap">
-                        <div class="bank-sheet-handle"></div>
-                    </div>
-
-                    <div class="bank-sheet-header">
-                        <div class="bank-sheet-title-group">
-                            <div class="bank-logo-bubble">
-                                <span class="bank-logo-icon">🍡</span>
-                            </div>
-                            <div>
-                                <h3 data-i18n="bank_title">Zephyrius Банкинг</h3>
-                                <span class="bank-subtitle" data-i18n="bank_subtitle">История операций и выписка</span>
-                            </div>
+            <!-- ================= ZEPHYRS BANKING FULLSCREEN VIEW (TINKOFF STYLE) ================= -->
+            <div class="bank-fullscreen-view" id="bankSheetOverlay" style="display: none;">
+                <div class="bank-fullscreen-container">
+                    <!-- Top Navigation Bar -->
+                    <div class="bank-top-nav">
+                        <button class="bank-nav-back-btn" id="btnCloseBankSheet" aria-label="Назад">
+                            <span class="back-arrow-icon">←</span>
+                            <span data-i18n="btn_back">Назад</span>
+                        </button>
+                        <div class="bank-top-brand">
+                            <span class="bank-logo-icon">🍡</span>
+                            <span class="bank-top-title" data-i18n="bank_title">Zephyrius Банкинг</span>
                         </div>
-                        <button class="btn-sheet-close" id="btnCloseBankSheet" aria-label="Close">✕</button>
+                        <div class="bank-nav-spacer"></div>
                     </div>
 
                     <!-- Банковская карточка счёта (Tinkoff Black Style) -->
@@ -1098,20 +1093,30 @@
                                 </svg>
                             </div>
                         </div>
-                        <!-- Сводка Доходы / Расходы (Tinkoff style) -->
+                        <!-- Сводка Доходы / Расходы (Tinkoff style с новыми иконками стрелок) -->
                         <div class="bank-card-summary">
                             <div class="bank-summary-box income">
-                                <span class="summary-icon">📈</span>
+                                <div class="summary-icon-circle income-circle">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#10b981" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <polyline points="19 12 12 19 5 12"></polyline>
+                                    </svg>
+                                </div>
                                 <div class="summary-text">
                                     <span class="summary-label" data-i18n="bank_income_label">Доходы</span>
-                                    <span class="summary-val font-mono" id="bankTotalIncome">+190 🍡</span>
+                                    <span class="summary-val font-mono" id="bankTotalIncome">+0 🍡</span>
                                 </div>
                             </div>
                             <div class="bank-summary-box expense">
-                                <span class="summary-icon">📉</span>
+                                <div class="summary-icon-circle expense-circle">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#f87171" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="19" x2="12" y2="5"></line>
+                                        <polyline points="5 12 12 5 19 12"></polyline>
+                                    </svg>
+                                </div>
                                 <div class="summary-text">
                                     <span class="summary-label" data-i18n="bank_expense_label">Расходы</span>
-                                    <span class="summary-val font-mono" id="bankTotalExpense">-65 🍡</span>
+                                    <span class="summary-val font-mono" id="bankTotalExpense">-0 🍡</span>
                                 </div>
                             </div>
                         </div>
@@ -1124,46 +1129,16 @@
                         <button class="bank-tab-btn" data-filter="expense" data-i18n="bank_filter_expense">Списания</button>
                     </div>
 
-                    <!-- Список транзакций -->
+                    <!-- Список транзакций (Пустой стейт по умолчанию) -->
                     <div class="bank-transactions-wrap" id="bankTransactionsList">
-                        <!-- Заполняется динамически -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Модальное окно чека / деталей транзакции (Tinkoff Receipt) -->
-            <div class="bank-receipt-overlay" id="bankReceiptOverlay" style="display: none;">
-                <div class="bank-receipt-backdrop" id="bankReceiptBackdrop"></div>
-                <div class="bank-receipt-card" id="bankReceiptCard">
-                    <div class="receipt-status-icon-wrap" id="receiptStatusIcon">
-                        <span>✔</span>
-                    </div>
-                    <div class="receipt-amount font-mono" id="receiptAmount">+0 🍡</div>
-                    <div class="receipt-title" id="receiptTitle">Название операции</div>
-                    <div class="receipt-category" id="receiptCategory">Категория</div>
-
-                    <div class="receipt-details-list">
-                        <div class="receipt-row">
-                            <span class="receipt-label" data-i18n="receipt_status_label">Статус</span>
-                            <span class="receipt-val text-emerald font-semibold" id="receiptStatus">Успешно</span>
-                        </div>
-                        <div class="receipt-row">
-                            <span class="receipt-label" data-i18n="receipt_date_label">Дата и время</span>
-                            <span class="receipt-val font-mono" id="receiptDateTime">15.10.2026, 18:40</span>
-                        </div>
-                        <div class="receipt-row">
-                            <span class="receipt-label" data-i18n="receipt_id_label">Номер операции</span>
-                            <span class="receipt-val font-mono" id="receiptId">#ZEPH-84920</span>
-                        </div>
-                        <div class="receipt-row">
-                            <span class="receipt-label" data-i18n="receipt_fee_label">Комиссия</span>
-                            <span class="receipt-val" data-i18n="receipt_fee_free">0 🍡 (Бесплатно)</span>
+                        <div class="bank-empty-state">
+                            <div class="bank-empty-icon-wrap">
+                                <span>🧾</span>
+                            </div>
+                            <h4 class="bank-empty-title" data-i18n="bank_empty_title">Операций пока нет</h4>
+                            <p class="bank-empty-desc" data-i18n="bank_empty_desc">Здесь будут отображаться ваши доходы, награды и покупки на сервере.</p>
                         </div>
                     </div>
-
-                    <button class="btn btn-secondary" id="btnCloseReceipt" style="width: 100%; margin-top: 14px;" data-i18n="btn_close_receipt">
-                        Закрыть чек
-                    </button>
                 </div>
             </div>
 

@@ -394,13 +394,8 @@ document.addEventListener('DOMContentLoaded', () => {
             bank_filter_income: "Пополнения",
             bank_filter_expense: "Списания",
             bank_no_tx: "Нет операций",
-            receipt_status_label: "Статус",
-            receipt_status_success: "Успешно",
-            receipt_date_label: "Дата и время",
-            receipt_id_label: "Номер операции",
-            receipt_fee_label: "Комиссия",
-            receipt_fee_free: "0 🍡 (Бесплатно)",
-            btn_close_receipt: "Закрыть чек",
+            bank_empty_title: "Операций пока нет",
+            bank_empty_desc: "Здесь будут отображаться ваши доходы, награды и покупки на сервере.",
 
             // Info View & Badges
             info_title: "О сервере и крафты",
@@ -681,13 +676,8 @@ document.addEventListener('DOMContentLoaded', () => {
             bank_filter_income: "Income",
             bank_filter_expense: "Expenses",
             bank_no_tx: "No transactions",
-            receipt_status_label: "Status",
-            receipt_status_success: "Completed",
-            receipt_date_label: "Date & Time",
-            receipt_id_label: "Transaction ID",
-            receipt_fee_label: "Fee",
-            receipt_fee_free: "0 🍡 (Free)",
-            btn_close_receipt: "Close Receipt",
+            bank_empty_title: "No transactions yet",
+            bank_empty_desc: "Your income, rewards, and server purchases will appear here.",
 
             // Info View & Badges
             info_title: "Server Info & Crafts",
@@ -1462,77 +1452,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ================= ZEPHYRS BANKING (TINKOFF STYLE) =================
-    const BANK_TRANSACTIONS = [
-        {
-            id: 'ZEPH-94182',
-            titleRu: 'Ежедневный бонус за вход',
-            titleEn: 'Daily Login Bonus',
-            catRu: 'Бонусы',
-            catEn: 'Bonuses',
-            icon: '🎁',
-            amount: 50,
-            type: 'income',
-            dateRu: 'Сегодня, 14:20',
-            dateEn: 'Today, 14:20',
-            fee: 0
-        },
-        {
-            id: 'ZEPH-93821',
-            titleRu: 'Покупка на аукционе: Алмазная кирка',
-            titleEn: 'Auction Purchase: Diamond Pickaxe',
-            catRu: 'Торговля',
-            catEn: 'Trading',
-            icon: '🛒',
-            amount: 35,
-            type: 'expense',
-            dateRu: 'Сегодня, 11:05',
-            dateEn: 'Today, 11:05',
-            fee: 0
-        },
-        {
-            id: 'ZEPH-91204',
-            titleRu: 'Награда за Кровавую Луну',
-            titleEn: 'BloodMoon Survival Reward',
-            catRu: 'Награды',
-            catEn: 'Rewards',
-            icon: '🩸',
-            amount: 100,
-            type: 'income',
-            dateRu: 'Вчера, 22:45',
-            dateEn: 'Yesterday, 22:45',
-            fee: 0
-        },
-        {
-            id: 'ZEPH-90412',
-            titleRu: 'Быстрый телепорт на спавн',
-            titleEn: 'Fast Teleport to Spawn',
-            catRu: 'Система',
-            catEn: 'System',
-            icon: '🌀',
-            amount: 30,
-            type: 'expense',
-            dateRu: 'Вчера, 19:12',
-            dateEn: 'Yesterday, 19:12',
-            fee: 0
-        },
-        {
-            id: 'ZEPH-88540',
-            titleRu: 'Квест: Охотник на монстров',
-            titleEn: 'Quest: Monster Hunter',
-            catRu: 'Награды',
-            catEn: 'Rewards',
-            icon: '⚔️',
-            amount: 40,
-            type: 'income',
-            dateRu: '13 октября, 17:30',
-            dateEn: 'Oct 13, 17:30',
-            fee: 0
-        }
-    ];
+    // ================= ZEPHYRS BANKING (TINKOFF STYLE FULLSCREEN) =================
+    const BANK_TRANSACTIONS = [];
 
     const bankSheetOverlay = document.getElementById('bankSheetOverlay');
-    const bankSheetBackdrop = document.getElementById('bankSheetBackdrop');
     const btnCloseBankSheet = document.getElementById('btnCloseBankSheet');
     const bankSheetBalance = document.getElementById('bankSheetBalance');
     const bankTotalIncome = document.getElementById('bankTotalIncome');
@@ -1540,42 +1463,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bankTransactionsList = document.getElementById('bankTransactionsList');
     const bankFilterTabBtns = document.querySelectorAll('.bank-tab-btn');
 
-    const bankReceiptOverlay = document.getElementById('bankReceiptOverlay');
-    const bankReceiptBackdrop = document.getElementById('bankReceiptBackdrop');
-    const btnCloseReceipt = document.getElementById('btnCloseReceipt');
-    const receiptStatusIcon = document.getElementById('receiptStatusIcon');
-    const receiptAmount = document.getElementById('receiptAmount');
-    const receiptTitle = document.getElementById('receiptTitle');
-    const receiptCategory = document.getElementById('receiptCategory');
-    const receiptStatus = document.getElementById('receiptStatus');
-    const receiptDateTime = document.getElementById('receiptDateTime');
-    const receiptId = document.getElementById('receiptId');
-
     let currentBankFilter = 'all';
-
-    function openReceipt(tx) {
-        if (!bankReceiptOverlay || !tx) return;
-        triggerHaptic('light');
-        if (receiptStatusIcon) {
-            receiptStatusIcon.className = 'receipt-status-icon-wrap ' + (tx.type === 'expense' ? 'expense' : '');
-            receiptStatusIcon.innerHTML = tx.type === 'expense' ? '<span>↗</span>' : '<span>✔</span>';
-        }
-        if (receiptAmount) {
-            receiptAmount.textContent = (tx.type === 'income' ? '+' : '-') + tx.amount + ' 🍡';
-            receiptAmount.style.color = tx.type === 'income' ? '#34d399' : '#f87171';
-        }
-        if (receiptTitle) receiptTitle.textContent = currentLang === 'ru' ? tx.titleRu : tx.titleEn;
-        if (receiptCategory) receiptCategory.textContent = (currentLang === 'ru' ? tx.catRu : tx.catEn) + ' • Zephyrius Pay';
-        if (receiptStatus) receiptStatus.textContent = t('receipt_status_success');
-        if (receiptDateTime) receiptDateTime.textContent = currentLang === 'ru' ? tx.dateRu : tx.dateEn;
-        if (receiptId) receiptId.textContent = '#' + tx.id;
-        bankReceiptOverlay.style.display = 'flex';
-    }
-
-    function closeReceipt() {
-        triggerHaptic('light');
-        if (bankReceiptOverlay) bankReceiptOverlay.style.display = 'none';
-    }
 
     function renderBankSheet(filter = 'all') {
         currentBankFilter = filter;
@@ -1600,7 +1488,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const filtered = filter === 'all' ? BANK_TRANSACTIONS : BANK_TRANSACTIONS.filter(t => t.type === filter);
 
         if (filtered.length === 0) {
-            bankTransactionsList.innerHTML = `<div style="text-align: center; padding: 24px 0; color: #64748b; font-size: 13px;">${t('bank_no_tx')}</div>`;
+            bankTransactionsList.innerHTML = `
+                <div class="bank-empty-state">
+                    <div class="bank-empty-icon-wrap">
+                        <span>🧾</span>
+                    </div>
+                    <h4 class="bank-empty-title">${t('bank_empty_title')}</h4>
+                    <p class="bank-empty-desc">${t('bank_empty_desc')}</p>
+                </div>
+            `;
             return;
         }
 
@@ -1619,14 +1515,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
         `).join('');
-
-        bankTransactionsList.querySelectorAll('.bank-tx-item').forEach(el => {
-            el.addEventListener('click', () => {
-                const txId = el.getAttribute('data-id');
-                const targetTx = BANK_TRANSACTIONS.find(t => t.id === txId);
-                if (targetTx) openReceipt(targetTx);
-            });
-        });
     }
 
     function openBankSheet() {
@@ -1638,10 +1526,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeBankSheet() {
         triggerHaptic('light');
         if (bankSheetOverlay) bankSheetOverlay.style.display = 'none';
-        if (bankReceiptOverlay) bankReceiptOverlay.style.display = 'none';
     }
 
-    // Open Tinkoff Zephyrs Banking sheet on balance card click
+    // Open Tinkoff Zephyrs Banking screen on balance card click
     if (zephyrsBalanceCard) {
         zephyrsBalanceCard.addEventListener('click', () => {
             triggerHaptic('medium');
@@ -1650,9 +1537,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (btnCloseBankSheet) btnCloseBankSheet.addEventListener('click', closeBankSheet);
-    if (bankSheetBackdrop) bankSheetBackdrop.addEventListener('click', closeBankSheet);
-    if (btnCloseReceipt) btnCloseReceipt.addEventListener('click', closeReceipt);
-    if (bankReceiptBackdrop) bankReceiptBackdrop.addEventListener('click', closeReceipt);
 
     if (bankFilterTabBtns) {
         bankFilterTabBtns.forEach(btn => {
