@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="style.css?v=3.0">
+    <link rel="stylesheet" href="style.css?v=3.5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
@@ -570,8 +570,15 @@
         </button>
     </nav>
 
+    <!-- Hidden backward-compatibility dummy elements preventing cached JS from throwing on missing elements -->
+    <div style="display: none !important;" aria-hidden="true">
+        <button id="btnBackToMenu"></button>
+        <button id="btnProfileBack"></button>
+        <button id="btnPlaceholderBack"></button>
+    </div>
+
     <!-- Scripts -->
-    <script src="config.js?v=3.0"></script>
-    <script src="app.js?v=3.0"></script>
+    <script src="config.js?v=3.5"></script>
+    <script src="app.js?v=3.5"></script>
 </body>
 </html>

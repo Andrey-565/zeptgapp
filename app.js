@@ -97,8 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------
     // 3. Elements & URL Query Parsing
     // ----------------------------------------------------
-    if (CONFIG.serverName) {
-        document.getElementById('serverName').textContent = CONFIG.serverName;
+    const serverNameEl = document.getElementById('serverName');
+    if (serverNameEl && window.CONFIG && CONFIG.serverName) {
+        serverNameEl.textContent = CONFIG.serverName;
     }
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -305,8 +306,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Header
         if (targetView === 'menu') {
-            pageTitle.textContent = t('menu_title');
-            pageSubtitle.textContent = t('menu_sub');
+            if (pageTitle) pageTitle.textContent = t('menu_title');
+            if (pageSubtitle) pageSubtitle.textContent = t('menu_sub');
             if (tg?.BackButton) tg.BackButton.hide();
             setActiveDockTab('home');
         } else {
@@ -314,21 +315,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             switch (targetView) {
                 case 'auth':
-                    pageTitle.textContent = t('auth_title');
-                    pageSubtitle.textContent = t('auth_sub');
+                    if (pageTitle) pageTitle.textContent = t('auth_title');
+                    if (pageSubtitle) pageSubtitle.textContent = t('auth_sub');
                     break;
                 case 'map':
-                    pageTitle.textContent = t('map_title');
-                    pageSubtitle.textContent = t('map_sub');
+                    if (pageTitle) pageTitle.textContent = t('map_title');
+                    if (pageSubtitle) pageSubtitle.textContent = t('map_sub');
                     break;
                 case 'settings':
-                    pageTitle.textContent = t('settings_title');
-                    pageSubtitle.textContent = t('settings_sub');
+                    if (pageTitle) pageTitle.textContent = t('settings_title');
+                    if (pageSubtitle) pageSubtitle.textContent = t('settings_sub');
                     setActiveDockTab('settings');
                     break;
                 case 'profile':
-                    pageTitle.textContent = t('profile_title');
-                    pageSubtitle.textContent = t('profile_sub');
+                    if (pageTitle) pageTitle.textContent = t('profile_title');
+                    if (pageSubtitle) pageSubtitle.textContent = t('profile_sub');
                     setActiveDockTab('profile');
                     break;
             }
@@ -339,13 +340,17 @@ document.addEventListener('DOMContentLoaded', () => {
         tg.BackButton.onClick(() => switchView('menu'));
     }
 
-    menuBtnAuth.addEventListener('click', () => switchView('auth'));
-    menuBtnMap.addEventListener('click', () => switchView('map'));
+    if (menuBtnAuth) {
+        menuBtnAuth.addEventListener('click', () => switchView('auth'));
+    }
+    if (menuBtnMap) {
+        menuBtnMap.addEventListener('click', () => switchView('map'));
+    }
 
     if (menuBtnDiscord) {
         menuBtnDiscord.addEventListener('click', () => {
             triggerHaptic('medium');
-            const discordLink = CONFIG.discordUrl || 'https://discord.gg/X9fPgGjATk';
+            const discordLink = (window.CONFIG && CONFIG.discordUrl) ? CONFIG.discordUrl : 'https://discord.gg/X9fPgGjATk';
             if (tg?.openLink) {
                 tg.openLink(discordLink);
             } else {
@@ -359,6 +364,20 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             switchView('auth');
         });
+    }
+
+    // Backward-compatibility listeners for older cached views
+    const btnBackToMenu = document.getElementById('btnBackToMenu');
+    if (btnBackToMenu) {
+        btnBackToMenu.addEventListener('click', () => switchView('menu'));
+    }
+    const btnProfileBack = document.getElementById('btnProfileBack');
+    if (btnProfileBack) {
+        btnProfileBack.addEventListener('click', () => switchView('menu'));
+    }
+    const btnPlaceholderBack = document.getElementById('btnPlaceholderBack');
+    if (btnPlaceholderBack) {
+        btnPlaceholderBack.addEventListener('click', () => switchView('menu'));
     }
 
     // ----------------------------------------------------
@@ -523,25 +542,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update active view title & subtitle
         if (currentView === 'menu') {
-            pageTitle.textContent = t('menu_title');
-            pageSubtitle.textContent = t('menu_sub');
+            if (pageTitle) pageTitle.textContent = t('menu_title');
+            if (pageSubtitle) pageSubtitle.textContent = t('menu_sub');
         } else if (currentView === 'auth') {
-            pageTitle.textContent = t('auth_title');
-            pageSubtitle.textContent = t('auth_sub');
+            if (pageTitle) pageTitle.textContent = t('auth_title');
+            if (pageSubtitle) pageSubtitle.textContent = t('auth_sub');
         } else if (currentView === 'map') {
-            pageTitle.textContent = t('map_title');
-            pageSubtitle.textContent = t('map_sub');
+            if (pageTitle) pageTitle.textContent = t('map_title');
+            if (pageSubtitle) pageSubtitle.textContent = t('map_sub');
         } else if (currentView === 'settings') {
-            pageTitle.textContent = t('settings_title');
-            pageSubtitle.textContent = t('settings_sub');
+            if (pageTitle) pageTitle.textContent = t('settings_title');
+            if (pageSubtitle) pageSubtitle.textContent = t('settings_sub');
         } else if (currentView === 'profile') {
-            pageTitle.textContent = t('profile_title');
-            pageSubtitle.textContent = t('profile_sub');
+            if (pageTitle) pageTitle.textContent = t('profile_title');
+            if (pageSubtitle) pageSubtitle.textContent = t('profile_sub');
         } else if (currentView === 'placeholder') {
-            pageTitle.textContent = t('shop_title');
-            pageSubtitle.textContent = t('shop_sub');
-            placeholderTitle.textContent = t('shop_placeholder_title');
-            placeholderDesc.textContent = t('shop_placeholder_desc');
+            if (pageTitle) pageTitle.textContent = t('shop_title');
+            if (pageSubtitle) pageSubtitle.textContent = t('shop_sub');
+            if (placeholderTitle) placeholderTitle.textContent = t('shop_placeholder_title');
+            if (placeholderDesc) placeholderDesc.textContent = t('shop_placeholder_desc');
         }
     }
 
@@ -895,42 +914,47 @@ document.addEventListener('DOMContentLoaded', () => {
             showProfileIpAlert(sessionNick, sessionIp, cleanCode);
             switchView('profile');
         } else {
-            activeSessionBanner.style.display = 'flex';
-            bannerCode.textContent = cleanCode;
-            authBadge.style.display = 'inline-block';
+            if (activeSessionBanner) activeSessionBanner.style.display = 'flex';
+            if (bannerCode) bannerCode.textContent = cleanCode;
+            if (authBadge) authBadge.style.display = 'inline-block';
 
-            authConfirmBox.style.display = 'block';
-            authManualBox.style.display = 'none';
-            sessionCodeBadge.textContent = cleanCode;
+            if (authConfirmBox) authConfirmBox.style.display = 'block';
+            if (authManualBox) authManualBox.style.display = 'none';
+            if (sessionCodeBadge) sessionCodeBadge.textContent = cleanCode;
 
             if (sessionNick) {
-                playerName.textContent = sessionNick;
-                playerAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(sessionNick)}/120`;
+                if (playerName) playerName.textContent = sessionNick;
+                if (playerAvatar) playerAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(sessionNick)}/120`;
             }
             if (sessionIp) {
-                playerIp.textContent = sessionIp;
-                ipRow.style.display = 'flex';
+                if (playerIp) playerIp.textContent = sessionIp;
+                if (ipRow) ipRow.style.display = 'flex';
             }
 
             switchView('auth');
         }
     } else {
-        authConfirmBox.style.display = 'none';
-        authManualBox.style.display = 'block';
+        if (authConfirmBox) authConfirmBox.style.display = 'none';
+        if (authManualBox) authManualBox.style.display = 'block';
         setupPinInputs();
         switchView('menu');
     }
 
-    btnConfirm.addEventListener('click', () => {
-        submitVerification(sessionCodeBadge.textContent);
-    });
+    if (btnConfirm) {
+        btnConfirm.addEventListener('click', () => {
+            const code = sessionCodeBadge ? sessionCodeBadge.textContent.trim() : '';
+            submitVerification(code);
+        });
+    }
 
-    btnReject.addEventListener('click', () => {
-        if (!confirm("Вы уверены, что хотите отклонить вход?")) return;
-        triggerHaptic('warning');
-        const currentCode = sessionCodeBadge.textContent;
-        rejectSession(currentCode);
-    });
+    if (btnReject) {
+        btnReject.addEventListener('click', () => {
+            if (!confirm("Вы уверены, что хотите отклонить вход?")) return;
+            triggerHaptic('warning');
+            const currentCode = sessionCodeBadge ? sessionCodeBadge.textContent.trim() : '';
+            rejectSession(currentCode);
+        });
+    }
 
     function showPinError(message) {
         triggerHaptic('error');

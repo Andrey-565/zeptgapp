@@ -24,3 +24,7 @@ const CONFIG = {
     // Если оставить пустым "", всё работает через Telegram-бота напрямую!
     apiUrl: ""
 };
+
+if (typeof window !== 'undefined') {
+    window.CONFIG = CONFIG;
+}
