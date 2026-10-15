@@ -897,6 +897,253 @@ body {
     font-weight: 600;
 }
 
+/* ================= ZEPHYRS BALANCE CARD ================= */
+.zephyrs-balance-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, rgba(244, 114, 182, 0.15), rgba(168, 85, 247, 0.12), rgba(18, 24, 38, 0.95));
+    border: 1px solid rgba(244, 114, 182, 0.35);
+    border-radius: 20px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 24px rgba(244, 114, 182, 0.12);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.zephyrs-balance-card:active {
+    transform: scale(0.98);
+}
+
+.zephyrs-balance-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(244, 114, 182, 0.25) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.zephyrs-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.zephyrs-icon-bubble {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: rgba(244, 114, 182, 0.18);
+    border: 1px solid rgba(244, 114, 182, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 0 16px rgba(244, 114, 182, 0.25);
+    flex-shrink: 0;
+}
+
+.zephyrs-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.zephyrs-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.zephyrs-badge {
+    align-self: flex-start;
+    font-size: 10px;
+    font-weight: 700;
+    color: #f472b6;
+    background: rgba(244, 114, 182, 0.15);
+    border: 1px solid rgba(244, 114, 182, 0.3);
+    padding: 1px 7px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.zephyrs-right {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.zephyrs-amount {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fdf2f8;
+    text-shadow: 0 0 12px rgba(244, 114, 182, 0.5);
+    letter-spacing: -0.5px;
+}
+
+.zephyrs-unit {
+    font-size: 16px;
+}
+
+/* ================= PROFILE STATS CARD ================= */
+.profile-stats-card {
+    background: rgba(18, 24, 38, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 14px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.profile-stats-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.stats-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #cbd5e1;
+}
+
+.stats-header-icon {
+    font-size: 16px;
+}
+
+.stats-live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #34d399;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 2px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.stat-box {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 12px 6px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: transform 0.15s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-2px);
+}
+
+.stat-box.stat-mined {
+    border-color: rgba(6, 182, 212, 0.3);
+    background: linear-gradient(180deg, rgba(6, 182, 212, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.stat-box.stat-kills {
+    border-color: rgba(16, 185, 129, 0.3);
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.stat-box.stat-deaths {
+    border-color: rgba(239, 68, 68, 0.3);
+    background: linear-gradient(180deg, rgba(239, 68, 68, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.stat-icon-wrap {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 100%;
+}
+
+.stat-value {
+    font-size: 17px;
+    font-weight: 800;
+    color: #f8fafc;
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.stat-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    line-height: 1.2;
+}
+
+body.theme-light .zephyrs-balance-card {
+    background: linear-gradient(135deg, rgba(244, 114, 182, 0.15), rgba(168, 85, 247, 0.08), #ffffff);
+    border-color: rgba(244, 114, 182, 0.35);
+    box-shadow: 0 4px 18px rgba(244, 114, 182, 0.15);
+}
+
+body.theme-light .zephyrs-title {
+    color: var(--text-primary);
+}
+
+body.theme-light .zephyrs-amount {
+    color: var(--text-primary);
+    text-shadow: none;
+}
+
+body.theme-light .profile-stats-card {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+body.theme-light .stats-header-title {
+    color: var(--text-primary);
+}
+
+body.theme-light .stat-box {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+body.theme-light .stat-value {
+    color: var(--text-primary);
+}
+
 /* ================= PROFILE INFO GRID ================= */
 .profile-info-grid {
     display: grid;

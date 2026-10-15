@@ -164,6 +164,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileAuthStatus = document.getElementById('profileAuthStatus');
     const profileUnlinkedCard = document.getElementById('profileUnlinkedCard');
     const btnProfileGoLink = document.getElementById('btnProfileGoLink');
+    const profileZephyrs = document.getElementById('profileZephyrs');
+    const statMinedBlocks = document.getElementById('statMinedBlocks');
+    const statMobKills = document.getElementById('statMobKills');
+    const statDeaths = document.getElementById('statDeaths');
 
     // BlueMap Elements
     const btnLaunchMapDirect = document.getElementById('btnLaunchMapDirect');
@@ -221,7 +225,13 @@ document.addEventListener('DOMContentLoaded', () => {
             settings_reload_btn: "🔄 Сбросить кэш и перезагрузить",
             profile_sync_desc: "Синхронизация профиля и статистика скоро",
             coming_soon: "Скоро в обновлении сервера",
-            btn_back: "← В главное меню"
+            btn_back: "← В главное меню",
+            profile_zephyrs_title: "Баланс Зефирок",
+            profile_zephyrs_badge: "Игровая валюта",
+            profile_stats_title: "Игровая статистика",
+            stat_mined: "Блоков добыто",
+            stat_kills: "Убийств мобов",
+            stat_deaths: "Смертей"
         },
         en: {
             menu_title: "Main Menu",
@@ -257,7 +267,13 @@ document.addEventListener('DOMContentLoaded', () => {
             settings_reload_btn: "🔄 Reset Cache & Reload",
             profile_sync_desc: "Profile synchronization & statistics coming soon",
             coming_soon: "Coming in server update",
-            btn_back: "← To Main Menu"
+            btn_back: "← To Main Menu",
+            profile_zephyrs_title: "Zephyrs Balance",
+            profile_zephyrs_badge: "Game Currency",
+            profile_stats_title: "Game Statistics",
+            stat_mined: "Blocks Mined",
+            stat_kills: "Mob Kills",
+            stat_deaths: "Deaths"
         }
     };
 
@@ -599,6 +615,16 @@ document.addEventListener('DOMContentLoaded', () => {
         let savedNick = localStorage.getItem('zeph_linked_nick') || sessionNick || '';
         let savedIp = localStorage.getItem('zeph_trusted_ip') || '';
 
+        // Read stats & zephyrs from URL if present
+        const urlZephyrs = urlParams.get('zephyrs');
+        const urlDeaths = urlParams.get('deaths');
+        const urlMined = urlParams.get('mined');
+        const urlKills = urlParams.get('kills');
+        if (urlZephyrs !== null) localStorage.setItem('zeph_balance_zephyrs', urlZephyrs);
+        if (urlDeaths !== null) localStorage.setItem('zeph_stat_deaths', urlDeaths);
+        if (urlMined !== null) localStorage.setItem('zeph_stat_mined', urlMined);
+        if (urlKills !== null) localStorage.setItem('zeph_stat_kills', urlKills);
+
         // If opened with IP change session
         const isIpChangeParam = urlParams.get('isIpChange') === 'true' || urlParams.get('tab') === 'profile';
         if (sessionIp && (isIpChangeParam || sessionCode)) {
@@ -616,7 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (data.linked) {
                         localStorage.setItem('zeph_linked_nick', data.nick);
                         if (data.trustedIp) localStorage.setItem('zeph_trusted_ip', data.trustedIp);
-                        updateProfileUI(data.nick, data.trustedIp);
+                        updateProfileUI(data.nick, data.trustedIp, data.stats, data.zephyrs);
                     }
                     if (data.pendingSession && data.pendingSession.isIpChange) {
                         showProfileIpAlert(data.pendingSession.player, data.pendingSession.ip, data.pendingSession.code);
@@ -626,7 +652,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateProfileUI(nick, trustedIp) {
+    function updateProfileUI(nick, trustedIp, stats, zephyrs) {
+        if (zephyrs !== undefined && zephyrs !== null) {
+            localStorage.setItem('zeph_balance_zephyrs', zephyrs);
+        }
+        if (stats) {
+            if (stats.deaths !== undefined) localStorage.setItem('zeph_stat_deaths', stats.deaths);
+            if (stats.minedBlocks !== undefined) localStorage.setItem('zeph_stat_mined', stats.minedBlocks);
+            else if (stats.mined !== undefined) localStorage.setItem('zeph_stat_mined', stats.mined);
+            if (stats.mobKills !== undefined) localStorage.setItem('zeph_stat_kills', stats.mobKills);
+            else if (stats.kills !== undefined) localStorage.setItem('zeph_stat_kills', stats.kills);
+        }
+
+        const currentZephyrs = Number(localStorage.getItem('zeph_balance_zephyrs') || 0);
+        const currentDeaths = Number(localStorage.getItem('zeph_stat_deaths') || 0);
+        const currentMined = Number(localStorage.getItem('zeph_stat_mined') || 0);
+        const currentKills = Number(localStorage.getItem('zeph_stat_kills') || 0);
+
+        if (profileZephyrs) profileZephyrs.textContent = currentZephyrs.toLocaleString('ru-RU');
+        if (statDeaths) statDeaths.textContent = currentDeaths.toLocaleString('ru-RU');
+        if (statMinedBlocks) statMinedBlocks.textContent = currentMined.toLocaleString('ru-RU');
+        if (statMobKills) statMobKills.textContent = currentKills.toLocaleString('ru-RU');
+
         if (nick) {
             if (profileMcNick) profileMcNick.textContent = nick;
             if (profileUserAvatar) profileUserAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(nick)}/120`;
@@ -955,7 +1002,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const trustedIp = data.trustedIp || sessionIp;
                     if (linkedNick) {
                         localStorage.setItem('zeph_linked_nick', linkedNick);
-                        updateProfileUI(linkedNick, trustedIp);
+                        updateProfileUI(linkedNick, trustedIp, data.stats, data.zephyrs);
                     }
                     triggerHaptic('success');
                     switchView('success');

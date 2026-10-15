@@ -383,6 +383,71 @@
                     </div>
                 </div>
 
+                <!-- Карточка баланса валюты: Зефирки -->
+                <div class="zephyrs-balance-card">
+                    <div class="zephyrs-left">
+                        <div class="zephyrs-icon-bubble">
+                            <span class="zephyrs-icon">🍬</span>
+                        </div>
+                        <div class="zephyrs-text">
+                            <span class="zephyrs-title" data-i18n="profile_zephyrs_title">Баланс Зефирок</span>
+                            <span class="zephyrs-badge" data-i18n="profile_zephyrs_badge">Игровая валюта</span>
+                        </div>
+                    </div>
+                    <div class="zephyrs-right">
+                        <span class="zephyrs-amount font-mono" id="profileZephyrs">0</span>
+                        <span class="zephyrs-unit">🍬</span>
+                    </div>
+                </div>
+
+                <!-- Карточка игровой статистики -->
+                <div class="profile-stats-card">
+                    <div class="profile-stats-header">
+                        <div class="stats-header-title">
+                            <span class="stats-header-icon">📊</span>
+                            <span data-i18n="profile_stats_title">Игровая статистика</span>
+                        </div>
+                        <span class="stats-live-pill">
+                            <span class="pulse-dot"></span> Live
+                        </span>
+                    </div>
+
+                    <div class="stats-grid">
+                        <!-- Добыто блоков -->
+                        <div class="stat-box stat-mined">
+                            <div class="stat-icon-wrap">
+                                <span class="stat-icon">⛏️</span>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value font-mono" id="statMinedBlocks">0</span>
+                                <span class="stat-label" data-i18n="stat_mined">Блоков добыто</span>
+                            </div>
+                        </div>
+
+                        <!-- Убийств мобов -->
+                        <div class="stat-box stat-kills">
+                            <div class="stat-icon-wrap">
+                                <span class="stat-icon">⚔️</span>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value font-mono" id="statMobKills">0</span>
+                                <span class="stat-label" data-i18n="stat_kills">Убийств мобов</span>
+                            </div>
+                        </div>
+
+                        <!-- Смертей -->
+                        <div class="stat-box stat-deaths">
+                            <div class="stat-icon-wrap">
+                                <span class="stat-icon">💀</span>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value font-mono" id="statDeaths">0</span>
+                                <span class="stat-label" data-i18n="stat_deaths">Смертей</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Блок деталей аккаунта -->
                 <div class="profile-info-grid">
                     <div class="profile-info-item">
