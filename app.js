@@ -120,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pageTitle = document.getElementById('pageTitle');
     const pageSubtitle = document.getElementById('pageSubtitle');
-    const btnBackToMenu = document.getElementById('btnBackToMenu');
 
     // Menu Cards
     const menuBtnAuth = document.getElementById('menuBtnAuth');
@@ -179,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const placeholderIcon = document.getElementById('placeholderIcon');
     const placeholderTitle = document.getElementById('placeholderTitle');
     const placeholderDesc = document.getElementById('placeholderDesc');
-    const btnPlaceholderBack = document.getElementById('btnPlaceholderBack');
 
     // Result Buttons
     const btnCloseApp = document.getElementById('btnCloseApp');
@@ -305,15 +303,13 @@ document.addEventListener('DOMContentLoaded', () => {
             views[targetView].style.display = 'block';
         }
 
-        // Header and Back Button
+        // Header
         if (targetView === 'menu') {
             pageTitle.textContent = t('menu_title');
             pageSubtitle.textContent = t('menu_sub');
-            btnBackToMenu.style.display = 'none';
             if (tg?.BackButton) tg.BackButton.hide();
             setActiveDockTab('home');
         } else {
-            btnBackToMenu.style.display = 'flex';
             if (tg?.BackButton) tg.BackButton.show();
 
             switch (targetView) {
@@ -339,7 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    btnBackToMenu.addEventListener('click', () => switchView('menu'));
     if (tg?.BackButton) {
         tg.BackButton.onClick(() => switchView('menu'));
     }
@@ -406,15 +401,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    if (btnPlaceholderBack) {
-        btnPlaceholderBack.addEventListener('click', () => switchView('menu'));
-    }
-
-    const btnProfileBack = document.getElementById('btnProfileBack');
-    if (btnProfileBack) {
-        btnProfileBack.addEventListener('click', () => switchView('menu'));
-    }
 
     // ----------------------------------------------------
     // 6. BlueMap 3D Launch Action
