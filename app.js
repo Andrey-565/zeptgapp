@@ -331,6 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (pageTitle) pageTitle.textContent = t('profile_title');
                     if (pageSubtitle) pageSubtitle.textContent = t('profile_sub');
                     setActiveDockTab('profile');
+                    initProfileData();
                     break;
             }
         }
@@ -623,9 +624,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------
     function initProfileData() {
         const tgUser = tg?.initDataUnsafe?.user;
-        const tgId = tgUser?.id || 0;
-        const tgUsername = tgUser?.username || '';
-        const tgDisplayName = tgUser ? [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ') : 'Игрок';
+        let tgId = tgUser?.id || 0;
+        let tgUsername = tgUser?.username || '';
+        let tgDisplayName = tgUser ? [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ') : '';
+
+        if (tgId) {
+            localStorage.setItem('zeph_tg_id', tgId);
+        } else {
+            tgId = Number(localStorage.getItem('zeph_tg_id') || 0);
+        }
+
+        if (tgUsername) {
+            localStorage.setItem('zeph_tg_username', tgUsername);
+        } else {
+            tgUsername = localStorage.getItem('zeph_tg_username') || '';
+        }
+
+        if (!tgDisplayName && tgUsername) tgDisplayName = '@' + tgUsername;
+        if (!tgDisplayName) tgDisplayName = 'Игрок';
 
         if (profileTgUser) {
             profileTgUser.textContent = tgUsername ? '@' + tgUsername : tgDisplayName;
@@ -1002,8 +1018,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const tgUser = tg?.initDataUnsafe?.user;
-        const tgId = tgUser?.id || 0;
-        const tgUsername = tgUser?.username || '';
+        let tgId = tgUser?.id || 0;
+        let tgUsername = tgUser?.username || '';
+        if (!tgId) tgId = Number(localStorage.getItem('zeph_tg_id') || 0);
+        if (!tgUsername) tgUsername = localStorage.getItem('zeph_tg_username') || '';
 
         // Check API URL if available
         const apiUrl = CONFIG.apiUrl || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? `${window.location.protocol}//${window.location.hostname}:8088` : '');
@@ -1034,7 +1052,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const trustedIp = data.trustedIp || sessionIp;
                     if (linkedNick) {
                         localStorage.setItem('zeph_linked_nick', linkedNick);
+                        if (trustedIp) localStorage.setItem('zeph_trusted_ip', trustedIp);
                         updateProfileUI(linkedNick, trustedIp, data.stats, data.zephyrs);
+                    }
+                    if (data.telegramId) {
+                        localStorage.setItem('zeph_tg_id', data.telegramId);
+                    }
+                    if (data.telegramUsername) {
+                        localStorage.setItem('zeph_tg_username', data.telegramUsername);
                     }
                     triggerHaptic('success');
                     switchView('success');
@@ -1078,6 +1103,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Result Button Handlers
+    const btnSuccessProfile = document.getElementById('btnSuccessProfile');
+    if (btnSuccessProfile) {
+        btnSuccessProfile.addEventListener('click', () => {
+            switchView('profile');
+        });
+    }
+
     if (btnCloseApp) {
         btnCloseApp.addEventListener('click', () => {
             if (tg?.close) tg.close();
