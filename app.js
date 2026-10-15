@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Menu Cards
     const menuBtnAuth = document.getElementById('menuBtnAuth');
     const menuBtnMap = document.getElementById('menuBtnMap');
+    const menuBtnDiscord = document.getElementById('menuBtnDiscord');
     const activeSessionBanner = document.getElementById('activeSessionBanner');
     const bannerCode = document.getElementById('bannerCode');
     const btnOpenAuthFromBanner = document.getElementById('btnOpenAuthFromBanner');
@@ -231,7 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
             profile_stats_title: "Игровая статистика",
             stat_mined: "Блоков добыто",
             stat_kills: "Убийств мобов",
-            stat_deaths: "Смертей"
+            stat_deaths: "Смертей",
+            menu_discord_title: "Discord Сервер",
+            menu_discord_desc: "Новости, общение с игроками, тикеты и голосовые каналы"
         },
         en: {
             menu_title: "Main Menu",
@@ -273,7 +276,9 @@ document.addEventListener('DOMContentLoaded', () => {
             profile_stats_title: "Game Statistics",
             stat_mined: "Blocks Mined",
             stat_kills: "Mob Kills",
-            stat_deaths: "Deaths"
+            stat_deaths: "Deaths",
+            menu_discord_title: "Discord Server",
+            menu_discord_desc: "News, community chat, support tickets & voice channels"
         }
     };
 
@@ -341,6 +346,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     menuBtnAuth.addEventListener('click', () => switchView('auth'));
     menuBtnMap.addEventListener('click', () => switchView('map'));
+
+    if (menuBtnDiscord) {
+        menuBtnDiscord.addEventListener('click', () => {
+            triggerHaptic('medium');
+            const discordLink = CONFIG.discordUrl || 'https://discord.gg/X9fPgGjATk';
+            if (tg?.openLink) {
+                tg.openLink(discordLink);
+            } else {
+                window.open(discordLink, '_blank');
+            }
+        });
+    }
 
     if (btnOpenAuthFromBanner) {
         btnOpenAuthFromBanner.addEventListener('click', (e) => {

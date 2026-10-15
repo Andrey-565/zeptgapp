@@ -269,6 +269,28 @@ body {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(18, 24, 38, 0.85));
 }
 
+.card-discord {
+    border-color: rgba(88, 101, 242, 0.35);
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.16), rgba(18, 24, 38, 0.88));
+}
+
+.card-discord:hover {
+    box-shadow: 0 10px 30px rgba(88, 101, 242, 0.28);
+}
+
+.icon-discord-wrap {
+    color: #5865F2;
+    background: rgba(88, 101, 242, 0.15) !important;
+    border-color: rgba(88, 101, 242, 0.35) !important;
+}
+
+.discord-svg-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+    filter: drop-shadow(0 0 6px rgba(88, 101, 242, 0.4));
+}
+
 .card-icon-wrap {
     width: 48px;
     height: 48px;
@@ -340,6 +362,12 @@ body {
     background: rgba(139, 92, 246, 0.15);
     color: #c084fc;
     border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.badge-discord {
+    background: rgba(88, 101, 242, 0.2);
+    color: #818cf8;
+    border: 1px solid rgba(88, 101, 242, 0.4);
 }
 
 /* Views */
