@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="style.css?v=4.0">
+    <link rel="stylesheet" href="style.css?v=4.1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
@@ -40,10 +40,10 @@
                 <div class="alert-banner" id="activeSessionBanner" style="display: none;">
                     <div class="alert-icon">⚡</div>
                     <div class="alert-info">
-                        <strong>Ожидает подтверждения</strong>
-                        <span>Код сессии: <code id="bannerCode">------</code></span>
+                        <strong data-i18n="banner_pending">Ожидает подтверждения</strong>
+                        <span><span data-i18n="banner_code_label">Код сессии:</span> <code id="bannerCode">------</code></span>
                     </div>
-                    <button class="btn btn-sm btn-accent" id="btnOpenAuthFromBanner">Войти</button>
+                    <button class="btn btn-sm btn-accent" id="btnOpenAuthFromBanner" data-i18n="banner_login_btn">Войти</button>
                 </div>
 
                 <!-- Меню Кнопки / Карточки -->
@@ -55,10 +55,10 @@
                         </div>
                         <div class="card-content">
                             <div class="card-title-row">
-                                <h3>Авторизация</h3>
-                                <span class="badge badge-accent" id="authBadge" style="display: none;">Запрос</span>
+                                <h3 data-i18n="menu_auth_title">Авторизация</h3>
+                                <span class="badge badge-accent" id="authBadge" style="display: none;" data-i18n="menu_auth_badge">Запрос</span>
                             </div>
-                            <p>Подтвердить вход на сервер или ввести 6-значный PIN-код</p>
+                            <p data-i18n="menu_auth_desc">Подтвердить вход на сервер или ввести 6-значный PIN-код</p>
                         </div>
                         <span class="card-arrow">→</span>
                     </div>
@@ -70,10 +70,10 @@
                         </div>
                         <div class="card-content">
                             <div class="card-title-row">
-                                <h3>Карта сервера</h3>
+                                <h3 data-i18n="menu_map_title">Карта сервера</h3>
                                 <span class="badge badge-3d">3D BlueMap</span>
                             </div>
-                            <p>Интерактивная 3D карта основного мира в реальном времени</p>
+                            <p data-i18n="menu_map_desc">Интерактивная 3D карта основного мира в реальном времени</p>
                         </div>
                         <span class="card-arrow">→</span>
                     </div>
@@ -102,10 +102,10 @@
                         </div>
                         <div class="card-content">
                             <div class="card-title-row">
-                                <h3>О сервере и крафты</h3>
+                                <h3 data-i18n="menu_info_title">О сервере и крафты</h3>
                                 <span class="badge badge-info">Wiki</span>
                             </div>
-                            <p>Уникальные механики, кастомные крафты, напитки BreweryX</p>
+                            <p data-i18n="menu_info_desc">Уникальные механики, кастомные крафты, напитки BreweryX</p>
                         </div>
                         <span class="card-arrow">→</span>
                     </div>
@@ -122,24 +122,24 @@
                     </div>
 
                     <h2 id="playerName">Игрок</h2>
-                    <div class="status-pill" id="statusPill">Подтверждение сессии</div>
+                    <div class="status-pill" id="statusPill" data-i18n="auth_confirm_pill">Подтверждение сессии</div>
 
                     <div class="info-box">
                         <div class="info-row">
-                            <span class="info-label">🔑 Код сессии:</span>
+                            <span class="info-label" data-i18n="auth_session_code">🔑 Код сессии:</span>
                             <span class="code-badge" id="sessionCodeBadge">------</span>
                         </div>
                         <div class="info-row" id="ipRow" style="display: none;">
-                            <span class="info-label">🌐 IP-адрес:</span>
+                            <span class="info-label" data-i18n="auth_ip_label">🌐 IP-адрес:</span>
                             <span class="info-val" id="playerIp">0.0.0.0</span>
                         </div>
                     </div>
 
                     <div class="actions">
                         <button class="btn btn-primary" id="btnConfirm">
-                            <span class="btn-icon">🎮</span> Подтвердить вход
+                            <span class="btn-icon">🎮</span> <span data-i18n="auth_confirm_btn">Подтвердить вход</span>
                         </button>
-                        <button class="btn btn-danger" id="btnReject">
+                        <button class="btn btn-danger" id="btnReject" data-i18n="auth_reject_btn">
                             Это не я (Отклонить)
                         </button>
                     </div>
@@ -151,8 +151,8 @@
                         <div class="manual-icon-glow"></div>
                         <span class="manual-icon">⌨️</span>
                     </div>
-                    <h2>Ввод кода авторизации</h2>
-                    <p class="hint-text">Введите 6-значный код с экрана Minecraft сервера:</p>
+                    <h2 data-i18n="auth_manual_title">Ввод кода авторизации</h2>
+                    <p class="hint-text" data-i18n="auth_manual_hint">Введите 6-значный код с экрана Minecraft сервера:</p>
 
                     <div class="pin-container">
                         <div class="pin-inputs" id="pinInputs">
@@ -167,21 +167,21 @@
 
                         <div class="pin-tools">
                             <button type="button" class="btn-pin-tool" id="btnPastePin">
-                                <span>📋</span> Вставить из буфера
+                                <span>📋</span> <span data-i18n="auth_paste_btn">Вставить из буфера</span>
                             </button>
                             <button type="button" class="btn-pin-tool" id="btnClearPin">
-                                <span>✕</span> Очистить
+                                <span>✕</span> <span data-i18n="auth_clear_btn">Очистить</span>
                             </button>
                         </div>
                     </div>
 
                     <div class="pin-error-msg" id="pinErrorMsg" style="display: none;">
                         <span class="pin-error-icon">❌</span>
-                        <span id="pinErrorText">Неверный код авторизации! Код не найден на сервере.</span>
+                        <span id="pinErrorText" data-i18n="auth_error_not_found">Неверный код авторизации! Код не найден на сервере.</span>
                     </div>
 
                     <button class="btn btn-primary btn-glow" id="btnManualSubmit" disabled>
-                        <span class="btn-icon">🔗</span> Подтвердить по коду
+                        <span class="btn-icon">🔗</span> <span data-i18n="auth_submit_btn">Подтвердить по коду</span>
                     </button>
                 </div>
             </section>
@@ -217,7 +217,7 @@
                                     <span class="pin-label">Spawn World</span>
                                 </div>
                                 <button class="btn-expand-map" id="btnExpandMap">
-                                    <span>🔍 Развернуть 3D мир</span>
+                                    <span>🔍</span> <span data-i18n="map_expand_btn">Развернуть 3D мир</span>
                                 </button>
                             </div>
                         </div>
@@ -249,7 +249,7 @@
                         </button>
                     </div>
 
-                    <div class="copy-toast" id="mapCopyToast" style="display: none;">✔ Ссылка на карту скопирована!</div>
+                    <div class="copy-toast" id="mapCopyToast" style="display: none;" data-i18n="map_copied_toast">✔ Ссылка на карту скопирована!</div>
                 </div>
             </section>
 
@@ -362,32 +362,32 @@
                             <span class="ip-card-icon">⚠️</span>
                         </div>
                         <div class="ip-card-title-wrap">
-                            <h3>Вход с нового IP-адреса</h3>
-                            <span class="ip-card-subtitle">Обнаружена новая попытка входа</span>
+                            <h3 data-i18n="profile_alert_ip_title">Вход с нового IP-адреса</h3>
+                            <span class="ip-card-subtitle" data-i18n="profile_alert_ip_subtitle">Обнаружена новая попытка входа</span>
                         </div>
                     </div>
 
                     <div class="ip-card-details">
                         <div class="ip-detail-row">
-                            <span class="ip-detail-label">👤 Никнейм:</span>
+                            <span class="ip-detail-label" data-i18n="profile_alert_nick_label">👤 Никнейм:</span>
                             <span class="ip-detail-val font-mono" id="profileAlertNick">Player</span>
                         </div>
                         <div class="ip-detail-row">
-                            <span class="ip-detail-label">🌐 Новый IP:</span>
+                            <span class="ip-detail-label" data-i18n="profile_alert_newip_label">🌐 Новый IP:</span>
                             <span class="ip-detail-val ip-highlight font-mono" id="profileAlertIp">0.0.0.0</span>
                         </div>
                         <div class="ip-detail-row" id="profileAlertCodeRow">
-                            <span class="ip-detail-label">🔑 Код сессии:</span>
+                            <span class="ip-detail-label" data-i18n="profile_alert_code_label">🔑 Код сессии:</span>
                             <span class="code-badge font-mono" id="profileAlertCode">------</span>
                         </div>
                     </div>
 
                     <div class="ip-card-actions">
                         <button class="btn btn-primary btn-glow" id="btnProfileApproveIp">
-                            <span class="btn-icon">✔</span> Подтвердить вход
+                            <span class="btn-icon">✔</span> <span data-i18n="profile_alert_approve_btn">Подтвердить вход</span>
                         </button>
                         <button class="btn btn-danger" id="btnProfileRejectIp">
-                            ✖ Отклонить (Не я)
+                            <span data-i18n="profile_alert_reject_btn">✖ Отклонить (Не я)</span>
                         </button>
                     </div>
                 </div>
@@ -403,7 +403,7 @@
                     <div class="profile-details">
                         <div class="profile-nick-row">
                             <h2 id="profileMcNick">Steve</h2>
-                            <span class="badge badge-verified" id="badgeNickLinked">✔ Привязан</span>
+                            <span class="badge badge-verified" id="badgeNickLinked" data-i18n="profile_nick_linked">✔ Привязан</span>
                         </div>
                         <div class="profile-meta-row">
                             <span class="profile-tg-user" id="profileTgUser">@username</span>
@@ -482,15 +482,15 @@
                     <div class="profile-info-item">
                         <span class="info-item-icon">🛡️</span>
                         <div class="info-item-content">
-                            <span class="info-item-title">Доверенный IP</span>
-                            <span class="info-item-val font-mono" id="profileTrustedIp">Не установлен</span>
+                            <span class="info-item-title" data-i18n="profile_trusted_ip_label">Доверенный IP</span>
+                            <span class="info-item-val font-mono" id="profileTrustedIp" data-i18n="profile_trusted_ip_none">Не установлен</span>
                         </div>
                     </div>
                     <div class="profile-info-item">
                         <span class="info-item-icon">⚡</span>
                         <div class="info-item-content">
-                            <span class="info-item-title">Статус входа</span>
-                            <span class="info-item-val text-emerald" id="profileAuthStatus">Вход без пароля</span>
+                            <span class="info-item-title" data-i18n="profile_auth_status_label">Статус входа</span>
+                            <span class="info-item-val text-emerald" id="profileAuthStatus" data-i18n="profile_auth_status_active">Вход без пароля</span>
                         </div>
                     </div>
                 </div>
@@ -498,9 +498,9 @@
                 <!-- Если аккаунт еще не привязан: плашка для привязки -->
                 <div class="unlinked-card" id="profileUnlinkedCard" style="display: none;">
                     <div class="unlinked-icon">🔗</div>
-                    <h3>Minecraft аккаунт не привязан</h3>
-                    <p>Зайдите на сервер Minecraft, скопируйте 6-значный код и подтвердите привязку.</p>
-                    <button class="btn btn-primary btn-sm" id="btnProfileGoLink">
+                    <h3 data-i18n="profile_unlinked_title">Minecraft аккаунт не привязан</h3>
+                    <p data-i18n="profile_unlinked_desc">Зайдите на сервер Minecraft, скопируйте 6-значный код и подтвердите привязку.</p>
+                    <button class="btn btn-primary btn-sm" id="btnProfileGoLink" data-i18n="profile_unlinked_btn">
                         Ввести код привязки
                     </button>
                 </div>
@@ -511,13 +511,13 @@
                 <!-- Вкладки навигации по разделу инфо -->
                 <div class="info-nav-tabs">
                     <button class="info-tab-btn active" id="tabBtnFeatures" data-infotab="features">
-                        <span>🌟</span> Механики
+                        <span>🌟</span> <span data-i18n="info_tab_features">Механики</span>
                     </button>
                     <button class="info-tab-btn" id="tabBtnCrafts" data-infotab="crafts">
-                        <span>🛠️</span> Крафты
+                        <span>🛠️</span> <span data-i18n="info_tab_crafts">Крафты</span>
                     </button>
                     <button class="info-tab-btn" id="tabBtnBrewery" data-infotab="brewery">
-                        <span>🍺</span> Напитки
+                        <span>🍺</span> <span data-i18n="info_tab_brewery">Напитки</span>
                     </button>
                 </div>
 
@@ -528,15 +528,15 @@
                         <div class="feat-header">
                             <div class="feat-title-wrap">
                                 <span class="feat-icon">⚡</span>
-                                <span class="feat-title">Беспарольный вход (TgAuth)</span>
+                                <span class="feat-title" data-i18n="feat_tgauth_title">Беспарольный вход (TgAuth)</span>
                             </div>
-                            <span class="badge badge-emerald">Безопасность</span>
+                            <span class="badge badge-emerald" data-i18n="badge_security">Безопасность</span>
                         </div>
-                        <p>Никаких паролей в чате игры! Вход на сервер подтверждается в 1 клик через это Mini App. Доверенный IP запоминается автоматически — повторный ввод не требуется.</p>
+                        <p data-i18n="feat_tgauth_desc">Никаких паролей в чате игры! Вход на сервер подтверждается в 1 клик через это Mini App. Доверенный IP запоминается автоматически — повторный ввод не требуется.</p>
                         <div class="feat-tags">
-                            <span class="feat-tag">1-Click Login</span>
-                            <span class="feat-tag">Защита по IP</span>
-                            <span class="feat-tag">Защита от взлома</span>
+                            <span class="feat-tag" data-i18n="tag_1click">1-Click Login</span>
+                            <span class="feat-tag" data-i18n="tag_ip_protect">Защита по IP</span>
+                            <span class="feat-tag" data-i18n="tag_anti_hack">Защита от взлома</span>
                         </div>
                     </div>
 
@@ -545,16 +545,16 @@
                         <div class="feat-header">
                             <div class="feat-title-wrap">
                                 <span class="feat-icon">🌕</span>
-                                <span class="feat-title">Кровавая Луна (BloodMoon)</span>
+                                <span class="feat-title" data-i18n="feat_bm_title">Кровавая Луна (BloodMoon)</span>
                             </div>
-                            <span class="badge badge-red">Событие</span>
+                            <span class="badge badge-red" data-i18n="badge_event">Событие</span>
                         </div>
-                        <p>Наступает раз в 12–15 игровых дней и длится 10 минут. Ночь окрашивается в багровый цвет, спавн мобов возрастает в 3 раза, появляются опасные заряженные криперы! Защитите базу или сразитесь за топ в турнире выживания.</p>
+                        <p data-i18n="feat_bm_desc">Наступает раз в 12–15 игровых дней и длится 10 минут. Ночь окрашивается в багровый цвет, спавн мобов возрастает в 3 раза, появляются опасные заряженные криперы! Защитите базу или сразитесь за топ в турнире выживания.</p>
                         <div class="feat-tags">
-                            <span class="feat-tag">Спавн x3</span>
-                            <span class="feat-tag">Charged Creepers</span>
-                            <span class="feat-tag">Турнир и награды</span>
-                            <span class="feat-tag">Длительность 10 мин</span>
+                            <span class="feat-tag" data-i18n="tag_spawn3x">Спавн x3</span>
+                            <span class="feat-tag" data-i18n="tag_charged_creepers">Charged Creepers</span>
+                            <span class="feat-tag" data-i18n="tag_bm_tournament">Турнир и награды</span>
+                            <span class="feat-tag" data-i18n="tag_bm_duration">Длительность 10 мин</span>
                         </div>
                     </div>
 
@@ -563,16 +563,16 @@
                         <div class="feat-header">
                             <div class="feat-title-wrap">
                                 <span class="feat-icon">☄️</span>
-                                <span class="feat-title">Падение Метеоритов</span>
+                                <span class="feat-title" data-i18n="feat_met_title">Падение Метеоритов</span>
                             </div>
-                            <span class="badge badge-cyan">Ивент</span>
+                            <span class="badge badge-cyan" data-i18n="badge_event_short">Ивент</span>
                         </div>
-                        <p>Каждые 5 часов в радиусе 1000 блоков падает метеорит с грохотом и огненным следом. В месте падения образуется кратер с лавой, а в самом сердце скрыто ядро из глубинной алмазной руды!</p>
+                        <p data-i18n="feat_met_desc">Каждые 5 часов в радиусе 1000 блоков падает метеорит с грохотом и огненным следом. В месте падения образуется кратер с лавой, а в самом сердце скрыто ядро из глубинной алмазной руды!</p>
                         <div class="feat-tags">
-                            <span class="feat-tag">Каждые 5 часов</span>
-                            <span class="feat-tag">Кратер с лавой</span>
-                            <span class="feat-tag">Алмазное ядро</span>
-                            <span class="feat-tag">Радиус 1000 бл</span>
+                            <span class="feat-tag" data-i18n="tag_met_interval">Каждые 5 часов</span>
+                            <span class="feat-tag" data-i18n="tag_met_crater">Кратер с лавой</span>
+                            <span class="feat-tag" data-i18n="tag_met_diamond">Алмазное ядро</span>
+                            <span class="feat-tag" data-i18n="tag_met_radius">Радиус 1000 бл</span>
                         </div>
                     </div>
 
@@ -581,15 +581,15 @@
                         <div class="feat-header">
                             <div class="feat-title-wrap">
                                 <span class="feat-icon">⛓️</span>
-                                <span class="feat-title">Баланс Железа (IronTweaks)</span>
+                                <span class="feat-title" data-i18n="feat_iron_title">Баланс Железа (IronTweaks)</span>
                             </div>
-                            <span class="badge badge-gold">Экономика</span>
+                            <span class="badge badge-gold" data-i18n="badge_economy">Экономика</span>
                         </div>
-                        <p>Экономика сбалансирована: из обычной железной руды выпадают самородки (1–4 шт). Из железных големов дропается 4–9 самородков вместо целых слитков. Железо сохраняет ценность на всех этапах выживания.</p>
+                        <p data-i18n="feat_iron_desc">Экономика сбалансирована: из обычной железной руды выпадают самородки (1–4 шт). Из железных големов дропается 4–9 самородков вместо целых слитков. Железо сохраняет ценность на всех этапах выживания.</p>
                         <div class="feat-tags">
-                            <span class="feat-tag">1-4 самородка с руды</span>
-                            <span class="feat-tag">Анти-фермы големов</span>
-                            <span class="feat-tag">Реалистичный баланс</span>
+                            <span class="feat-tag" data-i18n="tag_iron_ore">1-4 самородка с руды</span>
+                            <span class="feat-tag" data-i18n="tag_iron_golem">Анти-фермы големов</span>
+                            <span class="feat-tag" data-i18n="tag_iron_balance">Реалистичный баланс</span>
                         </div>
                     </div>
 
@@ -598,15 +598,15 @@
                         <div class="feat-header">
                             <div class="feat-title-wrap">
                                 <span class="feat-icon">👾</span>
-                                <span class="feat-title">Уровневые Мобы (LevelledMobs)</span>
+                                <span class="feat-title" data-i18n="feat_lm_title">Уровневые Мобы (LevelledMobs)</span>
                             </div>
-                            <span class="badge badge-purple">RPG</span>
+                            <span class="badge badge-purple" data-i18n="badge_rpg">RPG</span>
                         </div>
-                        <p>Чем дальше вы исследуете мир от спавна и чем глубже спускаетесь под землю, тем выше уровень мобов. Сильные монстры наносят больше урона, но дают больше ценного лута и опыта.</p>
+                        <p data-i18n="feat_lm_desc">Чем дальше вы исследуете мир от спавна и чем глубже спускаетесь под землю, тем выше уровень мобов. Сильные монстры наносят больше урона, но дают больше ценного лута и опыта.</p>
                         <div class="feat-tags">
-                            <span class="feat-tag">Растущая сложность</span>
-                            <span class="feat-tag">Увеличенный XP</span>
-                            <span class="feat-tag">Редкий лут</span>
+                            <span class="feat-tag" data-i18n="tag_lm_scaling">Растущая сложность</span>
+                            <span class="feat-tag" data-i18n="tag_lm_xp">Увеличенный XP</span>
+                            <span class="feat-tag" data-i18n="tag_lm_loot">Редкий лут</span>
                         </div>
                     </div>
 
@@ -615,15 +615,15 @@
                         <div class="feat-header">
                             <div class="feat-title-wrap">
                                 <span class="feat-icon">🗝️</span>
-                                <span class="feat-title">Сброс Vaults (VaultReset)</span>
+                                <span class="feat-title" data-i18n="feat_vault_title">Сброс Vaults (VaultReset)</span>
                             </div>
-                            <span class="badge badge-cyan">Данжи</span>
+                            <span class="badge badge-cyan" data-i18n="badge_dungeons">Данжи</span>
                         </div>
-                        <p>Испытательные хранилища и спавнеры в Trial Chambers обновляются каждые 3 часа. Над каждым сундуком парит голографический таймер до следующего открытия ключом.</p>
+                        <p data-i18n="feat_vault_desc">Испытательные хранилища и спавнеры в Trial Chambers обновляются каждые 3 часа. Над каждым сундуком парит голографический таймер до следующего открытия ключом.</p>
                         <div class="feat-tags">
-                            <span class="feat-tag">Кулдаун 3 часа</span>
-                            <span class="feat-tag">Голограмма с таймером</span>
-                            <span class="feat-tag">Бесконечные данжи</span>
+                            <span class="feat-tag" data-i18n="tag_vault_cd">Кулдаун 3 часа</span>
+                            <span class="feat-tag" data-i18n="tag_vault_holo">Голограмма с таймером</span>
+                            <span class="feat-tag" data-i18n="tag_vault_dungeons">Бесконечные данжи</span>
                         </div>
                     </div>
 
@@ -632,16 +632,16 @@
                         <div class="feat-header">
                             <div class="feat-title-wrap">
                                 <span class="feat-icon">✨</span>
-                                <span class="feat-title">Атмосфера и Детали</span>
+                                <span class="feat-title" data-i18n="feat_atm_title">Атмосфера и Детали</span>
                             </div>
-                            <span class="badge badge-emerald">Комфорт</span>
+                            <span class="badge badge-emerald" data-i18n="badge_comfort">Комфорт</span>
                         </div>
-                        <p>Голосовой чат Plasmo Voice (клавиша V), реалистичная анимация призыва железного голема, возможность сидеть на ступеньках и ковриках (ПКМ или /sit), и интерактивная 3D карта BlueMap.</p>
+                        <p data-i18n="feat_atm_desc">Голосовой чат Plasmo Voice (клавиша V), реалистичная анимация призыва железного голема, возможность сидеть на ступеньках и ковриках (ПКМ или /sit), и интерактивная 3D карта BlueMap.</p>
                         <div class="feat-tags">
                             <span class="feat-tag">Plasmo Voice</span>
-                            <span class="feat-tag">/sit на ступеньках</span>
+                            <span class="feat-tag" data-i18n="tag_sit">/sit на ступеньках</span>
                             <span class="feat-tag">BlueMap 3D</span>
-                            <span class="feat-tag">Анимация голема</span>
+                            <span class="feat-tag" data-i18n="tag_golem_anim">Анимация голема</span>
                         </div>
                     </div>
                 </div>
@@ -652,32 +652,32 @@
                     <div class="craft-card">
                         <div class="craft-header">
                             <div class="craft-title">
-                                <span>🔮</span> Ядро Дровосека
+                                <span>🔮</span> <span data-i18n="craft_core_title">Ядро Дровосека</span>
                             </div>
-                            <span class="badge badge-gold">Верстак 3x3</span>
+                            <span class="badge badge-gold" data-i18n="badge_workbench">Верстак 3x3</span>
                         </div>
-                        <p>Легендарное магическое ядро, концентрирующее силу древнего леса. Используется для создания Топора Дровосека на наковальне.</p>
+                        <p data-i18n="craft_core_desc">Легендарное магическое ядро, концентрирующее силу древнего леса. Используется для создания Топора Дровосека на наковальне.</p>
                         
                         <div class="craft-workbench-ui">
                             <div class="grid-3x3">
-                                <div class="c-slot" title="Алмаз">💎</div>
-                                <div class="c-slot" title="Незеритовый слиток">⬛</div>
-                                <div class="c-slot" title="Алмаз">💎</div>
+                                <div class="c-slot" title="Diamond / Алмаз">💎</div>
+                                <div class="c-slot" title="Netherite Ingot / Незеритовый слиток">⬛</div>
+                                <div class="c-slot" title="Diamond / Алмаз">💎</div>
                                 
-                                <div class="c-slot" title="Незеритовый слиток">⬛</div>
-                                <div class="c-slot" title="Звезда Незера">⭐</div>
-                                <div class="c-slot" title="Незеритовый слиток">⬛</div>
+                                <div class="c-slot" title="Netherite Ingot / Незеритовый слиток">⬛</div>
+                                <div class="c-slot" title="Nether Star / Звезда Незера">⭐</div>
+                                <div class="c-slot" title="Netherite Ingot / Незеритовый слиток">⬛</div>
                                 
-                                <div class="c-slot" title="Алмаз">💎</div>
-                                <div class="c-slot" title="Незеритовый слиток">⬛</div>
-                                <div class="c-slot" title="Алмаз">💎</div>
+                                <div class="c-slot" title="Diamond / Алмаз">💎</div>
+                                <div class="c-slot" title="Netherite Ingot / Незеритовый слиток">⬛</div>
+                                <div class="c-slot" title="Diamond / Алмаз">💎</div>
                             </div>
                             <div class="c-arrow">➔</div>
-                            <div class="c-res-slot" title="Ядро Дровосека">🔮</div>
+                            <div class="c-res-slot" title="Lumberjack Core / Ядро Дровосека">🔮</div>
                         </div>
 
-                        <div class="craft-legend">
-                            <strong>Ингредиенты:</strong> 4x Алмаз, 4x Незеритовый слиток, 1x Звезда Незера (в центре).
+                        <div class="craft-legend" data-i18n="craft_core_legend">
+                            Ингредиенты: 4x Алмаз, 4x Незеритовый слиток, 1x Звезда Незера (в центре).
                         </div>
                     </div>
 
@@ -685,27 +685,27 @@
                     <div class="craft-card">
                         <div class="craft-header">
                             <div class="craft-title">
-                                <span>🪓</span> Топор Дровосека
+                                <span>🪓</span> <span data-i18n="craft_axe_title">Топор Дровосека</span>
                             </div>
-                            <span class="badge badge-emerald">Наковальня</span>
+                            <span class="badge badge-emerald" data-i18n="badge_anvil">Наковальня</span>
                         </div>
-                        <p>Позволяет срубить все дерево целиком за 1 удар! Мгновенно разрушает ствол и всю листву (до 500 блоков за раз).</p>
+                        <p data-i18n="craft_axe_desc">Позволяет срубить все дерево целиком за 1 удар! Мгновенно разрушает ствол и всю листву (до 500 блоков за раз).</p>
 
                         <div class="anvil-ui">
-                            <div class="anvil-slot" title="Любой топор">🪓</div>
+                            <div class="anvil-slot" title="Axe / Любой топор">🪓</div>
                             <span class="anvil-plus">+</span>
-                            <div class="anvil-slot" title="Ядро Дровосека">🔮</div>
+                            <div class="anvil-slot" title="Lumberjack Core / Ядро Дровосека">🔮</div>
                             <div class="c-arrow">➔</div>
-                            <div class="anvil-slot" style="border-color: #34d399; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);" title="Топор Дровосека">🪓✨</div>
+                            <div class="anvil-slot" style="border-color: #34d399; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);" title="Lumberjack Axe / Топор Дровосека">🪓✨</div>
                         </div>
 
                         <div class="craft-property">
                             <span>⚡</span>
-                            <div><strong>Стоимость:</strong> <span class="anvil-xp-tag">40 уровней опыта</span> на наковальне.</div>
+                            <div><strong data-i18n="craft_axe_cost_label">Стоимость:</strong> <span class="anvil-xp-tag" data-i18n="craft_axe_cost_val">40 уровней опыта на наковальне.</span></div>
                         </div>
                         <div class="craft-property">
                             <span>🌲</span>
-                            <div><strong>Возможности:</strong> Срубает до 500 блоков дерева + сбрасывает листву. Включение/выключение: <code>Shift + ПКМ</code> или <code>/lj toggle</code>.</div>
+                            <div><strong data-i18n="craft_axe_feat_label">Возможности:</strong> <span data-i18n="craft_axe_feat_val">Срубает до 500 блоков дерева + сбрасывает листву. Включение/выключение: Shift + ПКМ или /lj toggle.</span></div>
                         </div>
                     </div>
 
@@ -713,164 +713,164 @@
                     <div class="craft-card">
                         <div class="craft-header">
                             <div class="craft-title">
-                                <span>🖼️</span> Невидимая Рамка
+                                <span>🖼️</span> <span data-i18n="craft_frame_title">Невидимая Рамка</span>
                             </div>
-                            <span class="badge badge-cyan">Действие</span>
+                            <span class="badge badge-cyan" data-i18n="badge_action">Действие</span>
                         </div>
-                        <p>Сделайте рамку с предметом полностью невидимой, чтобы предмет выглядел лежащим на блоке или парящим у стены.</p>
+                        <p data-i18n="craft_frame_desc">Сделайте рамку с предметом полностью невидимой, чтобы предмет выглядел лежащим на блоке или парящим у стены.</p>
 
                         <div class="anvil-ui" style="justify-content: flex-start; gap: 10px;">
-                            <div class="anvil-slot" title="Рамка с предметом">🖼️</div>
+                            <div class="anvil-slot" title="Item Frame / Рамка с предметом">🖼️</div>
                             <span class="anvil-plus">+</span>
-                            <div class="anvil-slot" title="Ножницы в руке">✂️</div>
+                            <div class="anvil-slot" title="Shears / Ножницы в руке">✂️</div>
                             <div class="c-arrow">➔</div>
-                            <span style="font-size: 13px; color: #34d399; font-weight: 600;">Shift + ПКМ ножницами</span>
+                            <span style="font-size: 13px; color: #34d399; font-weight: 600;" data-i18n="craft_frame_action">Shift + ПКМ ножницами</span>
                         </div>
 
-                        <div class="craft-legend">
-                            Повесьте рамку, поместите в неё предмет. Возьмите в руку <strong>Ножницы</strong>, зажмите <strong>Shift</strong> и нажмите <strong>ПКМ</strong> по рамке!
+                        <div class="craft-legend" data-i18n="craft_frame_legend">
+                            Повесьте рамку, поместите в неё предмет. Возьмите в руку Ножницы, зажмите Shift и нажмите ПКМ по рамке!
                         </div>
                     </div>
                 </div>
 
                 <!-- ВКЛАДКА 3: НАПИТКИ И АЛХИМИЯ (BREWERYX) -->
                 <div class="info-tab-content" id="infoTabBrewery" style="display: none;">
-                    <div style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 12px; padding: 10px 12px; margin-bottom: 14px; font-size: 12px; color: #c084fc; line-height: 1.4;">
-                        ⚗️ <strong>Как варить:</strong> Бросьте ингредиенты в кипящий котел с водой, подождите время варки, наберите в колбы, при необходимости перегоните в зельеварке со светопылью и выдержите в нужной деревянной бочке!
+                    <div style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 12px; padding: 10px 12px; margin-bottom: 14px; font-size: 12px; color: #c084fc; line-height: 1.4;" data-i18n="brew_guide_notice">
+                        ⚗️ Как варить: Бросьте ингредиенты в кипящий котел с водой, подождите время варки, наберите в колбы, при необходимости перегоните в зельеварке со светопылью и выдержите в нужной деревянной бочке!
                     </div>
 
                     <!-- Напиток 1: Горячий шоколад -->
                     <div class="brew-card">
                         <div class="brew-header">
                             <div class="brew-title">
-                                <span>☕</span> Горячий Шоколад
+                                <span>☕</span> <span data-i18n="drink_choc_title">Горячий Шоколад</span>
                             </div>
-                            <span class="badge badge-emerald">Безалкогольный</span>
+                            <span class="badge badge-emerald" data-i18n="badge_non_alcoholic">Безалкогольный</span>
                         </div>
                         <div class="brew-steps">
                             <div class="brew-step">
                                 <span class="brew-step-icon">🥣</span>
-                                <span>Котел (3 мин): 3x Молоко, 4x Какао-бобы</span>
+                                <span data-i18n="drink_choc_step1">Котел (3 мин): 3x Молоко, 4x Какао-бобы</span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">⏳</span>
-                                <span>Выдержка: Не требуется (пить свежим)</span>
+                                <span data-i18n="drink_choc_step2">Выдержка: Не требуется (пить свежим)</span>
                             </div>
                         </div>
-                        <span class="brew-effect">⚡ Спешка I (Haste) на 2 мин + Скорость I</span>
+                        <span class="brew-effect" data-i18n="drink_choc_effect">⚡ Спешка I (Haste) на 2 мин + Скорость I</span>
                     </div>
 
                     <!-- Напиток 2: Ледяной кофе -->
                     <div class="brew-card">
                         <div class="brew-header">
                             <div class="brew-title">
-                                <span>🧊</span> Ледяной Кофе
+                                <span>🧊</span> <span data-i18n="drink_coffee_title">Ледяной Кофе</span>
                             </div>
-                            <span class="badge badge-cyan">Бодрость</span>
+                            <span class="badge badge-cyan" data-i18n="badge_energy">Бодрость</span>
                         </div>
                         <div class="brew-steps">
                             <div class="brew-step">
                                 <span class="brew-step-icon">🥣</span>
-                                <span>Котел (4 мин): 3x Какао-бобы, 2x Сахар, 1x Плотный лёд</span>
+                                <span data-i18n="drink_coffee_step1">Котел (4 мин): 3x Какао-бобы, 2x Сахар, 1x Плотный лёд</span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">❄️</span>
-                                <span>Перегонка: Не требуется</span>
+                                <span data-i18n="drink_coffee_step2">Перегонка: Не требуется</span>
                             </div>
                         </div>
-                        <span class="brew-effect">✨ Снимает похмелье + Регенерация I</span>
+                        <span class="brew-effect" data-i18n="drink_coffee_effect">✨ Снимает похмелье + Регенерация I</span>
                     </div>
 
                     <!-- Напиток 3: Пылающий виски -->
                     <div class="brew-card">
                         <div class="brew-header">
                             <div class="brew-title">
-                                <span>🔥</span> Пылающий Виски
+                                <span>🔥</span> <span data-i18n="drink_whiskey_title">Пылающий Виски</span>
                             </div>
-                            <span class="badge badge-red">Крепкий (35%)</span>
+                            <span class="badge badge-red" data-i18n="drink_whiskey_badge">Крепкий (35%)</span>
                         </div>
                         <div class="brew-steps">
                             <div class="brew-step">
                                 <span class="brew-step-icon">🥣</span>
-                                <span>Котел (10 мин): 6x Пшеница, 2x Огненный порошок, 1x Сгусток магмы</span>
+                                <span data-i18n="drink_whiskey_step1">Котел (10 мин): 6x Пшеница, 2x Огненный порошок, 1x Сгусток магмы</span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">⚗️</span>
-                                <span>Перегонка: 2 раза в зельеварке</span>
+                                <span data-i18n="drink_whiskey_step2">Перегонка: 2 раза в зельеварке</span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">🪵</span>
-                                <span>Бочка: Акация (выдержка 3 года)</span>
+                                <span data-i18n="drink_whiskey_step3">Бочка: Акация (выдержка 3 года)</span>
                             </div>
                         </div>
-                        <span class="brew-effect">🛡️ Огнестойкость на 5 мин + Сила II</span>
+                        <span class="brew-effect" data-i18n="drink_whiskey_effect">🛡️ Огнестойкость на 5 мин + Сила II</span>
                     </div>
 
                     <!-- Напиток 4: Светящаяся грибная водка -->
                     <div class="brew-card">
                         <div class="brew-header">
                             <div class="brew-title">
-                                <span>🍄</span> Светящаяся Грибная Водка
+                                <span>🍄</span> <span data-i18n="drink_vodka_title">Светящаяся Грибная Водка</span>
                             </div>
-                            <span class="badge badge-gold">Крепкий (40%)</span>
+                            <span class="badge badge-gold" data-i18n="drink_vodka_badge">Крепкий (40%)</span>
                         </div>
                         <div class="brew-steps">
                             <div class="brew-step">
                                 <span class="brew-step-icon">🥣</span>
-                                <span>Котел (8 мин): 8x Картофель, 3x Светящийся мох, 2x Светящиеся ягоды</span>
+                                <span data-i18n="drink_vodka_step1">Котел (8 мин): 8x Картофель, 3x Светящийся мох, 2x Светящиеся ягоды</span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">⚗️</span>
-                                <span>Перегонка: 3 раза</span>
+                                <span data-i18n="drink_vodka_step2">Перегонка: 3 раза</span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">🪵</span>
-                                <span>Бочка: Берёза (выдержка 2 года)</span>
+                                <span data-i18n="drink_vodka_step3">Бочка: Берёза (выдержка 2 года)</span>
                             </div>
                         </div>
-                        <span class="brew-effect">👁️ Ночное зрение на 10 мин + Свечение</span>
+                        <span class="brew-effect" data-i18n="drink_vodka_effect">👁️ Ночное зрение на 10 мин + Свечение</span>
                     </div>
 
                     <!-- Напиток 5: Золотая медовуха -->
                     <div class="brew-card">
                         <div class="brew-header">
                             <div class="brew-title">
-                                <span>🍯</span> Золотая Медовуха
+                                <span>🍯</span> <span data-i18n="drink_mead_title">Золотая Медовуха</span>
                             </div>
-                            <span class="badge badge-gold">Легендарный</span>
+                            <span class="badge badge-gold" data-i18n="drink_mead_badge">Легендарный</span>
                         </div>
                         <div class="brew-steps">
                             <div class="brew-step">
                                 <span class="brew-step-icon">🥣</span>
-                                <span>Котел (6 мин): 5x Бутылочка мёда, 2x Тростник, 1x Золотое яблоко</span>
+                                <span data-i18n="drink_mead_step1">Котел (6 мин): 5x Бутылочка мёда, 2x Тростник, 1x Золотое яблоко</span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">🪵</span>
-                                <span>Бочка: Дуб (выдержка 4 года)</span>
+                                <span data-i18n="drink_mead_step2">Бочка: Дуб (выдержка 4 года)</span>
                             </div>
                         </div>
-                        <span class="brew-effect">💛 Поглощение сердец (Golden Hearts) + Насыщение</span>
+                        <span class="brew-effect" data-i18n="drink_mead_effect">💛 Поглощение сердец (Golden Hearts) + Насыщение</span>
                     </div>
 
                     <!-- Напиток 6: Благородное красное вино -->
                     <div class="brew-card">
                         <div class="brew-header">
                             <div class="brew-title">
-                                <span>🍷</span> Благородное Красное Вино
+                                <span>🍷</span> <span data-i18n="drink_wine_title">Благородное Красное Вино</span>
                             </div>
-                            <span class="badge badge-purple">Изысканное (15%)</span>
+                            <span class="badge badge-purple" data-i18n="drink_wine_badge">Изысканное (15%)</span>
                         </div>
                         <div class="brew-steps">
                             <div class="brew-step">
                                 <span class="brew-step-icon">🥣</span>
-                                <span>Котел (5 мин): 8x Сладкие ягоды, 2x Сахар</span>
+                                <span data-i18n="drink_wine_step1">Котел (5 мин): 8x Сладкие ягоды, 2x Сахар</span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">🪵</span>
-                                <span>Бочка: Тёмный дуб (выдержка 5 лет)</span>
+                                <span data-i18n="drink_wine_step2">Бочка: Тёмный дуб (выдержка 5 лет)</span>
                             </div>
                         </div>
-                        <span class="brew-effect">❤️ Регенерация II на 1.5 мин + Снятие дебаффов</span>
+                        <span class="brew-effect" data-i18n="drink_wine_effect">❤️ Регенерация II на 1.5 мин + Снятие дебаффов</span>
                     </div>
                 </div>
             </section>
@@ -893,15 +893,15 @@
             <!-- Success View -->
             <div class="view result-view" id="successView" style="display: none;">
                 <div class="icon-circle success-circle">✓</div>
-                <h2>Вход подтверждён!</h2>
-                <p class="success-desc">Сервер перенаправляет вас в основной мир. Приятной игры!</p>
-                <div class="tip-box">
+                <h2 data-i18n="success_title">Вход подтверждён!</h2>
+                <p class="success-desc" data-i18n="success_desc">Сервер перенаправляет вас в основной мир. Приятной игры!</p>
+                <div class="tip-box" data-i18n="success_tip">
                     ✨ Аккаунт успешно привязан к вашему Telegram!
                 </div>
-                <button class="btn btn-primary" id="btnSuccessProfile" style="margin-bottom: 10px; width: 100%;">
+                <button class="btn btn-primary" id="btnSuccessProfile" style="margin-bottom: 10px; width: 100%;" data-i18n="btn_success_profile">
                     👤 Открыть профиль
                 </button>
-                <button class="btn btn-secondary" id="btnCloseApp" style="width: 100%;">
+                <button class="btn btn-secondary" id="btnCloseApp" style="width: 100%;" data-i18n="btn_close_app">
                     Закрыть окно
                 </button>
             </div>
@@ -909,9 +909,9 @@
             <!-- Error View -->
             <div class="view result-view" id="errorView" style="display: none;">
                 <div class="icon-circle error-circle">✕</div>
-                <h2 id="errorTitle">Вход отклонён</h2>
-                <p class="error-desc" id="errorDesc">Сессия аннулирована.</p>
-                <button class="btn btn-secondary" id="btnRetry">
+                <h2 id="errorTitle" data-i18n="error_title">Вход отклонён</h2>
+                <p class="error-desc" id="errorDesc" data-i18n="error_desc">Сессия аннулирована.</p>
+                <button class="btn btn-secondary" id="btnRetry" data-i18n="btn_to_menu">
                     В главное меню
                 </button>
             </div>
@@ -965,7 +965,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="config.js?v=4.0"></script>
-    <script src="app.js?v=4.0"></script>
+    <script src="config.js?v=4.1"></script>
+    <script src="app.js?v=4.1"></script>
 </body>
 </html>

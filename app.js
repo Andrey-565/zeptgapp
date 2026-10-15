@@ -195,20 +195,68 @@ document.addEventListener('DOMContentLoaded', () => {
     // ====================================================
     const I18N = {
         ru: {
+            // General & Dock
+            dock_home: "Главная",
+            dock_shop: "Магазин",
+            dock_settings: "Настройки",
+            dock_profile: "Профиль",
+            coming_soon: "Скоро в обновлении сервера",
+            btn_back: "← В главное меню",
+            btn_close_app: "Закрыть окно",
+            btn_to_menu: "В главное меню",
+
+            // Menu View
             menu_title: "Главное меню",
             menu_sub: "Выберите нужный раздел",
+            banner_pending: "Ожидает подтверждения",
+            banner_code_label: "Код сессии:",
+            banner_login_btn: "Войти",
+            menu_auth_title: "Авторизация",
+            menu_auth_badge: "Запрос",
+            menu_auth_desc: "Подтвердить вход на сервер или ввести 6-значный PIN-код",
+            menu_map_title: "Карта сервера",
+            menu_map_desc: "Интерактивная 3D карта основного мира в реальном времени",
+            menu_discord_title: "Discord Сервер",
+            menu_discord_desc: "Новости, общение с игроками, тикеты и голосовые каналы",
+            menu_info_title: "О сервере и крафты",
+            menu_info_desc: "Уникальные механики, кастомные крафты, напитки BreweryX",
+
+            // Auth View
             auth_title: "Авторизация",
             auth_sub: "Подтверждение игровой сессии",
+            auth_confirm_pill: "Подтверждение сессии",
+            auth_session_code: "🔑 Код сессии:",
+            auth_ip_label: "🌐 IP-адрес:",
+            auth_confirm_btn: "Подтвердить вход",
+            auth_reject_btn: "Это не я (Отклонить)",
+            auth_manual_title: "Ввод кода авторизации",
+            auth_manual_hint: "Введите 6-значный код с экрана Minecraft сервера:",
+            auth_paste_btn: "Вставить из буфера",
+            auth_clear_btn: "Очистить",
+            auth_submit_btn: "Подтвердить по коду",
+            auth_error_not_found: "Неверный код авторизации! Код не найден на сервере.",
+            auth_error_6digits: "Код должен состоять из 6 цифр!",
+            auth_error_mismatch: "Неверный код! Код не совпадает с активной сессией на сервере.",
+            auth_error_conn: "Ошибка соединения с сервером! Проверьте интернет и повторите попытку.",
+            auth_checking: "Проверка...",
+            auth_confirm_reject_prompt: "Вы уверены, что хотите отклонить вход?",
+
+            // Map View
             map_title: "Карта сервера",
             map_sub: "Интерактивная 3D карта",
+            map_expand_btn: "Развернуть 3D мир",
+            map_h2: "Глобальная карта сервера",
+            map_p: "Полная 3D визуализация мира из плагина BlueMap с постройками, биомами и игроками в реальном времени.",
+            map_feat1: "Высокая детализация блоков",
+            map_feat2: "Обзор 360°, приближение и 3D",
+            map_feat3: "Маркеры игроков онлайн",
+            map_launch_btn: "Открыть 3D карту в браузере",
+            map_copy_btn: "📋 Скопировать ссылку на карту",
+            map_copied_toast: "✔ Ссылка на карту скопирована!",
+
+            // Settings View
             settings_title: "Настройки",
             settings_sub: "Параметры и оформление",
-            profile_title: "Профиль",
-            profile_sub: "Данные вашего аккаунта",
-            shop_title: "Магазин",
-            shop_sub: "Игровые привилегии и бонусы",
-            shop_placeholder_title: "Магазин и Донат",
-            shop_placeholder_desc: "Раздел игрового магазина и донат-привилегий скоро станет доступен!",
             settings_sec_notify: "Уведомления",
             settings_notify_title: "Уведомления о входе",
             settings_notify_desc: "Сообщение в боте при успешной авторизации",
@@ -226,35 +274,237 @@ document.addEventListener('DOMContentLoaded', () => {
             settings_sec_system: "Система",
             settings_version_title: "Версия приложения",
             settings_reload_btn: "🔄 Сбросить кэш и перезагрузить",
-            profile_sync_desc: "Синхронизация профиля и статистика скоро",
-            coming_soon: "Скоро в обновлении сервера",
-            btn_back: "← В главное меню",
+
+            // Shop / Placeholder
+            shop_title: "Магазин",
+            shop_sub: "Игровые привилегии и бонусы",
+            shop_placeholder_title: "Магазин и Донат",
+            shop_placeholder_desc: "Раздел игрового магазина и донат-привилегий скоро станет доступен!",
+
+            // Profile View
+            profile_title: "Профиль",
+            profile_sub: "Данные вашего аккаунта",
+            profile_alert_ip_title: "Вход с нового IP-адреса",
+            profile_alert_ip_subtitle: "Обнаружена новая попытка входа",
+            profile_alert_nick_label: "👤 Никнейм:",
+            profile_alert_newip_label: "🌐 Новый IP:",
+            profile_alert_code_label: "🔑 Код сессии:",
+            profile_alert_approve_btn: "Подтвердить вход",
+            profile_alert_reject_btn: "Отклонить (Не я)",
+            profile_alert_approving: "Подтверждение...",
+            profile_alert_success_title: "Вход успешно подтверждён!",
+            profile_alert_success_desc: "Доступ к серверу разблокирован. Приятной игры!",
+            profile_alert_reject_prompt: "Вы уверены, что хотите отклонить вход? Игрок будет отключён от сервера.",
+            profile_nick_linked: "✔ Привязан",
+            profile_nick_unlinked: "Не привязан",
+            profile_trusted_ip_label: "Доверенный IP",
+            profile_trusted_ip_active: "Защищён (текущий IP)",
+            profile_trusted_ip_none: "Не установлен",
+            profile_auth_status_label: "Статус входа",
+            profile_auth_status_active: "Вход без пароля",
+            profile_auth_status_req: "Требуется привязка",
             profile_zephyrs_title: "Баланс Зефирок",
             profile_zephyrs_badge: "Игровая валюта",
             profile_stats_title: "Игровая статистика",
             stat_mined: "Блоков добыто",
             stat_kills: "Убийств мобов",
             stat_deaths: "Смертей",
-            menu_discord_title: "Discord Сервер",
-            menu_discord_desc: "Новости, общение с игроками, тикеты и голосовые каналы",
+            profile_unlinked_title: "Minecraft аккаунт не привязан",
+            profile_unlinked_desc: "Зайдите на сервер Minecraft, скопируйте 6-значный код и подтвердите привязку.",
+            profile_unlinked_btn: "Ввести код привязки",
+
+            // Info View & Badges
             info_title: "О сервере и крафты",
-            info_sub: "Механики и кастомные рецепты"
+            info_sub: "Механики и кастомные рецепты",
+            info_tab_features: "Механики",
+            info_tab_crafts: "Крафты",
+            info_tab_brewery: "Напитки",
+            badge_security: "Безопасность",
+            badge_event: "Событие",
+            badge_event_short: "Ивент",
+            badge_economy: "Экономика",
+            badge_rpg: "RPG",
+            badge_dungeons: "Данжи",
+            badge_comfort: "Комфорт",
+            badge_workbench: "Верстак 3x3",
+            badge_anvil: "Наковальня",
+            badge_action: "Действие",
+            badge_non_alcoholic: "Безалкогольный",
+            badge_energy: "Бодрость",
+            badge_strong: "Крепкий",
+            badge_legendary: "Легендарный",
+            badge_exquisite: "Изысканное",
+
+            // Info Mechanics
+            feat_tgauth_title: "Беспарольный вход (TgAuth)",
+            feat_tgauth_desc: "Никаких паролей в чате игры! Вход на сервер подтверждается в 1 клик через это Mini App. Доверенный IP запоминается автоматически — повторный ввод не требуется.",
+            tag_1click: "1-Click Login",
+            tag_ip_protect: "Защита по IP",
+            tag_anti_hack: "Защита от взлома",
+
+            feat_bm_title: "Кровавая Луна (BloodMoon)",
+            feat_bm_desc: "Наступает раз в 12–15 игровых дней и длится 10 минут. Ночь окрашивается в багровый цвет, спавн мобов возрастает в 3 раза, появляются опасные заряженные криперы! Защитите базу или сразитесь за топ в турнире выживания.",
+            tag_spawn3x: "Спавн x3",
+            tag_charged_creepers: "Charged Creepers",
+            tag_bm_tournament: "Турнир и награды",
+            tag_bm_duration: "Длительность 10 мин",
+
+            feat_met_title: "Падение Метеоритов",
+            feat_met_desc: "Каждые 5 часов в радиусе 1000 блоков падает метеорит с грохотом и огненным следом. В месте падения образуется кратер с лавой, а в самом сердце скрыто ядро из глубинной алмазной руды!",
+            tag_met_interval: "Каждые 5 часов",
+            tag_met_crater: "Кратер с лавой",
+            tag_met_diamond: "Алмазное ядро",
+            tag_met_radius: "Радиус 1000 бл",
+
+            feat_iron_title: "Баланс Железа (IronTweaks)",
+            feat_iron_desc: "Экономика сбалансирована: из обычной железной руды выпадают самородки (1–4 шт). Из железных големов дропается 4–9 самородков вместо целых слитков. Железо сохраняет ценность на всех этапах выживания.",
+            tag_iron_ore: "1-4 самородка с руды",
+            tag_iron_golem: "Анти-фермы големов",
+            tag_iron_balance: "Реалистичный баланс",
+
+            feat_lm_title: "Уровневые Мобы (LevelledMobs)",
+            feat_lm_desc: "Чем дальше вы исследуете мир от спавна и чем глубже спускаетесь под землю, тем выше уровень мобов. Сильные монстры наносят больше урона, но дают больше ценного лута и опыта.",
+            tag_lm_scaling: "Растущая сложность",
+            tag_lm_xp: "Увеличенный XP",
+            tag_lm_loot: "Редкий лут",
+
+            feat_vault_title: "Сброс Vaults (VaultReset)",
+            feat_vault_desc: "Испытательные хранилища и спавнеры в Trial Chambers обновляются каждые 3 часа. Над каждым сундуком парит голографический таймер до следующего открытия ключом.",
+            tag_vault_cd: "Кулдаун 3 часа",
+            tag_vault_holo: "Голограмма с таймером",
+            tag_vault_dungeons: "Бесконечные данжи",
+
+            feat_atm_title: "Атмосфера и Детали",
+            feat_atm_desc: "Голосовой чат Plasmo Voice (клавиша V), реалистичная анимация призыва железного голема, возможность сидеть на ступеньках и ковриках (ПКМ или /sit), и интерактивная 3D карта BlueMap.",
+            tag_sit: "/sit на ступеньках",
+            tag_golem_anim: "Анимация голема",
+
+            // Info Crafts
+            craft_core_title: "Ядро Дровосека",
+            craft_core_desc: "Легендарное магическое ядро, концентрирующее силу древнего леса. Используется для создания Топора Дровосека на наковальне.",
+            craft_core_legend: "Ингредиенты: 4x Алмаз, 4x Незеритовый слиток, 1x Звезда Незера (в центре).",
+
+            craft_axe_title: "Топор Дровосека",
+            craft_axe_desc: "Позволяет срубить все дерево целиком за 1 удар! Мгновенно разрушает ствол и всю листву (до 500 блоков за раз).",
+            craft_axe_cost_label: "Стоимость:",
+            craft_axe_cost_val: "40 уровней опыта на наковальне.",
+            craft_axe_feat_label: "Возможности:",
+            craft_axe_feat_val: "Срубает до 500 блоков дерева + сбрасывает листву. Включение/выключение: Shift + ПКМ или /lj toggle.",
+
+            craft_frame_title: "Невидимая Рамка",
+            craft_frame_desc: "Сделайте рамку с предметом полностью невидимой, чтобы предмет выглядел лежащим на блоке или парящим у стены.",
+            craft_frame_action: "Shift + ПКМ ножницами",
+            craft_frame_legend: "Повесьте рамку, поместите в неё предмет. Возьмите в руку Ножницы, зажмите Shift и нажмите ПКМ по рамке!",
+
+            // Info Brewery
+            brew_guide_notice: "⚗️ Как варить: Бросьте ингредиенты в кипящий котел с водой, подождите время варки, наберите в колбы, при необходимости перегоните в зельеварке со светопылью и выдержите в нужной деревянной бочке!",
+            drink_choc_title: "Горячий Шоколад",
+            drink_choc_step1: "Котел (3 мин): 3x Молоко, 4x Какао-бобы",
+            drink_choc_step2: "Выдержка: Не требуется (пить свежим)",
+            drink_choc_effect: "⚡ Спешка I (Haste) на 2 мин + Скорость I",
+
+            drink_coffee_title: "Ледяной Кофе",
+            drink_coffee_step1: "Котел (4 мин): 3x Какао-бобы, 2x Сахар, 1x Плотный лёд",
+            drink_coffee_step2: "Перегонка: Не требуется",
+            drink_coffee_effect: "✨ Снимает похмелье + Регенерация I",
+
+            drink_whiskey_title: "Пылающий Виски",
+            drink_whiskey_badge: "Крепкий (35%)",
+            drink_whiskey_step1: "Котел (10 мин): 6x Пшеница, 2x Огненный порошок, 1x Сгусток магмы",
+            drink_whiskey_step2: "Перегонка: 2 раза в зельеварке",
+            drink_whiskey_step3: "Бочка: Акация (выдержка 3 года)",
+            drink_whiskey_effect: "🛡️ Огнестойкость на 5 мин + Сила II",
+
+            drink_vodka_title: "Светящаяся Грибная Водка",
+            drink_vodka_badge: "Крепкий (40%)",
+            drink_vodka_step1: "Котел (8 мин): 8x Картофель, 3x Светящийся мох, 2x Светящиеся ягоды",
+            drink_vodka_step2: "Перегонка: 3 раза",
+            drink_vodka_step3: "Бочка: Берёза (выдержка 2 года)",
+            drink_vodka_effect: "👁️ Ночное зрение на 10 мин + Свечение",
+
+            drink_mead_title: "Золотая Медовуха",
+            drink_mead_badge: "Легендарный",
+            drink_mead_step1: "Котел (6 мин): 5x Бутылочка мёда, 2x Тростник, 1x Золотое яблоко",
+            drink_mead_step2: "Бочка: Дуб (выдержка 4 года)",
+            drink_mead_effect: "💛 Поглощение сердец (Golden Hearts) + Насыщение",
+
+            drink_wine_title: "Благородное Красное Вино",
+            drink_wine_badge: "Изысканное (15%)",
+            drink_wine_step1: "Котел (5 мин): 8x Сладкие ягоды, 2x Сахар",
+            drink_wine_step2: "Бочка: Тёмный дуб (выдержка 5 лет)",
+            drink_wine_effect: "❤️ Регенерация II на 1.5 мин + Снятие дебаффов",
+
+            // Result Views
+            success_title: "Вход подтверждён!",
+            success_desc: "Сервер перенаправляет вас в основной мир. Приятной игры!",
+            success_tip: "✨ Аккаунт успешно привязан к вашему Telegram!",
+            btn_success_profile: "👤 Открыть профиль",
+            error_title: "Вход отклонён",
+            error_desc: "Сессия аннулирована."
         },
         en: {
+            // General & Dock
+            dock_home: "Home",
+            dock_shop: "Store",
+            dock_settings: "Settings",
+            dock_profile: "Profile",
+            coming_soon: "Coming in server update",
+            btn_back: "← To Main Menu",
+            btn_close_app: "Close Window",
+            btn_to_menu: "To Main Menu",
+
+            // Menu View
             menu_title: "Main Menu",
             menu_sub: "Select a section",
+            banner_pending: "Pending confirmation",
+            banner_code_label: "Session code:",
+            banner_login_btn: "Login",
+            menu_auth_title: "Authorization",
+            menu_auth_badge: "Request",
+            menu_auth_desc: "Confirm server login or enter 6-digit PIN",
+            menu_map_title: "Server Map",
+            menu_map_desc: "Real-time interactive 3D map of the main world",
+            menu_discord_title: "Discord Server",
+            menu_discord_desc: "News, community chat, support tickets & voice channels",
+            menu_info_title: "Server Info & Crafts",
+            menu_info_desc: "Unique mechanics, custom crafts, BreweryX beverages",
+
+            // Auth View
             auth_title: "Authorization",
             auth_sub: "Game session confirmation",
+            auth_confirm_pill: "Session Confirmation",
+            auth_session_code: "🔑 Session Code:",
+            auth_ip_label: "🌐 IP Address:",
+            auth_confirm_btn: "Confirm Login",
+            auth_reject_btn: "Not Me (Reject)",
+            auth_manual_title: "Enter Authorization Code",
+            auth_manual_hint: "Enter the 6-digit code from your Minecraft screen:",
+            auth_paste_btn: "Paste from Clipboard",
+            auth_clear_btn: "Clear",
+            auth_submit_btn: "Confirm with Code",
+            auth_error_not_found: "Invalid code! Code not found on the server.",
+            auth_error_6digits: "Code must be 6 digits!",
+            auth_error_mismatch: "Incorrect code! Code does not match the active session.",
+            auth_error_conn: "Server connection error! Check your connection and try again.",
+            auth_checking: "Checking...",
+            auth_confirm_reject_prompt: "Are you sure you want to reject this login?",
+
+            // Map View
             map_title: "Server Map",
             map_sub: "Interactive 3D map",
+            map_expand_btn: "Expand 3D World",
+            map_h2: "Global Server Map",
+            map_p: "Full 3D visualization of the world from BlueMap plugin with builds, biomes and real-time players.",
+            map_feat1: "High block detail",
+            map_feat2: "360° view, zoom and 3D",
+            map_feat3: "Online player markers",
+            map_launch_btn: "Open 3D Map in Browser",
+            map_copy_btn: "📋 Copy Map Link",
+            map_copied_toast: "✔ Map link copied!",
+
+            // Settings View
             settings_title: "Settings",
             settings_sub: "Preferences & appearance",
-            profile_title: "Profile",
-            profile_sub: "Your account details",
-            shop_title: "Store",
-            shop_sub: "In-game ranks and perks",
-            shop_placeholder_title: "Store & Donations",
-            shop_placeholder_desc: "In-game store and donate privileges will be available soon!",
             settings_sec_notify: "Notifications",
             settings_notify_title: "Login Notifications",
             settings_notify_desc: "Receive bot message upon successful login",
@@ -272,19 +522,173 @@ document.addEventListener('DOMContentLoaded', () => {
             settings_sec_system: "System",
             settings_version_title: "App Version",
             settings_reload_btn: "🔄 Reset Cache & Reload",
-            profile_sync_desc: "Profile synchronization & statistics coming soon",
-            coming_soon: "Coming in server update",
-            btn_back: "← To Main Menu",
+
+            // Shop / Placeholder
+            shop_title: "Store",
+            shop_sub: "In-game ranks and perks",
+            shop_placeholder_title: "Store & Donations",
+            shop_placeholder_desc: "In-game store and donate privileges will be available soon!",
+
+            // Profile View
+            profile_title: "Profile",
+            profile_sub: "Your account details",
+            profile_alert_ip_title: "Login from New IP Address",
+            profile_alert_ip_subtitle: "New login attempt detected",
+            profile_alert_nick_label: "👤 Nickname:",
+            profile_alert_newip_label: "🌐 New IP:",
+            profile_alert_code_label: "🔑 Session Code:",
+            profile_alert_approve_btn: "Approve Login",
+            profile_alert_reject_btn: "Reject (Not Me)",
+            profile_alert_approving: "Approving...",
+            profile_alert_success_title: "Login successfully approved!",
+            profile_alert_success_desc: "Server access unlocked. Enjoy playing!",
+            profile_alert_reject_prompt: "Are you sure you want to reject? The player will be disconnected.",
+            profile_nick_linked: "✔ Linked",
+            profile_nick_unlinked: "Not Linked",
+            profile_trusted_ip_label: "Trusted IP",
+            profile_trusted_ip_active: "Protected (Current IP)",
+            profile_trusted_ip_none: "Not Set",
+            profile_auth_status_label: "Login Status",
+            profile_auth_status_active: "Passwordless Login",
+            profile_auth_status_req: "Linking Required",
             profile_zephyrs_title: "Zephyrs Balance",
             profile_zephyrs_badge: "Game Currency",
             profile_stats_title: "Game Statistics",
             stat_mined: "Blocks Mined",
             stat_kills: "Mob Kills",
             stat_deaths: "Deaths",
-            menu_discord_title: "Discord Server",
-            menu_discord_desc: "News, community chat, support tickets & voice channels",
+            profile_unlinked_title: "Minecraft Account Not Linked",
+            profile_unlinked_desc: "Join the Minecraft server, copy the 6-digit code, and confirm linking.",
+            profile_unlinked_btn: "Enter Linking Code",
+
+            // Info View & Badges
             info_title: "Server Info & Crafts",
-            info_sub: "Mechanics and custom recipes"
+            info_sub: "Mechanics and custom recipes",
+            info_tab_features: "Mechanics",
+            info_tab_crafts: "Crafts",
+            info_tab_brewery: "Beverages",
+            badge_security: "Security",
+            badge_event: "Event",
+            badge_event_short: "Event",
+            badge_economy: "Economy",
+            badge_rpg: "RPG",
+            badge_dungeons: "Dungeons",
+            badge_comfort: "Quality of Life",
+            badge_workbench: "Workbench 3x3",
+            badge_anvil: "Anvil",
+            badge_action: "Action",
+            badge_non_alcoholic: "Non-Alcoholic",
+            badge_energy: "Vigor",
+            badge_strong: "Strong",
+            badge_legendary: "Legendary",
+            badge_exquisite: "Exquisite",
+
+            // Info Mechanics
+            feat_tgauth_title: "Passwordless Login (TgAuth)",
+            feat_tgauth_desc: "No passwords in game chat! Server login is confirmed in 1 click via this Mini App. Trusted IP is remembered automatically — no repeated inputs needed.",
+            tag_1click: "1-Click Login",
+            tag_ip_protect: "IP Protection",
+            tag_anti_hack: "Anti-Hack Defense",
+
+            feat_bm_title: "Blood Moon (BloodMoon)",
+            feat_bm_desc: "Occurs every 12–15 in-game days and lasts 10 minutes. The night turns crimson, mob spawns increase 3x, and dangerous charged creepers appear! Protect your base or fight for the top in the survival tournament.",
+            tag_spawn3x: "Spawn x3",
+            tag_charged_creepers: "Charged Creepers",
+            tag_bm_tournament: "Tournament & Rewards",
+            tag_bm_duration: "Duration: 10 min",
+
+            feat_met_title: "Meteorite Strikes",
+            feat_met_desc: "Every 5 hours within a 1000-block radius, a meteorite falls with thunderous sound and fire trail. A lava crater forms, with a deepslate diamond ore core hidden at its heart!",
+            tag_met_interval: "Every 5 Hours",
+            tag_met_crater: "Lava Crater",
+            tag_met_diamond: "Diamond Core",
+            tag_met_radius: "Radius: 1000 Blocks",
+
+            feat_iron_title: "Iron Balance (IronTweaks)",
+            feat_iron_desc: "Balanced economy: regular iron ore drops nuggets (1–4 pcs). Iron golems drop 4–9 nuggets instead of whole ingots. Iron remains valuable at all survival stages.",
+            tag_iron_ore: "1-4 nuggets per ore",
+            tag_iron_golem: "Golem farm nerf",
+            tag_iron_balance: "Realistic balance",
+
+            feat_lm_title: "Levelled Mobs (LevelledMobs)",
+            feat_lm_desc: "The further you explore from spawn and the deeper underground you go, the higher the mob levels. Stronger monsters deal more damage but grant better loot and XP.",
+            tag_lm_scaling: "Scaling Difficulty",
+            tag_lm_xp: "Bonus XP",
+            tag_lm_loot: "Rare Loot",
+
+            feat_vault_title: "Vault Reset (VaultReset)",
+            feat_vault_desc: "Trial Vaults and spawners in Trial Chambers reset every 3 hours. A holographic countdown timer floats above each chest.",
+            tag_vault_cd: "Cooldown: 3 Hours",
+            tag_vault_holo: "Hologram Timer",
+            tag_vault_dungeons: "Endless Dungeons",
+
+            feat_atm_title: "Atmosphere & Details",
+            feat_atm_desc: "Plasmo Voice chat (V key), realistic iron golem build animation, sitting on stairs and carpets (RMB or /sit), and interactive 3D BlueMap.",
+            tag_sit: "/sit on stairs",
+            tag_golem_anim: "Golem animation",
+
+            // Info Crafts
+            craft_core_title: "Lumberjack Core",
+            craft_core_desc: "Legendary magical core concentrating ancient forest power. Used to craft the Lumberjack Axe on an anvil.",
+            craft_core_legend: "Ingredients: 4x Diamond, 4x Netherite Ingot, 1x Nether Star (center).",
+
+            craft_axe_title: "Lumberjack Axe",
+            craft_axe_desc: "Fells the entire tree in a single strike! Instantly breaks logs and leaves (up to 500 blocks at once).",
+            craft_axe_cost_label: "Cost:",
+            craft_axe_cost_val: "40 XP levels on an anvil.",
+            craft_axe_feat_label: "Features:",
+            craft_axe_feat_val: "Fells up to 500 blocks of logs + leaves. Toggle on/off: Shift + RMB or /lj toggle.",
+
+            craft_frame_title: "Invisible Item Frame",
+            craft_frame_desc: "Make the item frame invisible so the item appears resting on a surface or floating on a wall.",
+            craft_frame_action: "Shift + RMB with shears",
+            craft_frame_legend: "Place the frame, insert an item. Hold Shears in hand, crouch (Shift) and Right-Click the frame!",
+
+            // Info Brewery
+            brew_guide_notice: "⚗️ Brewing Guide: Drop ingredients into a boiling water cauldron, wait brewing time, collect in bottles, distill in brewing stand if needed, and age in wooden barrels!",
+            drink_choc_title: "Hot Chocolate",
+            drink_choc_step1: "Cauldron (3 min): 3x Milk, 4x Cocoa Beans",
+            drink_choc_step2: "Aging: None (drink fresh)",
+            drink_choc_effect: "⚡ Haste I (2 min) + Speed I",
+
+            drink_coffee_title: "Iced Coffee",
+            drink_coffee_step1: "Cauldron (4 min): 3x Cocoa Beans, 2x Sugar, 1x Packed Ice",
+            drink_coffee_step2: "Distillation: Not required",
+            drink_coffee_effect: "✨ Cures Hangover + Regeneration I",
+
+            drink_whiskey_title: "Blazing Whiskey",
+            drink_whiskey_badge: "Strong (35%)",
+            drink_whiskey_step1: "Cauldron (10 min): 6x Wheat, 2x Blaze Powder, 1x Magma Cream",
+            drink_whiskey_step2: "Distillation: 2x in brewing stand",
+            drink_whiskey_step3: "Barrel: Acacia (age 3 years)",
+            drink_whiskey_effect: "🛡️ Fire Resistance (5 min) + Strength II",
+
+            drink_vodka_title: "Glowing Mushroom Vodka",
+            drink_vodka_badge: "Strong (40%)",
+            drink_vodka_step1: "Cauldron (8 min): 8x Potato, 3x Glow Lichen, 2x Glow Berries",
+            drink_vodka_step2: "Distillation: 3x in brewing stand",
+            drink_vodka_step3: "Barrel: Birch (age 2 years)",
+            drink_vodka_effect: "👁️ Night Vision (10 min) + Glowing",
+
+            drink_mead_title: "Golden Mead",
+            drink_mead_badge: "Legendary",
+            drink_mead_step1: "Cauldron (6 min): 5x Honey Bottle, 2x Sugar Cane, 1x Golden Apple",
+            drink_mead_step2: "Barrel: Oak (age 4 years)",
+            drink_mead_effect: "💛 Absorption Hearts + Saturation",
+
+            drink_wine_title: "Noble Red Wine",
+            drink_wine_badge: "Exquisite (15%)",
+            drink_wine_step1: "Cauldron (5 min): 8x Sweet Berries, 2x Sugar",
+            drink_wine_step2: "Barrel: Dark Oak (age 5 years)",
+            drink_wine_effect: "❤️ Regeneration II (1.5 min) + Cleanses Debuffs",
+
+            // Result Views
+            success_title: "Login Confirmed!",
+            success_desc: "The server is routing you into the main world. Have fun!",
+            success_tip: "✨ Account successfully linked to your Telegram!",
+            btn_success_profile: "👤 Open Profile",
+            error_title: "Login Rejected",
+            error_desc: "Session invalidated."
         }
     };
 
@@ -599,12 +1003,29 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (currentView === 'profile') {
             if (pageTitle) pageTitle.textContent = t('profile_title');
             if (pageSubtitle) pageSubtitle.textContent = t('profile_sub');
+        } else if (currentView === 'info') {
+            if (pageTitle) pageTitle.textContent = t('info_title');
+            if (pageSubtitle) pageSubtitle.textContent = t('info_sub');
         } else if (currentView === 'placeholder') {
             if (pageTitle) pageTitle.textContent = t('shop_title');
             if (pageSubtitle) pageSubtitle.textContent = t('shop_sub');
             if (placeholderTitle) placeholderTitle.textContent = t('shop_placeholder_title');
             if (placeholderDesc) placeholderDesc.textContent = t('shop_placeholder_desc');
         }
+
+        // Update Dock Tab Titles
+        dockTabs.forEach(tab => {
+            const tabKey = tab.dataset.tab;
+            if (tabKey === 'home') tab.title = t('dock_home');
+            else if (tabKey === 'shop') tab.title = t('dock_shop');
+            else if (tabKey === 'settings') tab.title = t('dock_settings');
+            else if (tabKey === 'profile') tab.title = t('dock_profile');
+        });
+
+        // Re-render localized profile strings
+        const savedNick = localStorage.getItem('zeph_linked_nick') || sessionNick || '';
+        const savedIp = localStorage.getItem('zeph_trusted_ip') || '';
+        updateProfileUI(savedNick, savedIp);
     }
 
     langBtns.forEach(btn => {
@@ -761,17 +1182,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (profileUserAvatar) profileUserAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(nick)}/120`;
             if (badgeNickLinked) {
                 badgeNickLinked.style.display = 'inline-block';
-                badgeNickLinked.textContent = '✔ Привязан';
+                badgeNickLinked.textContent = t('profile_nick_linked');
             }
-            if (profileTrustedIp) profileTrustedIp.textContent = trustedIp || 'Защищён (текущий IP)';
-            if (profileAuthStatus) profileAuthStatus.textContent = 'Вход без пароля';
+            if (profileTrustedIp) profileTrustedIp.textContent = trustedIp || t('profile_trusted_ip_active');
+            if (profileAuthStatus) profileAuthStatus.textContent = t('profile_auth_status_active');
             if (profileUnlinkedCard) profileUnlinkedCard.style.display = 'none';
         } else {
-            if (profileMcNick) profileMcNick.textContent = 'Не привязан';
+            if (profileMcNick) profileMcNick.textContent = t('profile_nick_unlinked');
             if (profileUserAvatar) profileUserAvatar.src = 'https://mc-heads.net/avatar/Steve/120';
             if (badgeNickLinked) badgeNickLinked.style.display = 'none';
-            if (profileTrustedIp) profileTrustedIp.textContent = 'Не установлен';
-            if (profileAuthStatus) profileAuthStatus.textContent = 'Требуется привязка';
+            if (profileTrustedIp) profileTrustedIp.textContent = t('profile_trusted_ip_none');
+            if (profileAuthStatus) profileAuthStatus.textContent = t('profile_auth_status_req');
             if (profileUnlinkedCard) profileUnlinkedCard.style.display = 'block';
         }
     }
@@ -798,7 +1219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const nick = profileAlertNick ? profileAlertNick.textContent.trim() : '';
 
             btnProfileApproveIp.disabled = true;
-            btnProfileApproveIp.textContent = 'Подтверждение...';
+            btnProfileApproveIp.textContent = t('profile_alert_approving');
 
             submitVerification(code);
 
@@ -814,8 +1235,8 @@ document.addEventListener('DOMContentLoaded', () => {
             profileIpAlertCard.innerHTML = `
                 <div style="text-align: center; padding: 12px 6px;">
                     <div style="font-size: 28px; margin-bottom: 6px;">✔</div>
-                    <h3 style="color: #34d399; margin-bottom: 4px;">Вход успешно подтверждён!</h3>
-                    <p style="font-size: 12px; color: var(--text-muted); margin: 0;">Доступ к серверу разблокирован. Приятной игры!</p>
+                    <h3 style="color: #34d399; margin-bottom: 4px;">${t('profile_alert_success_title')}</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin: 0;">${t('profile_alert_success_desc')}</p>
                 </div>
             `;
             profileIpAlertCard.style.borderColor = 'rgba(16, 185, 129, 0.6)';
@@ -825,7 +1246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnProfileRejectIp) {
         btnProfileRejectIp.addEventListener('click', () => {
-            if (!confirm("Вы уверены, что хотите отклонить вход? Игрок будет отключён от сервера.")) return;
+            if (!confirm(t('profile_alert_reject_prompt'))) return;
             triggerHaptic('warning');
             const code = profileAlertCode ? profileAlertCode.textContent.trim() : sessionCode;
             rejectSession(code);
