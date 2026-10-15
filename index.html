@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="style.css?v=3.6">
+    <link rel="stylesheet" href="style.css?v=3.9">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
@@ -94,6 +94,38 @@
                         </div>
                         <span class="card-arrow">↗</span>
                     </div>
+
+                    <!-- Кнопка 4: О сервере и крафты -->
+                    <div class="menu-card card-info" id="menuBtnInfo">
+                        <div class="card-icon-wrap icon-info-wrap">
+                            <span class="card-icon">📜</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title-row">
+                                <h3>О сервере и крафты</h3>
+                                <span class="badge badge-info">Wiki</span>
+                            </div>
+                            <p>Уникальные механики, кастомные крафты, напитки BreweryX</p>
+                        </div>
+                        <span class="card-arrow">→</span>
+                    </div>
+                </div>
+
+                <!-- Быстрый инфо-блок на главной -->
+                <div class="server-quick-info">
+                    <div class="quick-info-header">
+                        <span class="quick-info-icon">🌟</span>
+                        <h4>Особенности Zephyrius</h4>
+                    </div>
+                    <div class="quick-tags-grid">
+                        <div class="quick-tag"><span>🌕</span> Кровавая луна</div>
+                        <div class="quick-tag"><span>☄️</span> Метеориты</div>
+                        <div class="quick-tag"><span>🪓</span> Ядро дровосека</div>
+                        <div class="quick-tag"><span>🍺</span> Алхимия Brewery</div>
+                    </div>
+                    <button class="btn-outline-info" id="btnOpenInfoFromQuick">
+                        <span>Полный гид и крафты</span> →
+                    </button>
                 </div>
             </section>
 
@@ -491,6 +523,375 @@
                 </div>
             </section>
 
+            <!-- ================= VIEW: ИНФО О СЕРВЕРЕ И КРАФТЫ ================= -->
+            <section class="view" id="infoView" style="display: none;">
+                <!-- Вкладки навигации по разделу инфо -->
+                <div class="info-nav-tabs">
+                    <button class="info-tab-btn active" id="tabBtnFeatures" data-infotab="features">
+                        <span>🌟</span> Механики
+                    </button>
+                    <button class="info-tab-btn" id="tabBtnCrafts" data-infotab="crafts">
+                        <span>🛠️</span> Крафты
+                    </button>
+                    <button class="info-tab-btn" id="tabBtnBrewery" data-infotab="brewery">
+                        <span>🍺</span> Напитки
+                    </button>
+                </div>
+
+                <!-- ВКЛАДКА 1: МЕХАНИКИ СЕРВЕРА -->
+                <div class="info-tab-content" id="infoTabFeatures">
+                    <!-- Механика: TgAuth -->
+                    <div class="feature-item-card">
+                        <div class="feat-header">
+                            <div class="feat-title-wrap">
+                                <span class="feat-icon">⚡</span>
+                                <span class="feat-title">Беспарольный вход (TgAuth)</span>
+                            </div>
+                            <span class="badge badge-emerald">Безопасность</span>
+                        </div>
+                        <p>Никаких паролей в чате игры! Вход на сервер подтверждается в 1 клик через это Mini App. Доверенный IP запоминается автоматически — повторный ввод не требуется.</p>
+                        <div class="feat-tags">
+                            <span class="feat-tag">1-Click Login</span>
+                            <span class="feat-tag">Защита по IP</span>
+                            <span class="feat-tag">Защита от взлома</span>
+                        </div>
+                    </div>
+
+                    <!-- Механика: Кровавая луна -->
+                    <div class="feature-item-card">
+                        <div class="feat-header">
+                            <div class="feat-title-wrap">
+                                <span class="feat-icon">🌕</span>
+                                <span class="feat-title">Кровавая Луна (BloodMoon)</span>
+                            </div>
+                            <span class="badge badge-red">Событие</span>
+                        </div>
+                        <p>Наступает раз в 12–15 игровых дней и длится 10 минут. Ночь окрашивается в багровый цвет, спавн мобов возрастает в 3 раза, появляются опасные заряженные криперы! Защитите базу или сразитесь за топ в турнире выживания.</p>
+                        <div class="feat-tags">
+                            <span class="feat-tag">Спавн x3</span>
+                            <span class="feat-tag">Charged Creepers</span>
+                            <span class="feat-tag">Турнир и награды</span>
+                            <span class="feat-tag">Длительность 10 мин</span>
+                        </div>
+                    </div>
+
+                    <!-- Механика: Падение метеоритов -->
+                    <div class="feature-item-card">
+                        <div class="feat-header">
+                            <div class="feat-title-wrap">
+                                <span class="feat-icon">☄️</span>
+                                <span class="feat-title">Падение Метеоритов</span>
+                            </div>
+                            <span class="badge badge-cyan">Ивент</span>
+                        </div>
+                        <p>Каждые 5 часов в радиусе 1000 блоков падает метеорит с грохотом и огненным следом. В месте падения образуется кратер с лавой, а в самом сердце скрыто ядро из глубинной алмазной руды!</p>
+                        <div class="feat-tags">
+                            <span class="feat-tag">Каждые 5 часов</span>
+                            <span class="feat-tag">Кратер с лавой</span>
+                            <span class="feat-tag">Алмазное ядро</span>
+                            <span class="feat-tag">Радиус 1000 бл</span>
+                        </div>
+                    </div>
+
+                    <!-- Механика: Баланс железа -->
+                    <div class="feature-item-card">
+                        <div class="feat-header">
+                            <div class="feat-title-wrap">
+                                <span class="feat-icon">⛓️</span>
+                                <span class="feat-title">Баланс Железа (IronTweaks)</span>
+                            </div>
+                            <span class="badge badge-gold">Экономика</span>
+                        </div>
+                        <p>Экономика сбалансирована: из обычной железной руды выпадают самородки (1–4 шт). Из железных големов дропается 4–9 самородков вместо целых слитков. Железо сохраняет ценность на всех этапах выживания.</p>
+                        <div class="feat-tags">
+                            <span class="feat-tag">1-4 самородка с руды</span>
+                            <span class="feat-tag">Анти-фермы големов</span>
+                            <span class="feat-tag">Реалистичный баланс</span>
+                        </div>
+                    </div>
+
+                    <!-- Механика: Прокачка монстров -->
+                    <div class="feature-item-card">
+                        <div class="feat-header">
+                            <div class="feat-title-wrap">
+                                <span class="feat-icon">👾</span>
+                                <span class="feat-title">Уровневые Мобы (LevelledMobs)</span>
+                            </div>
+                            <span class="badge badge-purple">RPG</span>
+                        </div>
+                        <p>Чем дальше вы исследуете мир от спавна и чем глубже спускаетесь под землю, тем выше уровень мобов. Сильные монстры наносят больше урона, но дают больше ценного лута и опыта.</p>
+                        <div class="feat-tags">
+                            <span class="feat-tag">Растущая сложность</span>
+                            <span class="feat-tag">Увеличенный XP</span>
+                            <span class="feat-tag">Редкий лут</span>
+                        </div>
+                    </div>
+
+                    <!-- Механика: Испытательные хранилища -->
+                    <div class="feature-item-card">
+                        <div class="feat-header">
+                            <div class="feat-title-wrap">
+                                <span class="feat-icon">🗝️</span>
+                                <span class="feat-title">Сброс Vaults (VaultReset)</span>
+                            </div>
+                            <span class="badge badge-cyan">Данжи</span>
+                        </div>
+                        <p>Испытательные хранилища и спавнеры в Trial Chambers обновляются каждые 3 часа. Над каждым сундуком парит голографический таймер до следующего открытия ключом.</p>
+                        <div class="feat-tags">
+                            <span class="feat-tag">Кулдаун 3 часа</span>
+                            <span class="feat-tag">Голограмма с таймером</span>
+                            <span class="feat-tag">Бесконечные данжи</span>
+                        </div>
+                    </div>
+
+                    <!-- Механика: Атмосфера и детали -->
+                    <div class="feature-item-card">
+                        <div class="feat-header">
+                            <div class="feat-title-wrap">
+                                <span class="feat-icon">✨</span>
+                                <span class="feat-title">Атмосфера и Детали</span>
+                            </div>
+                            <span class="badge badge-emerald">Комфорт</span>
+                        </div>
+                        <p>Голосовой чат Plasmo Voice (клавиша V), реалистичная анимация призыва железного голема, возможность сидеть на ступеньках и ковриках (ПКМ или /sit), и интерактивная 3D карта BlueMap.</p>
+                        <div class="feat-tags">
+                            <span class="feat-tag">Plasmo Voice</span>
+                            <span class="feat-tag">/sit на ступеньках</span>
+                            <span class="feat-tag">BlueMap 3D</span>
+                            <span class="feat-tag">Анимация голема</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ВКЛАДКА 2: КАСТОМНЫЕ КРАФТЫ -->
+                <div class="info-tab-content" id="infoTabCrafts" style="display: none;">
+                    <!-- Крафт 1: Ядро Дровосека -->
+                    <div class="craft-card">
+                        <div class="craft-header">
+                            <div class="craft-title">
+                                <span>🔮</span> Ядро Дровосека
+                            </div>
+                            <span class="badge badge-gold">Верстак 3x3</span>
+                        </div>
+                        <p>Легендарное магическое ядро, концентрирующее силу древнего леса. Используется для создания Топора Дровосека на наковальне.</p>
+                        
+                        <div class="craft-workbench-ui">
+                            <div class="grid-3x3">
+                                <div class="c-slot" title="Алмаз">💎</div>
+                                <div class="c-slot" title="Незеритовый слиток">⬛</div>
+                                <div class="c-slot" title="Алмаз">💎</div>
+                                
+                                <div class="c-slot" title="Незеритовый слиток">⬛</div>
+                                <div class="c-slot" title="Звезда Незера">⭐</div>
+                                <div class="c-slot" title="Незеритовый слиток">⬛</div>
+                                
+                                <div class="c-slot" title="Алмаз">💎</div>
+                                <div class="c-slot" title="Незеритовый слиток">⬛</div>
+                                <div class="c-slot" title="Алмаз">💎</div>
+                            </div>
+                            <div class="c-arrow">➔</div>
+                            <div class="c-res-slot" title="Ядро Дровосека">🔮</div>
+                        </div>
+
+                        <div class="craft-legend">
+                            <strong>Ингредиенты:</strong> 4x Алмаз, 4x Незеритовый слиток, 1x Звезда Незера (в центре).
+                        </div>
+                    </div>
+
+                    <!-- Крафт 2: Топор Дровосека -->
+                    <div class="craft-card">
+                        <div class="craft-header">
+                            <div class="craft-title">
+                                <span>🪓</span> Топор Дровосека
+                            </div>
+                            <span class="badge badge-emerald">Наковальня</span>
+                        </div>
+                        <p>Позволяет срубить все дерево целиком за 1 удар! Мгновенно разрушает ствол и всю листву (до 500 блоков за раз).</p>
+
+                        <div class="anvil-ui">
+                            <div class="anvil-slot" title="Любой топор">🪓</div>
+                            <span class="anvil-plus">+</span>
+                            <div class="anvil-slot" title="Ядро Дровосека">🔮</div>
+                            <div class="c-arrow">➔</div>
+                            <div class="anvil-slot" style="border-color: #34d399; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);" title="Топор Дровосека">🪓✨</div>
+                        </div>
+
+                        <div class="craft-property">
+                            <span>⚡</span>
+                            <div><strong>Стоимость:</strong> <span class="anvil-xp-tag">40 уровней опыта</span> на наковальне.</div>
+                        </div>
+                        <div class="craft-property">
+                            <span>🌲</span>
+                            <div><strong>Возможности:</strong> Срубает до 500 блоков дерева + сбрасывает листву. Включение/выключение: <code>Shift + ПКМ</code> или <code>/lj toggle</code>.</div>
+                        </div>
+                    </div>
+
+                    <!-- Крафт 3: Невидимая Рамка -->
+                    <div class="craft-card">
+                        <div class="craft-header">
+                            <div class="craft-title">
+                                <span>🖼️</span> Невидимая Рамка
+                            </div>
+                            <span class="badge badge-cyan">Действие</span>
+                        </div>
+                        <p>Сделайте рамку с предметом полностью невидимой, чтобы предмет выглядел лежащим на блоке или парящим у стены.</p>
+
+                        <div class="anvil-ui" style="justify-content: flex-start; gap: 10px;">
+                            <div class="anvil-slot" title="Рамка с предметом">🖼️</div>
+                            <span class="anvil-plus">+</span>
+                            <div class="anvil-slot" title="Ножницы в руке">✂️</div>
+                            <div class="c-arrow">➔</div>
+                            <span style="font-size: 13px; color: #34d399; font-weight: 600;">Shift + ПКМ ножницами</span>
+                        </div>
+
+                        <div class="craft-legend">
+                            Повесьте рамку, поместите в неё предмет. Возьмите в руку <strong>Ножницы</strong>, зажмите <strong>Shift</strong> и нажмите <strong>ПКМ</strong> по рамке!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ВКЛАДКА 3: НАПИТКИ И АЛХИМИЯ (BREWERYX) -->
+                <div class="info-tab-content" id="infoTabBrewery" style="display: none;">
+                    <div style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 12px; padding: 10px 12px; margin-bottom: 14px; font-size: 12px; color: #c084fc; line-height: 1.4;">
+                        ⚗️ <strong>Как варить:</strong> Бросьте ингредиенты в кипящий котел с водой, подождите время варки, наберите в колбы, при необходимости перегоните в зельеварке со светопылью и выдержите в нужной деревянной бочке!
+                    </div>
+
+                    <!-- Напиток 1: Горячий шоколад -->
+                    <div class="brew-card">
+                        <div class="brew-header">
+                            <div class="brew-title">
+                                <span>☕</span> Горячий Шоколад
+                            </div>
+                            <span class="badge badge-emerald">Безалкогольный</span>
+                        </div>
+                        <div class="brew-steps">
+                            <div class="brew-step">
+                                <span class="brew-step-icon">🥣</span>
+                                <span>Котел (3 мин): 3x Молоко, 4x Какао-бобы</span>
+                            </div>
+                            <div class="brew-step">
+                                <span class="brew-step-icon">⏳</span>
+                                <span>Выдержка: Не требуется (пить свежим)</span>
+                            </div>
+                        </div>
+                        <span class="brew-effect">⚡ Спешка I (Haste) на 2 мин + Скорость I</span>
+                    </div>
+
+                    <!-- Напиток 2: Ледяной кофе -->
+                    <div class="brew-card">
+                        <div class="brew-header">
+                            <div class="brew-title">
+                                <span>🧊</span> Ледяной Кофе
+                            </div>
+                            <span class="badge badge-cyan">Бодрость</span>
+                        </div>
+                        <div class="brew-steps">
+                            <div class="brew-step">
+                                <span class="brew-step-icon">🥣</span>
+                                <span>Котел (4 мин): 3x Какао-бобы, 2x Сахар, 1x Плотный лёд</span>
+                            </div>
+                            <div class="brew-step">
+                                <span class="brew-step-icon">❄️</span>
+                                <span>Перегонка: Не требуется</span>
+                            </div>
+                        </div>
+                        <span class="brew-effect">✨ Снимает похмелье + Регенерация I</span>
+                    </div>
+
+                    <!-- Напиток 3: Пылающий виски -->
+                    <div class="brew-card">
+                        <div class="brew-header">
+                            <div class="brew-title">
+                                <span>🔥</span> Пылающий Виски
+                            </div>
+                            <span class="badge badge-red">Крепкий (35%)</span>
+                        </div>
+                        <div class="brew-steps">
+                            <div class="brew-step">
+                                <span class="brew-step-icon">🥣</span>
+                                <span>Котел (10 мин): 6x Пшеница, 2x Огненный порошок, 1x Сгусток магмы</span>
+                            </div>
+                            <div class="brew-step">
+                                <span class="brew-step-icon">⚗️</span>
+                                <span>Перегонка: 2 раза в зельеварке</span>
+                            </div>
+                            <div class="brew-step">
+                                <span class="brew-step-icon">🪵</span>
+                                <span>Бочка: Акация (выдержка 3 года)</span>
+                            </div>
+                        </div>
+                        <span class="brew-effect">🛡️ Огнестойкость на 5 мин + Сила II</span>
+                    </div>
+
+                    <!-- Напиток 4: Светящаяся грибная водка -->
+                    <div class="brew-card">
+                        <div class="brew-header">
+                            <div class="brew-title">
+                                <span>🍄</span> Светящаяся Грибная Водка
+                            </div>
+                            <span class="badge badge-gold">Крепкий (40%)</span>
+                        </div>
+                        <div class="brew-steps">
+                            <div class="brew-step">
+                                <span class="brew-step-icon">🥣</span>
+                                <span>Котел (8 мин): 8x Картофель, 3x Светящийся мох, 2x Светящиеся ягоды</span>
+                            </div>
+                            <div class="brew-step">
+                                <span class="brew-step-icon">⚗️</span>
+                                <span>Перегонка: 3 раза</span>
+                            </div>
+                            <div class="brew-step">
+                                <span class="brew-step-icon">🪵</span>
+                                <span>Бочка: Берёза (выдержка 2 года)</span>
+                            </div>
+                        </div>
+                        <span class="brew-effect">👁️ Ночное зрение на 10 мин + Свечение</span>
+                    </div>
+
+                    <!-- Напиток 5: Золотая медовуха -->
+                    <div class="brew-card">
+                        <div class="brew-header">
+                            <div class="brew-title">
+                                <span>🍯</span> Золотая Медовуха
+                            </div>
+                            <span class="badge badge-gold">Легендарный</span>
+                        </div>
+                        <div class="brew-steps">
+                            <div class="brew-step">
+                                <span class="brew-step-icon">🥣</span>
+                                <span>Котел (6 мин): 5x Бутылочка мёда, 2x Тростник, 1x Золотое яблоко</span>
+                            </div>
+                            <div class="brew-step">
+                                <span class="brew-step-icon">🪵</span>
+                                <span>Бочка: Дуб (выдержка 4 года)</span>
+                            </div>
+                        </div>
+                        <span class="brew-effect">💛 Поглощение сердец (Golden Hearts) + Насыщение</span>
+                    </div>
+
+                    <!-- Напиток 6: Благородное красное вино -->
+                    <div class="brew-card">
+                        <div class="brew-header">
+                            <div class="brew-title">
+                                <span>🍷</span> Благородное Красное Вино
+                            </div>
+                            <span class="badge badge-purple">Изысканное (15%)</span>
+                        </div>
+                        <div class="brew-steps">
+                            <div class="brew-step">
+                                <span class="brew-step-icon">🥣</span>
+                                <span>Котел (5 мин): 8x Сладкие ягоды, 2x Сахар</span>
+                            </div>
+                            <div class="brew-step">
+                                <span class="brew-step-icon">🪵</span>
+                                <span>Бочка: Тёмный дуб (выдержка 5 лет)</span>
+                            </div>
+                        </div>
+                        <span class="brew-effect">❤️ Регенерация II на 1.5 мин + Снятие дебаффов</span>
+                    </div>
+                </div>
+            </section>
+
             <!-- ================= VIEW 6: ПЛЕЙСХОЛДЕРЫ ДЛЯ ТАБОВ (МАГАЗИН) ================= -->
             <section class="view" id="placeholderView" style="display: none;">
                 <div class="placeholder-card">
@@ -581,7 +982,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="config.js?v=3.8"></script>
-    <script src="app.js?v=3.8"></script>
+    <script src="config.js?v=3.9"></script>
+    <script src="app.js?v=3.9"></script>
 </body>
 </html>

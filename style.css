@@ -370,6 +370,36 @@ body {
     border: 1px solid rgba(88, 101, 242, 0.4);
 }
 
+.badge-red {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.badge-emerald {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.badge-cyan {
+    background: rgba(6, 182, 212, 0.2);
+    color: #22d3ee;
+    border: 1px solid rgba(6, 182, 212, 0.4);
+}
+
+.badge-gold {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.badge-purple {
+    background: rgba(168, 85, 247, 0.2);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
 /* Views */
 .view {
     animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2085,4 +2115,361 @@ body.theme-light .map-terrain-backdrop {
         linear-gradient(90deg, rgba(16, 185, 129, 0.2) 1px, transparent 1px),
         radial-gradient(ellipse at center, rgba(139, 92, 246, 0.2) 0%, rgba(241, 245, 249, 0.85) 75%);
 }
+
+/* ======================================================== */
+/*           ИНФО О СЕРВЕРЕ И КАСТОМНЫЕ КРАФТЫ              */
+/* ======================================================== */
+
+.card-info {
+    border-color: rgba(245, 158, 11, 0.3);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(18, 24, 38, 0.85));
+}
+.card-info:hover {
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.25);
+}
+.icon-info-wrap {
+    background: rgba(245, 158, 11, 0.18);
+    color: #f59e0b;
+}
+.badge-info {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+/* Quick Info block on Home */
+.server-quick-info {
+    margin-top: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 18px 16px;
+    backdrop-filter: blur(24px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.quick-info-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+.quick-info-header h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+.quick-info-icon {
+    font-size: 18px;
+}
+.quick-tags-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+}
+.quick-tag {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.quick-tag span {
+    font-size: 14px;
+}
+.btn-outline-info {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #fbbf24;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+}
+.btn-outline-info:hover {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: #f59e0b;
+}
+
+/* Info View & Tabs */
+.info-nav-tabs {
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 23, 42, 0.6);
+    padding: 4px;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 18px;
+}
+.info-tab-btn {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.info-tab-btn.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Feature Cards */
+.feature-item-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    backdrop-filter: blur(20px);
+}
+.feature-item-card .feat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+.feature-item-card .feat-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.feature-item-card .feat-icon {
+    font-size: 22px;
+}
+.feature-item-card .feat-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+.feature-item-card .feat-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 8px;
+    text-transform: uppercase;
+}
+.feature-item-card p {
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+.feat-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.feat-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Crafting Grids */
+.craft-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.craft-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.craft-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.craft-workbench-ui {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 12px 0;
+}
+.grid-3x3 {
+    display: grid;
+    grid-template-columns: repeat(3, 44px);
+    grid-gap: 5px;
+}
+.c-slot {
+    width: 44px;
+    height: 44px;
+    background: rgba(30, 41, 59, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+    font-size: 20px;
+}
+.c-arrow {
+    font-size: 24px;
+    color: var(--emerald);
+    font-weight: bold;
+}
+.c-res-slot {
+    width: 58px;
+    height: 58px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 2px solid var(--emerald);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 16px var(--emerald-glow), inset 0 2px 4px rgba(0, 0, 0, 0.4);
+    font-size: 26px;
+}
+.craft-legend {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+.craft-property {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 13px;
+    color: #e2e8f0;
+    margin-top: 8px;
+}
+
+/* Anvil UI */
+.anvil-ui {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 12px 0;
+}
+.anvil-slot {
+    min-width: 50px;
+    height: 50px;
+    padding: 0 8px;
+    background: rgba(30, 41, 59, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.anvil-plus {
+    font-size: 18px;
+    color: #94a3b8;
+    font-weight: 700;
+}
+.anvil-xp-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* Brewery Drink Cards */
+.brew-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+.brew-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+.brew-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.brew-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 10px 0;
+}
+.brew-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+.brew-step-icon {
+    font-size: 14px;
+}
+.brew-effect {
+    font-size: 12px;
+    color: #34d399;
+    font-weight: 600;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    padding: 4px 10px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-top: 4px;
+}
+
 

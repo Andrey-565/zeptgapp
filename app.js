@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         map: document.getElementById('mapView'),
         settings: document.getElementById('settingsView'),
         profile: document.getElementById('profileView'),
+        info: document.getElementById('infoView'),
         placeholder: document.getElementById('placeholderView'),
         success: document.getElementById('successView'),
         error: document.getElementById('errorView')
@@ -126,6 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuBtnAuth = document.getElementById('menuBtnAuth');
     const menuBtnMap = document.getElementById('menuBtnMap');
     const menuBtnDiscord = document.getElementById('menuBtnDiscord');
+    const menuBtnInfo = document.getElementById('menuBtnInfo');
+    const btnOpenInfoFromQuick = document.getElementById('btnOpenInfoFromQuick');
     const activeSessionBanner = document.getElementById('activeSessionBanner');
     const bannerCode = document.getElementById('bannerCode');
     const btnOpenAuthFromBanner = document.getElementById('btnOpenAuthFromBanner');
@@ -233,7 +236,9 @@ document.addEventListener('DOMContentLoaded', () => {
             stat_kills: "Убийств мобов",
             stat_deaths: "Смертей",
             menu_discord_title: "Discord Сервер",
-            menu_discord_desc: "Новости, общение с игроками, тикеты и голосовые каналы"
+            menu_discord_desc: "Новости, общение с игроками, тикеты и голосовые каналы",
+            info_title: "О сервере и крафты",
+            info_sub: "Механики и кастомные рецепты"
         },
         en: {
             menu_title: "Main Menu",
@@ -277,7 +282,9 @@ document.addEventListener('DOMContentLoaded', () => {
             stat_kills: "Mob Kills",
             stat_deaths: "Deaths",
             menu_discord_title: "Discord Server",
-            menu_discord_desc: "News, community chat, support tickets & voice channels"
+            menu_discord_desc: "News, community chat, support tickets & voice channels",
+            info_title: "Server Info & Crafts",
+            info_sub: "Mechanics and custom recipes"
         }
     };
 
@@ -333,6 +340,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     setActiveDockTab('profile');
                     initProfileData();
                     break;
+                case 'info':
+                    if (pageTitle) pageTitle.textContent = t('info_title');
+                    if (pageSubtitle) pageSubtitle.textContent = t('info_sub');
+                    break;
             }
         }
     }
@@ -347,6 +358,37 @@ document.addEventListener('DOMContentLoaded', () => {
     if (menuBtnMap) {
         menuBtnMap.addEventListener('click', () => switchView('map'));
     }
+    if (menuBtnInfo) {
+        menuBtnInfo.addEventListener('click', () => {
+            triggerHaptic('medium');
+            switchView('info');
+        });
+    }
+    if (btnOpenInfoFromQuick) {
+        btnOpenInfoFromQuick.addEventListener('click', () => {
+            triggerHaptic('medium');
+            switchView('info');
+        });
+    }
+
+    // Info tab switching (Механики / Крафты / Напитки)
+    const infoTabBtns = document.querySelectorAll('.info-tab-btn');
+    const infoTabFeatures = document.getElementById('infoTabFeatures');
+    const infoTabCrafts = document.getElementById('infoTabCrafts');
+    const infoTabBrewery = document.getElementById('infoTabBrewery');
+
+    infoTabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            triggerHaptic('selection');
+            infoTabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const targetTab = btn.dataset.infotab;
+            if (infoTabFeatures) infoTabFeatures.style.display = targetTab === 'features' ? 'block' : 'none';
+            if (infoTabCrafts) infoTabCrafts.style.display = targetTab === 'crafts' ? 'block' : 'none';
+            if (infoTabBrewery) infoTabBrewery.style.display = targetTab === 'brewery' ? 'block' : 'none';
+        });
+    });
 
     if (menuBtnDiscord) {
         menuBtnDiscord.addEventListener('click', () => {
