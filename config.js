@@ -20,9 +20,8 @@ const CONFIG = {
     // Ссылка на официальный Discord сервер
     discordUrl: "https://discord.gg/X9fPgGjATk",
 
-    // URL для встроенного API сервера Velocity (опционально)
-    // Если оставить пустым "", всё работает через Telegram-бота напрямую!
-    apiUrl: ""
+    // HTTPS URL для встроенного API сервера Velocity
+    apiUrl: "https://zephyrius-auth.loca.lt"
 };
 
 if (typeof window !== 'undefined') {

@@ -658,7 +658,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fetch profile from backend API if available
         const apiUrl = CONFIG.apiUrl || (window.location.hostname === 'localhost' ? 'http://localhost:8088' : '');
         if (apiUrl && (tgId || savedNick)) {
-            fetch(`${apiUrl}/api/profile?tg_id=${tgId}&nick=${encodeURIComponent(savedNick)}`)
+            fetch(`${apiUrl}/api/profile?tg_id=${tgId}&nick=${encodeURIComponent(savedNick)}`, {
+                headers: { 'Bypass-Tunnel-Reminder': '1' }
+            })
                 .then(r => r.json())
                 .then(data => {
                     if (data.linked) {
@@ -1009,11 +1011,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (apiUrl) {
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 3500);
+                const timeoutId = setTimeout(() => controller.abort(), 6000);
 
                 const response = await fetch(`${apiUrl}/api/verify`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Bypass-Tunnel-Reminder': '1'
+                    },
                     signal: controller.signal,
                     body: JSON.stringify({
                         code: targetCode,
@@ -1040,67 +1045,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
             } catch (err) {
-                console.warn('API verify failed or unreachable:', err);
+                console.error('API verify failed:', err);
+                showPinError("Ошибка соединения с сервером! Проверьте интернет и повторите попытку.");
+                return;
             }
-        }
-
-        // If not verified via API:
-        const botUsername = (window.CONFIG && CONFIG.botUsername) ? CONFIG.botUsername : 'Zephyriusbot';
-        const botLink = `https://t.me/${botUsername}?start=auth_${targetCode}`;
-
-        // Attempt direct Telegram open link
-        if (tg?.openTelegramLink) {
-            try {
-                tg.openTelegramLink(botLink);
-            } catch (_) {}
-        }
-
-        // Also try tg.sendData if available
-        try {
-            if (tg?.sendData) {
-                tg.sendData(JSON.stringify({
-                    action: "auth",
-                    code: targetCode,
-                    telegram_id: tgId,
-                    username: tgUsername
-                }));
-            }
-        } catch (_) {}
-
-        // Display interactive confirmation card with direct one-click button
-        if (authManualBox) {
-            authManualBox.innerHTML = `
-                <div class="pending-notice-card" style="text-align: center; padding: 20px 14px;">
-                    <div class="pending-notice-icon" style="font-size: 38px; margin-bottom: 10px;">🤖</div>
-                    <h3 style="font-size: 18px; margin-bottom: 6px;">Подтверждение через бота</h3>
-                    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
-                        Код сессии: <strong style="color: var(--emerald); font-family: monospace; font-size: 18px; letter-spacing: 2px;">${targetCode}</strong>
-                    </p>
-                    <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 16px;">
-                        Нажмите кнопку ниже, чтобы открыть бота <strong>@${botUsername}</strong> и моментально завершить привязку:
-                    </p>
-                    <a href="${botLink}" target="_blank" class="btn btn-primary btn-block" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; padding: 14px 18px;">
-                        <span>🎮</span> Подтвердить в @${botUsername}
-                    </a>
-                    <button class="btn btn-secondary btn-block" style="margin-top: 12px;" onclick="window.location.reload()">
-                        Ввести другой код
-                    </button>
-                </div>
-            `;
-        }
-
-        if (hasSessionUrl && sessionNick) {
-            localStorage.setItem('zeph_linked_nick', sessionNick);
-            updateProfileUI(sessionNick, sessionIp);
+        } else {
+            showPinError("Сервер авторизации не настроен.");
+            return;
         }
     }
 
     function rejectSession(targetCode) {
-        let sent = false;
         try {
             if (tg?.sendData) {
                 tg.sendData(JSON.stringify({ action: "reject", code: targetCode }));
-                sent = true;
             }
         } catch (_) {}
 
@@ -1108,18 +1066,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (apiUrl) {
             fetch(`${apiUrl}/api/reject`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Bypass-Tunnel-Reminder': '1'
+                },
                 body: JSON.stringify({ code: targetCode })
             }).catch(() => {});
-        }
-
-        const rejectLink = `https://t.me/${CONFIG.botUsername}?start=reject_${targetCode}`;
-        if (!sent && CONFIG.botUsername) {
-            if (tg?.openTelegramLink) {
-                tg.openTelegramLink(rejectLink);
-            } else {
-                window.location.href = rejectLink;
-            }
         }
 
         switchView('error');
