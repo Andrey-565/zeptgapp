@@ -1045,43 +1045,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // If not verified via API:
-        // Scenario A: Opened via verified session link (code was in URL and matches)
-        if (hasSessionUrl && targetCode === sessionCode.trim()) {
-            let sent = false;
+        const botUsername = (window.CONFIG && CONFIG.botUsername) ? CONFIG.botUsername : 'Zephyriusbot';
+        const botLink = `https://t.me/${botUsername}?start=auth_${targetCode}`;
+
+        // Attempt direct Telegram open link
+        if (tg?.openTelegramLink) {
             try {
-                if (tg?.sendData) {
-                    tg.sendData(JSON.stringify({
-                        action: "auth",
-                        code: targetCode,
-                        telegram_id: tgId,
-                        username: tgUsername
-                    }));
-                    sent = true;
-                }
+                tg.openTelegramLink(botLink);
             } catch (_) {}
-
-            const botLink = `https://t.me/${CONFIG.botUsername}?start=auth_${targetCode}`;
-            if (!sent && CONFIG.botUsername) {
-                if (tg?.openTelegramLink) {
-                    tg.openTelegramLink(botLink);
-                } else {
-                    window.location.href = botLink;
-                }
-            }
-
-            if (sessionNick) {
-                localStorage.setItem('zeph_linked_nick', sessionNick);
-                updateProfileUI(sessionNick, sessionIp);
-            }
-
-            triggerHaptic('success');
-            switchView('success');
-            return;
         }
 
-        // Scenario B: Code entered manually and API is not reachable
-        // Forward code to Bot for authoritative validation - DO NOT blindly show success!
-        let sentData = false;
+        // Also try tg.sendData if available
         try {
             if (tg?.sendData) {
                 tg.sendData(JSON.stringify({
@@ -1090,32 +1064,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     telegram_id: tgId,
                     username: tgUsername
                 }));
-                sentData = true;
             }
         } catch (_) {}
 
-        const botLink = `https://t.me/${CONFIG.botUsername}?start=auth_${targetCode}`;
-        if (!sentData && CONFIG.botUsername) {
-            if (tg?.openTelegramLink) {
-                tg.openTelegramLink(botLink);
-            } else {
-                window.location.href = botLink;
-            }
-        }
-
-        // Show pending notice card directing user to Telegram bot chat
+        // Display interactive confirmation card with direct one-click button
         if (authManualBox) {
             authManualBox.innerHTML = `
-                <div class="pending-notice-card">
-                    <div class="pending-notice-icon">⏳</div>
-                    <h3>Код отправлен боту</h3>
-                    <p>Код <code>${targetCode}</code> отправлен боту <strong>@${CONFIG.botUsername}</strong> для проверки.</p>
-                    <p style="color: #94a3b8; font-size: 13px; margin: 12px 0;">Если код верный, бот подтвердит авторизацию на сервере. Проверьте результат в диалоге с ботом!</p>
-                    <button class="btn btn-primary btn-block" onclick="window.location.reload()">
+                <div class="pending-notice-card" style="text-align: center; padding: 20px 14px;">
+                    <div class="pending-notice-icon" style="font-size: 38px; margin-bottom: 10px;">🤖</div>
+                    <h3 style="font-size: 18px; margin-bottom: 6px;">Подтверждение через бота</h3>
+                    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
+                        Код сессии: <strong style="color: var(--emerald); font-family: monospace; font-size: 18px; letter-spacing: 2px;">${targetCode}</strong>
+                    </p>
+                    <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 16px;">
+                        Нажмите кнопку ниже, чтобы открыть бота <strong>@${botUsername}</strong> и моментально завершить привязку:
+                    </p>
+                    <a href="${botLink}" target="_blank" class="btn btn-primary btn-block" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; padding: 14px 18px;">
+                        <span>🎮</span> Подтвердить в @${botUsername}
+                    </a>
+                    <button class="btn btn-secondary btn-block" style="margin-top: 12px;" onclick="window.location.reload()">
                         Ввести другой код
                     </button>
                 </div>
             `;
+        }
+
+        if (hasSessionUrl && sessionNick) {
+            localStorage.setItem('zeph_linked_nick', sessionNick);
+            updateProfileUI(sessionNick, sessionIp);
         }
     }
 
