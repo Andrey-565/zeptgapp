@@ -384,6 +384,24 @@ document.addEventListener('DOMContentLoaded', () => {
             profile_unlinked_desc: "Зайдите на сервер Minecraft, скопируйте 6-значный код и подтвердите привязку.",
             profile_unlinked_btn: "Ввести код привязки",
 
+            // Zephyrs Banking (Tinkoff Style)
+            bank_title: "Zephyrius Банкинг",
+            bank_subtitle: "История операций и выписка",
+            bank_card_label: "Счёт в Зефирках",
+            bank_income_label: "Доходы",
+            bank_expense_label: "Расходы",
+            bank_filter_all: "Все",
+            bank_filter_income: "Пополнения",
+            bank_filter_expense: "Списания",
+            bank_no_tx: "Нет операций",
+            receipt_status_label: "Статус",
+            receipt_status_success: "Успешно",
+            receipt_date_label: "Дата и время",
+            receipt_id_label: "Номер операции",
+            receipt_fee_label: "Комиссия",
+            receipt_fee_free: "0 🍡 (Бесплатно)",
+            btn_close_receipt: "Закрыть чек",
+
             // Info View & Badges
             info_title: "О сервере и крафты",
             info_sub: "Механики и кастомные рецепты",
@@ -652,6 +670,24 @@ document.addEventListener('DOMContentLoaded', () => {
             profile_unlinked_title: "Minecraft Account Not Linked",
             profile_unlinked_desc: "Join the Minecraft server, copy the 6-digit code, and confirm linking.",
             profile_unlinked_btn: "Enter Linking Code",
+
+            // Zephyrs Banking (Tinkoff Style)
+            bank_title: "Zephyrius Banking",
+            bank_subtitle: "Transaction history & statement",
+            bank_card_label: "Zephyrs Account",
+            bank_income_label: "Income",
+            bank_expense_label: "Expenses",
+            bank_filter_all: "All",
+            bank_filter_income: "Income",
+            bank_filter_expense: "Expenses",
+            bank_no_tx: "No transactions",
+            receipt_status_label: "Status",
+            receipt_status_success: "Completed",
+            receipt_date_label: "Date & Time",
+            receipt_id_label: "Transaction ID",
+            receipt_fee_label: "Fee",
+            receipt_fee_free: "0 🍡 (Free)",
+            btn_close_receipt: "Close Receipt",
 
             // Info View & Badges
             info_title: "Server Info & Crafts",
@@ -1426,20 +1462,204 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Toggle Zephyrs balance mask on card click
+    // ================= ZEPHYRS BANKING (TINKOFF STYLE) =================
+    const BANK_TRANSACTIONS = [
+        {
+            id: 'ZEPH-94182',
+            titleRu: 'Ежедневный бонус за вход',
+            titleEn: 'Daily Login Bonus',
+            catRu: 'Бонусы',
+            catEn: 'Bonuses',
+            icon: '🎁',
+            amount: 50,
+            type: 'income',
+            dateRu: 'Сегодня, 14:20',
+            dateEn: 'Today, 14:20',
+            fee: 0
+        },
+        {
+            id: 'ZEPH-93821',
+            titleRu: 'Покупка на аукционе: Алмазная кирка',
+            titleEn: 'Auction Purchase: Diamond Pickaxe',
+            catRu: 'Торговля',
+            catEn: 'Trading',
+            icon: '🛒',
+            amount: 35,
+            type: 'expense',
+            dateRu: 'Сегодня, 11:05',
+            dateEn: 'Today, 11:05',
+            fee: 0
+        },
+        {
+            id: 'ZEPH-91204',
+            titleRu: 'Награда за Кровавую Луну',
+            titleEn: 'BloodMoon Survival Reward',
+            catRu: 'Награды',
+            catEn: 'Rewards',
+            icon: '🩸',
+            amount: 100,
+            type: 'income',
+            dateRu: 'Вчера, 22:45',
+            dateEn: 'Yesterday, 22:45',
+            fee: 0
+        },
+        {
+            id: 'ZEPH-90412',
+            titleRu: 'Быстрый телепорт на спавн',
+            titleEn: 'Fast Teleport to Spawn',
+            catRu: 'Система',
+            catEn: 'System',
+            icon: '🌀',
+            amount: 30,
+            type: 'expense',
+            dateRu: 'Вчера, 19:12',
+            dateEn: 'Yesterday, 19:12',
+            fee: 0
+        },
+        {
+            id: 'ZEPH-88540',
+            titleRu: 'Квест: Охотник на монстров',
+            titleEn: 'Quest: Monster Hunter',
+            catRu: 'Награды',
+            catEn: 'Rewards',
+            icon: '⚔️',
+            amount: 40,
+            type: 'income',
+            dateRu: '13 октября, 17:30',
+            dateEn: 'Oct 13, 17:30',
+            fee: 0
+        }
+    ];
+
+    const bankSheetOverlay = document.getElementById('bankSheetOverlay');
+    const bankSheetBackdrop = document.getElementById('bankSheetBackdrop');
+    const btnCloseBankSheet = document.getElementById('btnCloseBankSheet');
+    const bankSheetBalance = document.getElementById('bankSheetBalance');
+    const bankTotalIncome = document.getElementById('bankTotalIncome');
+    const bankTotalExpense = document.getElementById('bankTotalExpense');
+    const bankTransactionsList = document.getElementById('bankTransactionsList');
+    const bankFilterTabBtns = document.querySelectorAll('.bank-tab-btn');
+
+    const bankReceiptOverlay = document.getElementById('bankReceiptOverlay');
+    const bankReceiptBackdrop = document.getElementById('bankReceiptBackdrop');
+    const btnCloseReceipt = document.getElementById('btnCloseReceipt');
+    const receiptStatusIcon = document.getElementById('receiptStatusIcon');
+    const receiptAmount = document.getElementById('receiptAmount');
+    const receiptTitle = document.getElementById('receiptTitle');
+    const receiptCategory = document.getElementById('receiptCategory');
+    const receiptStatus = document.getElementById('receiptStatus');
+    const receiptDateTime = document.getElementById('receiptDateTime');
+    const receiptId = document.getElementById('receiptId');
+
+    let currentBankFilter = 'all';
+
+    function openReceipt(tx) {
+        if (!bankReceiptOverlay || !tx) return;
+        triggerHaptic('light');
+        if (receiptStatusIcon) {
+            receiptStatusIcon.className = 'receipt-status-icon-wrap ' + (tx.type === 'expense' ? 'expense' : '');
+            receiptStatusIcon.innerHTML = tx.type === 'expense' ? '<span>↗</span>' : '<span>✔</span>';
+        }
+        if (receiptAmount) {
+            receiptAmount.textContent = (tx.type === 'income' ? '+' : '-') + tx.amount + ' 🍡';
+            receiptAmount.style.color = tx.type === 'income' ? '#34d399' : '#f87171';
+        }
+        if (receiptTitle) receiptTitle.textContent = currentLang === 'ru' ? tx.titleRu : tx.titleEn;
+        if (receiptCategory) receiptCategory.textContent = (currentLang === 'ru' ? tx.catRu : tx.catEn) + ' • Zephyrius Pay';
+        if (receiptStatus) receiptStatus.textContent = t('receipt_status_success');
+        if (receiptDateTime) receiptDateTime.textContent = currentLang === 'ru' ? tx.dateRu : tx.dateEn;
+        if (receiptId) receiptId.textContent = '#' + tx.id;
+        bankReceiptOverlay.style.display = 'flex';
+    }
+
+    function closeReceipt() {
+        triggerHaptic('light');
+        if (bankReceiptOverlay) bankReceiptOverlay.style.display = 'none';
+    }
+
+    function renderBankSheet(filter = 'all') {
+        currentBankFilter = filter;
+        const currentZephyrs = Number(localStorage.getItem('zeph_balance_zephyrs') || 0);
+        if (bankSheetBalance) {
+            bankSheetBalance.textContent = currentZephyrs.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US');
+        }
+
+        const totalInc = BANK_TRANSACTIONS.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+        const totalExp = BANK_TRANSACTIONS.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+
+        if (bankTotalIncome) bankTotalIncome.textContent = '+' + totalInc.toLocaleString('ru-RU') + ' 🍡';
+        if (bankTotalExpense) bankTotalExpense.textContent = '-' + totalExp.toLocaleString('ru-RU') + ' 🍡';
+
+        if (bankFilterTabBtns) {
+            bankFilterTabBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+        }
+
+        if (!bankTransactionsList) return;
+        const filtered = filter === 'all' ? BANK_TRANSACTIONS : BANK_TRANSACTIONS.filter(t => t.type === filter);
+
+        if (filtered.length === 0) {
+            bankTransactionsList.innerHTML = `<div style="text-align: center; padding: 24px 0; color: #64748b; font-size: 13px;">${t('bank_no_tx')}</div>`;
+            return;
+        }
+
+        bankTransactionsList.innerHTML = filtered.map(tx => `
+            <div class="bank-tx-item" data-id="${tx.id}">
+                <div class="bank-tx-left">
+                    <div class="bank-tx-icon-wrap">${tx.icon}</div>
+                    <div class="bank-tx-info">
+                        <span class="bank-tx-title">${currentLang === 'ru' ? tx.titleRu : tx.titleEn}</span>
+                        <span class="bank-tx-desc">${currentLang === 'ru' ? tx.catRu : tx.catEn}</span>
+                    </div>
+                </div>
+                <div class="bank-tx-right">
+                    <span class="bank-tx-amount ${tx.type}">${tx.type === 'income' ? '+' : '-'}${tx.amount} 🍡</span>
+                    <span class="bank-tx-time">${currentLang === 'ru' ? tx.dateRu : tx.dateEn}</span>
+                </div>
+            </div>
+        `).join('');
+
+        bankTransactionsList.querySelectorAll('.bank-tx-item').forEach(el => {
+            el.addEventListener('click', () => {
+                const txId = el.getAttribute('data-id');
+                const targetTx = BANK_TRANSACTIONS.find(t => t.id === txId);
+                if (targetTx) openReceipt(targetTx);
+            });
+        });
+    }
+
+    function openBankSheet() {
+        if (!bankSheetOverlay) return;
+        renderBankSheet(currentBankFilter || 'all');
+        bankSheetOverlay.style.display = 'flex';
+    }
+
+    function closeBankSheet() {
+        triggerHaptic('light');
+        if (bankSheetOverlay) bankSheetOverlay.style.display = 'none';
+        if (bankReceiptOverlay) bankReceiptOverlay.style.display = 'none';
+    }
+
+    // Open Tinkoff Zephyrs Banking sheet on balance card click
     if (zephyrsBalanceCard) {
         zephyrsBalanceCard.addEventListener('click', () => {
-            triggerHaptic('light');
-            window.zephPeekBalance = !window.zephPeekBalance;
-            const currentZephyrs = Number(localStorage.getItem('zeph_balance_zephyrs') || 0);
-            const isHideBalance = localStorage.getItem('zeph_setting_hide_balance') === 'true';
-            if (profileZephyrs) {
-                if (isHideBalance && !window.zephPeekBalance) {
-                    profileZephyrs.textContent = '••••';
-                } else {
-                    profileZephyrs.textContent = currentZephyrs.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US');
-                }
-            }
+            triggerHaptic('medium');
+            openBankSheet();
+        });
+    }
+
+    if (btnCloseBankSheet) btnCloseBankSheet.addEventListener('click', closeBankSheet);
+    if (bankSheetBackdrop) bankSheetBackdrop.addEventListener('click', closeBankSheet);
+    if (btnCloseReceipt) btnCloseReceipt.addEventListener('click', closeReceipt);
+    if (bankReceiptBackdrop) bankReceiptBackdrop.addEventListener('click', closeReceipt);
+
+    if (bankFilterTabBtns) {
+        bankFilterTabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                triggerHaptic('selection');
+                renderBankSheet(btn.dataset.filter || 'all');
+            });
         });
     }
 

@@ -472,25 +472,16 @@
                         <div class="profile-nick-row">
                             <h2 id="profileMcNick">Steve</h2>
                             <span class="badge badge-verified" id="badgeNickLinked" data-i18n="profile_nick_linked">✔ Привязан</span>
-                            <span class="badge badge-rank" id="badgePlayerRank" data-i18n="badge_player_rank">⭐ Игрок</span>
                         </div>
                         <div class="profile-meta-row">
                             <span class="profile-tg-user" id="profileTgUser">@username</span>
                             <span class="profile-tg-id" id="profileUserId">ID: —</span>
                         </div>
                     </div>
-                    <div class="profile-hero-actions">
-                        <button class="btn-icon-action" id="btnCopyNick" title="Копировать ник" aria-label="Copy Nickname">
-                            📋
-                        </button>
-                        <button class="btn-icon-action" id="btnRefreshProfile" title="Обновить профиль" aria-label="Refresh Profile">
-                            🔄
-                        </button>
-                    </div>
                 </div>
 
-                <!-- Карточка баланса валюты: Зефирки (Кастомная векторная зефирка) -->
-                <div class="zephyrs-balance-card" id="zephyrsBalanceCard" title="Нажмите, чтобы скрыть/показать баланс">
+                <!-- Карточка баланса валюты: Зефирки (Кликабельна для открытия истории Tinkoff Style) -->
+                <div class="zephyrs-balance-card" id="zephyrsBalanceCard" title="Открыть историю операций">
                     <div class="zephyrs-left">
                         <div class="zephyrs-icon-bubble">
                             <svg class="marshmallow-icon-svg" viewBox="0 0 28 28" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -519,40 +510,40 @@
                         </div>
                     </div>
                     <div class="zephyrs-right">
-                        <span class="zephyrs-amount font-mono" id="profileZephyrs">0</span>
-                        <span class="zephyrs-unit">
-                            <svg class="marshmallow-icon-inline" viewBox="0 0 28 28" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <ellipse cx="14" cy="20.5" rx="9" ry="3.2" fill="#f472b6" fill-opacity="0.35"/>
-                                <path d="M5 9.5C5 7.2 9 5.5 14 5.5C19 5.5 23 7.2 23 9.5V17.5C23 19.8 19 21.5 14 21.5C9 21.5 5 19.8 5 17.5V9.5Z" fill="url(#zMarshGradInline)"/>
-                                <ellipse cx="14" cy="9.5" rx="9" ry="3.8" fill="url(#zMarshTopInline)"/>
-                                <path d="M9.5 9.5C9.5 8.4 11.5 7.6 14 7.6C16.5 7.6 18.5 8.4 18.5 9.5" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-                                <path d="M7 12C7 15 7 17.5 7.6 19" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.85"/>
-                                <defs>
-                                    <linearGradient id="zMarshGradInline" x1="5" y1="5.5" x2="23" y2="21.5" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#ffffff"/>
-                                        <stop offset="0.4" stop-color="#fdf2f8"/>
-                                        <stop offset="1" stop-color="#f472b6"/>
-                                    </linearGradient>
-                                    <linearGradient id="zMarshTopInline" x1="14" y1="5.5" x2="14" y2="13.3" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#ffffff"/>
-                                        <stop offset="1" stop-color="#fce7f3"/>
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-                        </span>
+                        <div class="zephyrs-val-group">
+                            <span class="zephyrs-amount font-mono" id="profileZephyrs">0</span>
+                            <span class="zephyrs-unit">
+                                <svg class="marshmallow-icon-inline" viewBox="0 0 28 28" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="14" cy="20.5" rx="9" ry="3.2" fill="#f472b6" fill-opacity="0.35"/>
+                                    <path d="M5 9.5C5 7.2 9 5.5 14 5.5C19 5.5 23 7.2 23 9.5V17.5C23 19.8 19 21.5 14 21.5C9 21.5 5 19.8 5 17.5V9.5Z" fill="url(#zMarshGradInline)"/>
+                                    <ellipse cx="14" cy="9.5" rx="9" ry="3.8" fill="url(#zMarshTopInline)"/>
+                                    <path d="M9.5 9.5C9.5 8.4 11.5 7.6 14 7.6C16.5 7.6 18.5 8.4 18.5 9.5" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+                                    <path d="M7 12C7 15 7 17.5 7.6 19" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.85"/>
+                                    <defs>
+                                        <linearGradient id="zMarshGradInline" x1="5" y1="5.5" x2="23" y2="21.5" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#ffffff"/>
+                                            <stop offset="0.4" stop-color="#fdf2f8"/>
+                                            <stop offset="1" stop-color="#f472b6"/>
+                                        </linearGradient>
+                                        <linearGradient id="zMarshTopInline" x1="14" y1="5.5" x2="14" y2="13.3" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#ffffff"/>
+                                            <stop offset="1" stop-color="#fce7f3"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </span>
+                        </div>
+                        <span class="zephyrs-arrow">›</span>
                     </div>
                 </div>
 
-                <!-- Карточка расширенной игровой статистики (6 показателей) -->
+                <!-- Карточка игровой статистики (без Live и без КД) -->
                 <div class="profile-stats-card">
                     <div class="profile-stats-header">
                         <div class="stats-header-title">
                             <span class="stats-header-icon">📊</span>
                             <span data-i18n="profile_stats_title">Игровая статистика</span>
                         </div>
-                        <span class="stats-live-pill">
-                            <span class="pulse-dot"></span> Live
-                        </span>
                     </div>
 
                     <div class="stats-grid">
@@ -589,17 +580,6 @@
                             </div>
                         </div>
 
-                        <!-- K/D Рейтинг -->
-                        <div class="stat-box stat-kd">
-                            <div class="stat-icon-wrap">
-                                <span class="stat-icon">🎯</span>
-                            </div>
-                            <div class="stat-content">
-                                <span class="stat-value font-mono" id="statKdRatio">0.00</span>
-                                <span class="stat-label" data-i18n="stat_kd">K/D Рейтинг</span>
-                            </div>
-                        </div>
-
                         <!-- Время в игре -->
                         <div class="stat-box stat-time">
                             <div class="stat-icon-wrap">
@@ -624,7 +604,7 @@
                     </div>
                 </div>
 
-                <!-- Блок деталей аккаунта и безопасности (2x2 Grid) -->
+                <!-- Блок деталей аккаунта (только Доверенный IP и Статус входа) -->
                 <div class="profile-info-grid">
                     <div class="profile-info-item">
                         <span class="info-item-icon">🛡️</span>
@@ -638,20 +618,6 @@
                         <div class="info-item-content">
                             <span class="info-item-title" data-i18n="profile_auth_status_label">Статус входа</span>
                             <span class="info-item-val text-emerald" id="profileAuthStatus" data-i18n="profile_auth_status_active">Вход без пароля</span>
-                        </div>
-                    </div>
-                    <div class="profile-info-item">
-                        <span class="info-item-icon">📅</span>
-                        <div class="info-item-content">
-                            <span class="info-item-title" data-i18n="profile_join_date_label">На сервере с</span>
-                            <span class="info-item-val" id="profileJoinDate">—</span>
-                        </div>
-                    </div>
-                    <div class="profile-info-item">
-                        <span class="info-item-icon">🟢</span>
-                        <div class="info-item-content">
-                            <span class="info-item-title" data-i18n="profile_online_status_label">Статус сети</span>
-                            <span class="info-item-val text-emerald" id="profileOnlineStatus" data-i18n="profile_status_online">В сети</span>
                         </div>
                     </div>
                 </div>
@@ -1075,6 +1041,130 @@
                 <button class="btn btn-secondary" id="btnRetry" data-i18n="btn_to_menu">
                     В главное меню
                 </button>
+            </div>
+
+            <!-- ================= ZEPHYRS BANKING BOTTOM SHEET (TINKOFF STYLE) ================= -->
+            <div class="bank-sheet-overlay" id="bankSheetOverlay" style="display: none;">
+                <div class="bank-sheet-backdrop" id="bankSheetBackdrop"></div>
+                <div class="bank-sheet" id="bankSheet">
+                    <div class="bank-sheet-handle-wrap">
+                        <div class="bank-sheet-handle"></div>
+                    </div>
+
+                    <div class="bank-sheet-header">
+                        <div class="bank-sheet-title-group">
+                            <div class="bank-logo-bubble">
+                                <span class="bank-logo-icon">🍡</span>
+                            </div>
+                            <div>
+                                <h3 data-i18n="bank_title">Zephyrius Банкинг</h3>
+                                <span class="bank-subtitle" data-i18n="bank_subtitle">История операций и выписка</span>
+                            </div>
+                        </div>
+                        <button class="btn-sheet-close" id="btnCloseBankSheet" aria-label="Close">✕</button>
+                    </div>
+
+                    <!-- Банковская карточка счёта (Tinkoff Black Style) -->
+                    <div class="bank-card">
+                        <div class="bank-card-pattern"></div>
+                        <div class="bank-card-top">
+                            <div class="bank-card-brand-group">
+                                <span class="bank-card-chip"></span>
+                                <span class="bank-card-brand">ZEPHYRIUS PAY</span>
+                            </div>
+                            <span class="bank-card-type">BLACK</span>
+                        </div>
+                        <div class="bank-card-middle">
+                            <span class="bank-card-label" data-i18n="bank_card_label">Счёт в Зефирках</span>
+                            <div class="bank-card-amount-wrap">
+                                <span class="bank-card-amount font-mono" id="bankSheetBalance">0</span>
+                                <svg class="marshmallow-icon-inline" viewBox="0 0 28 28" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="14" cy="20.5" rx="9" ry="3.2" fill="#f472b6" fill-opacity="0.35"/>
+                                    <path d="M5 9.5C5 7.2 9 5.5 14 5.5C19 5.5 23 7.2 23 9.5V17.5C23 19.8 19 21.5 14 21.5C9 21.5 5 19.8 5 17.5V9.5Z" fill="url(#zMarshGradBank)"/>
+                                    <ellipse cx="14" cy="9.5" rx="9" ry="3.8" fill="url(#zMarshTopBank)"/>
+                                    <path d="M9.5 9.5C9.5 8.4 11.5 7.6 14 7.6C16.5 7.6 18.5 8.4 18.5 9.5" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+                                    <path d="M7 12C7 15 7 17.5 7.6 19" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.85"/>
+                                    <defs>
+                                        <linearGradient id="zMarshGradBank" x1="5" y1="5.5" x2="23" y2="21.5" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#ffffff"/>
+                                            <stop offset="0.4" stop-color="#fdf2f8"/>
+                                            <stop offset="1" stop-color="#f472b6"/>
+                                        </linearGradient>
+                                        <linearGradient id="zMarshTopBank" x1="14" y1="5.5" x2="14" y2="13.3" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#ffffff"/>
+                                            <stop offset="1" stop-color="#fce7f3"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                        <!-- Сводка Доходы / Расходы (Tinkoff style) -->
+                        <div class="bank-card-summary">
+                            <div class="bank-summary-box income">
+                                <span class="summary-icon">📈</span>
+                                <div class="summary-text">
+                                    <span class="summary-label" data-i18n="bank_income_label">Доходы</span>
+                                    <span class="summary-val font-mono" id="bankTotalIncome">+190 🍡</span>
+                                </div>
+                            </div>
+                            <div class="bank-summary-box expense">
+                                <span class="summary-icon">📉</span>
+                                <div class="summary-text">
+                                    <span class="summary-label" data-i18n="bank_expense_label">Расходы</span>
+                                    <span class="summary-val font-mono" id="bankTotalExpense">-65 🍡</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Фильтры операций (Все / Пополнения / Списания) -->
+                    <div class="bank-filter-tabs">
+                        <button class="bank-tab-btn active" data-filter="all" data-i18n="bank_filter_all">Все</button>
+                        <button class="bank-tab-btn" data-filter="income" data-i18n="bank_filter_income">Пополнения</button>
+                        <button class="bank-tab-btn" data-filter="expense" data-i18n="bank_filter_expense">Списания</button>
+                    </div>
+
+                    <!-- Список транзакций -->
+                    <div class="bank-transactions-wrap" id="bankTransactionsList">
+                        <!-- Заполняется динамически -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модальное окно чека / деталей транзакции (Tinkoff Receipt) -->
+            <div class="bank-receipt-overlay" id="bankReceiptOverlay" style="display: none;">
+                <div class="bank-receipt-backdrop" id="bankReceiptBackdrop"></div>
+                <div class="bank-receipt-card" id="bankReceiptCard">
+                    <div class="receipt-status-icon-wrap" id="receiptStatusIcon">
+                        <span>✔</span>
+                    </div>
+                    <div class="receipt-amount font-mono" id="receiptAmount">+0 🍡</div>
+                    <div class="receipt-title" id="receiptTitle">Название операции</div>
+                    <div class="receipt-category" id="receiptCategory">Категория</div>
+
+                    <div class="receipt-details-list">
+                        <div class="receipt-row">
+                            <span class="receipt-label" data-i18n="receipt_status_label">Статус</span>
+                            <span class="receipt-val text-emerald font-semibold" id="receiptStatus">Успешно</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label" data-i18n="receipt_date_label">Дата и время</span>
+                            <span class="receipt-val font-mono" id="receiptDateTime">15.10.2026, 18:40</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label" data-i18n="receipt_id_label">Номер операции</span>
+                            <span class="receipt-val font-mono" id="receiptId">#ZEPH-84920</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label" data-i18n="receipt_fee_label">Комиссия</span>
+                            <span class="receipt-val" data-i18n="receipt_fee_free">0 🍡 (Бесплатно)</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-secondary" id="btnCloseReceipt" style="width: 100%; margin-top: 14px;" data-i18n="btn_close_receipt">
+                        Закрыть чек
+                    </button>
+                </div>
             </div>
 
         </main>
