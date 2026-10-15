@@ -1521,11 +1521,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!bankSheetOverlay) return;
         renderBankSheet(currentBankFilter || 'all');
         bankSheetOverlay.style.display = 'flex';
+        try {
+            if (tg?.BackButton) {
+                tg.BackButton.show();
+                tg.BackButton.onClick(closeBankSheet);
+            }
+        } catch (_) {}
     }
 
     function closeBankSheet() {
         triggerHaptic('light');
         if (bankSheetOverlay) bankSheetOverlay.style.display = 'none';
+        try {
+            if (tg?.BackButton) {
+                tg.BackButton.hide();
+                tg.BackButton.offClick(closeBankSheet);
+            }
+        } catch (_) {}
     }
 
     // Open Tinkoff Zephyrs Banking screen on balance card click

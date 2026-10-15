@@ -2674,54 +2674,67 @@ body.theme-light .map-terrain-backdrop {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 4px 0 6px 0;
+    padding: 6px 0 10px 0;
     width: 100%;
 }
 
 .bank-nav-back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.12);
     color: #f8fafc;
-    padding: 8px 14px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: background 0.15s ease, transform 0.1s ease;
+    transition: background 0.15s ease, transform 0.12s ease;
+    flex-shrink: 0;
 }
 
 .bank-nav-back-btn:hover {
-    background: rgba(255, 255, 255, 0.18);
-    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.16);
+    transform: scale(1.04);
 }
 
 .bank-nav-back-btn:active {
-    transform: scale(0.96);
+    transform: scale(0.92);
 }
 
-.back-arrow-icon {
-    font-size: 16px;
-    line-height: 1;
+.bank-back-svg {
+    display: block;
+    color: #f8fafc;
 }
 
 .bank-top-brand {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    font-weight: 800;
-    color: #f8fafc;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
 }
 
-.bank-top-brand .bank-logo-icon {
-    font-size: 18px;
+.bank-top-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #f8fafc;
+    line-height: 1.2;
+}
+
+.bank-top-subtitle {
+    font-size: 11px;
+    font-weight: 500;
+    color: #94a3b8;
+    line-height: 1.2;
+    margin-top: 2px;
 }
 
 .bank-nav-spacer {
-    width: 72px;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
 }
 
 /* Tinkoff Black Card */
