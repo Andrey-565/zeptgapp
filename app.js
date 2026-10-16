@@ -257,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ru: {
             // General & Dock
             dock_home: "Главная",
-            dock_shop: "Магазин",
             dock_settings: "Настройки",
             dock_profile: "Профиль",
             coming_soon: "Скоро в обновлении сервера",
@@ -345,13 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
             settings_lang_desc: "Язык интерфейса Mini App",
             settings_version_title: "Версия приложения",
             settings_reload_btn: "🔄 Сбросить кэш и перезагрузить",
-
-            // Shop / Placeholder
-            shop_title: "Магазин",
-            shop_sub: "Игровые привилегии и бонусы",
-            shop_placeholder_title: "Магазин и Донат",
-            shop_placeholder_desc: "Раздел игрового магазина и донат-привилегий скоро станет доступен!",
-
+ 
             // Profile View
             profile_title: "Профиль",
             profile_sub: "Данные вашего аккаунта",
@@ -552,7 +545,6 @@ document.addEventListener('DOMContentLoaded', () => {
         en: {
             // General & Dock
             dock_home: "Home",
-            dock_shop: "Store",
             dock_settings: "Settings",
             dock_profile: "Profile",
             coming_soon: "Coming in server update",
@@ -640,13 +632,7 @@ document.addEventListener('DOMContentLoaded', () => {
             settings_lang_desc: "Language of Mini App interface",
             settings_version_title: "App Version",
             settings_reload_btn: "🔄 Reset Cache & Reload",
-
-            // Shop / Placeholder
-            shop_title: "Store",
-            shop_sub: "In-game ranks and perks",
-            shop_placeholder_title: "Store & Donations",
-            shop_placeholder_desc: "In-game store and donate privileges will be available soon!",
-
+ 
             // Profile View
             profile_title: "Profile",
             profile_sub: "Your account details",
@@ -1004,14 +990,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'home':
                     switchView('menu');
                     break;
-                case 'shop':
-                    placeholderIcon.textContent = "💸";
-                    placeholderTitle.textContent = "Магазин и Донат";
-                    placeholderDesc.textContent = "Раздел игрового магазина и донат-привилегий скоро станет доступен!";
-                    pageTitle.textContent = "Магазин";
-                    pageSubtitle.textContent = "Игровые привилегии и бонусы";
-                    switchView('placeholder');
-                    break;
                 case 'settings':
                     switchView('settings');
                     break;
@@ -1160,18 +1138,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (currentView === 'info') {
             if (pageTitle) pageTitle.textContent = t('info_title');
             if (pageSubtitle) pageSubtitle.textContent = t('info_sub');
-        } else if (currentView === 'placeholder') {
-            if (pageTitle) pageTitle.textContent = t('shop_title');
-            if (pageSubtitle) pageSubtitle.textContent = t('shop_sub');
-            if (placeholderTitle) placeholderTitle.textContent = t('shop_placeholder_title');
-            if (placeholderDesc) placeholderDesc.textContent = t('shop_placeholder_desc');
         }
-
+ 
         // Update Dock Tab Titles
         dockTabs.forEach(tab => {
             const tabKey = tab.dataset.tab;
             if (tabKey === 'home') tab.title = t('dock_home');
-            else if (tabKey === 'shop') tab.title = t('dock_shop');
             else if (tabKey === 'settings') tab.title = t('dock_settings');
             else if (tabKey === 'profile') tab.title = t('dock_profile');
         });
