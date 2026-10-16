@@ -774,33 +774,72 @@
                 </div>
 
                 <!-- ВКЛАДКА 2: КАСТОМНЫЕ КРАФТЫ -->
+                <!-- ВКЛАДКА 2: КАСТОМНЫЕ КРАФТЫ -->
                 <div class="info-tab-content" id="infoTabCrafts" style="display: none;">
-                    <!-- Крафт 1: Ядро Дровосека -->
+                    <!-- Крафт 1: Ядро Дровосека (Верстак 3x3) -->
                     <div class="craft-card">
                         <div class="craft-header">
                             <div class="craft-title">
-                                <span>🔮</span> <span data-i18n="craft_core_title">Ядро Дровосека</span>
+                                <img src="assets/textures/nether_star.png" class="mc-title-ico" alt="Lumberjack Core">
+                                <span data-i18n="craft_core_title">Ядро Дровосека</span>
                             </div>
                             <span class="badge badge-gold" data-i18n="badge_workbench">Верстак 3x3</span>
                         </div>
                         <p data-i18n="craft_core_desc">Легендарное магическое ядро, концентрирующее силу древнего леса. Используется для создания Топора Дровосека на наковальне.</p>
                         
-                        <div class="craft-workbench-ui">
-                            <div class="grid-3x3">
-                                <div class="c-slot" title="Diamond / Алмаз">💎</div>
-                                <div class="c-slot" title="Netherite Ingot / Незеритовый слиток">⬛</div>
-                                <div class="c-slot" title="Diamond / Алмаз">💎</div>
-                                
-                                <div class="c-slot" title="Netherite Ingot / Незеритовый слиток">⬛</div>
-                                <div class="c-slot" title="Nether Star / Звезда Незера">⭐</div>
-                                <div class="c-slot" title="Netherite Ingot / Незеритовый слиток">⬛</div>
-                                
-                                <div class="c-slot" title="Diamond / Алмаз">💎</div>
-                                <div class="c-slot" title="Netherite Ingot / Незеритовый слиток">⬛</div>
-                                <div class="c-slot" title="Diamond / Алмаз">💎</div>
+                        <!-- Аутентичный интерфейс Верстака Minecraft (в точности как на фото) -->
+                        <div class="mc-crafting-gui">
+                            <div class="mc-gui-title" data-i18n="craft_workbench_title">Создание</div>
+                            <div class="mc-gui-body">
+                                <div class="mc-book-col">
+                                    <div class="mc-book-slot" title="Книга рецептов">
+                                        <img src="assets/textures/knowledge_book.png" class="mc-item-img" alt="Recipe Book">
+                                    </div>
+                                </div>
+                                <div class="mc-grid-3x3">
+                                    <div class="mc-slot" title="Diamond / Алмаз">
+                                        <img src="assets/textures/diamond.png" class="mc-item-img" alt="Diamond">
+                                    </div>
+                                    <div class="mc-slot" title="Netherite Ingot / Незеритовый слиток">
+                                        <img src="assets/textures/netherite_ingot.png" class="mc-item-img" alt="Netherite Ingot">
+                                    </div>
+                                    <div class="mc-slot" title="Diamond / Алмаз">
+                                        <img src="assets/textures/diamond.png" class="mc-item-img" alt="Diamond">
+                                    </div>
+                                    
+                                    <div class="mc-slot" title="Netherite Ingot / Незеритовый слиток">
+                                        <img src="assets/textures/netherite_ingot.png" class="mc-item-img" alt="Netherite Ingot">
+                                    </div>
+                                    <div class="mc-slot" title="Nether Star / Звезда Незера">
+                                        <img src="assets/textures/nether_star.png" class="mc-item-img" alt="Nether Star">
+                                    </div>
+                                    <div class="mc-slot" title="Netherite Ingot / Незеритовый слиток">
+                                        <img src="assets/textures/netherite_ingot.png" class="mc-item-img" alt="Netherite Ingot">
+                                    </div>
+                                    
+                                    <div class="mc-slot" title="Diamond / Алмаз">
+                                        <img src="assets/textures/diamond.png" class="mc-item-img" alt="Diamond">
+                                    </div>
+                                    <div class="mc-slot" title="Netherite Ingot / Незеритовый слиток">
+                                        <img src="assets/textures/netherite_ingot.png" class="mc-item-img" alt="Netherite Ingot">
+                                    </div>
+                                    <div class="mc-slot" title="Diamond / Алмаз">
+                                        <img src="assets/textures/diamond.png" class="mc-item-img" alt="Diamond">
+                                    </div>
+                                </div>
+                                <div class="mc-arrow-wrap">
+                                    <svg class="mc-gui-arrow" viewBox="0 0 24 16">
+                                        <path d="M0 6h15V2l9 6-9 6v-4H0z" fill="#4a4a4a"/>
+                                    </svg>
+                                </div>
+                                <div class="mc-res-slot" title="Lumberjack Core / Ядро Дровосека">
+                                    <img src="assets/textures/nether_star.png" class="mc-item-img mc-item-lg" alt="Lumberjack Core">
+                                </div>
                             </div>
-                            <div class="c-arrow">➔</div>
-                            <div class="c-res-slot" title="Lumberjack Core / Ядро Дровосека">🔮</div>
+                            <div class="mc-gui-footer">
+                                <span data-i18n="craft_inventory_title">Инвентарь</span>
+                                <div class="mc-inv-mini-slot"></div>
+                            </div>
                         </div>
 
                         <div class="craft-legend" data-i18n="craft_core_legend">
@@ -808,22 +847,40 @@
                         </div>
                     </div>
 
-                    <!-- Крафт 2: Топор Дровосека -->
+                    <!-- Крафт 2: Топор Дровосека (Наковальня) -->
                     <div class="craft-card">
                         <div class="craft-header">
                             <div class="craft-title">
-                                <span>🪓</span> <span data-i18n="craft_axe_title">Топор Дровосека</span>
+                                <img src="assets/textures/diamond_axe.png" class="mc-title-ico mc-enchanted" alt="Lumberjack Axe">
+                                <span data-i18n="craft_axe_title">Топор Дровосека</span>
                             </div>
                             <span class="badge badge-emerald" data-i18n="badge_anvil">Наковальня</span>
                         </div>
                         <p data-i18n="craft_axe_desc">Позволяет срубить все дерево целиком за 1 удар! Мгновенно разрушает ствол и всю листву (до 500 блоков за раз).</p>
 
-                        <div class="anvil-ui">
-                            <div class="anvil-slot" title="Axe / Любой топор">🪓</div>
-                            <span class="anvil-plus">+</span>
-                            <div class="anvil-slot" title="Lumberjack Core / Ядро Дровосека">🔮</div>
-                            <div class="c-arrow">➔</div>
-                            <div class="anvil-slot" style="border-color: #34d399; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);" title="Lumberjack Axe / Топор Дровосека">🪓✨</div>
+                        <!-- Интерфейс Наковальни Minecraft -->
+                        <div class="mc-crafting-gui">
+                            <div class="mc-gui-title" style="margin-left: 0;" data-i18n="craft_anvil_title">Наковальня (Объединение)</div>
+                            <div class="mc-gui-body mc-anvil-body">
+                                <div class="mc-slot" title="Алмазный топор">
+                                    <img src="assets/textures/diamond_axe.png" class="mc-item-img" alt="Diamond Axe">
+                                </div>
+                                <span class="mc-plus-sign">+</span>
+                                <div class="mc-slot" title="Ядро Дровосека">
+                                    <img src="assets/textures/nether_star.png" class="mc-item-img" alt="Lumberjack Core">
+                                </div>
+                                <div class="mc-arrow-wrap">
+                                    <svg class="mc-gui-arrow" viewBox="0 0 24 16">
+                                        <path d="M0 6h15V2l9 6-9 6v-4H0z" fill="#4a4a4a"/>
+                                    </svg>
+                                </div>
+                                <div class="mc-res-slot mc-enchanted-slot" title="Топор Дровосека">
+                                    <img src="assets/textures/diamond_axe.png" class="mc-item-img mc-item-lg mc-enchanted" alt="Lumberjack Axe">
+                                </div>
+                            </div>
+                            <div class="mc-anvil-cost-row">
+                                <span class="mc-anvil-cost-label" data-i18n="craft_anvil_cost_tag">Стоимость: 40 уровней опыта</span>
+                            </div>
                         </div>
 
                         <div class="craft-property">
@@ -840,18 +897,33 @@
                     <div class="craft-card">
                         <div class="craft-header">
                             <div class="craft-title">
-                                <span>🖼️</span> <span data-i18n="craft_frame_title">Невидимая Рамка</span>
+                                <img src="assets/textures/item_frame.png" class="mc-title-ico" alt="Item Frame">
+                                <span data-i18n="craft_frame_title">Невидимая Рамка</span>
                             </div>
                             <span class="badge badge-cyan" data-i18n="badge_action">Действие</span>
                         </div>
                         <p data-i18n="craft_frame_desc">Сделайте рамку с предметом полностью невидимой, чтобы предмет выглядел лежащим на блоке или парящим у стены.</p>
 
-                        <div class="anvil-ui" style="justify-content: flex-start; gap: 10px;">
-                            <div class="anvil-slot" title="Item Frame / Рамка с предметом">🖼️</div>
-                            <span class="anvil-plus">+</span>
-                            <div class="anvil-slot" title="Shears / Ножницы в руке">✂️</div>
-                            <div class="c-arrow">➔</div>
-                            <span style="font-size: 13px; color: #34d399; font-weight: 600;" data-i18n="craft_frame_action">Shift + ПКМ ножницами</span>
+                        <!-- Интерфейс Рамка + Ножницы -->
+                        <div class="mc-crafting-gui">
+                            <div class="mc-gui-title" style="margin-left: 0;" data-i18n="craft_frame_step_title">Рамка + Ножницы</div>
+                            <div class="mc-gui-body mc-anvil-body">
+                                <div class="mc-slot" title="Рамка с предметом">
+                                    <img src="assets/textures/item_frame.png" class="mc-item-img" alt="Item Frame">
+                                </div>
+                                <span class="mc-plus-sign">+</span>
+                                <div class="mc-slot" title="Ножницы в руке">
+                                    <img src="assets/textures/shears.png" class="mc-item-img" alt="Shears">
+                                </div>
+                                <div class="mc-arrow-wrap">
+                                    <svg class="mc-gui-arrow" viewBox="0 0 24 16">
+                                        <path d="M0 6h15V2l9 6-9 6v-4H0z" fill="#4a4a4a"/>
+                                    </svg>
+                                </div>
+                                <div class="mc-res-slot mc-ghost-slot" title="Невидимая Рамка">
+                                    <img src="assets/textures/item_frame.png" class="mc-item-img mc-item-lg mc-invisible-ghost" alt="Invisible Item Frame">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="craft-legend" data-i18n="craft_frame_legend">
@@ -870,14 +942,15 @@
                     <div class="brew-card">
                         <div class="brew-header">
                             <div class="brew-title">
-                                <span>☕</span> <span data-i18n="drink_choc_title">Горячий Шоколад</span>
+                                <img src="assets/textures/cocoa_beans.png" class="mc-title-ico" alt="Hot Chocolate">
+                                <span data-i18n="drink_choc_title">Горячий Шоколад</span>
                             </div>
                             <span class="badge badge-emerald" data-i18n="badge_non_alcoholic">Безалкогольный</span>
                         </div>
                         <div class="brew-steps">
                             <div class="brew-step">
                                 <span class="brew-step-icon">🥣</span>
-                                <span data-i18n="drink_choc_step1">Котел (3 мин): 3x Молоко, 4x Какао-бобы</span>
+                                <span><img src="assets/textures/milk_bucket.png" class="mc-item-img mc-brew-ico" alt="Milk"><img src="assets/textures/cocoa_beans.png" class="mc-item-img mc-brew-ico" alt="Cocoa"> <span data-i18n="drink_choc_step1">Котел (3 мин): 3x Молоко, 4x Какао-бобы</span></span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">⏳</span>
@@ -891,14 +964,15 @@
                     <div class="brew-card">
                         <div class="brew-header">
                             <div class="brew-title">
-                                <span>🧊</span> <span data-i18n="drink_coffee_title">Ледяной Кофе</span>
+                                <img src="assets/textures/potion.png" class="mc-title-ico" alt="Iced Coffee">
+                                <span data-i18n="drink_coffee_title">Ледяной Кофе</span>
                             </div>
                             <span class="badge badge-cyan" data-i18n="badge_energy">Бодрость</span>
                         </div>
                         <div class="brew-steps">
                             <div class="brew-step">
                                 <span class="brew-step-icon">🥣</span>
-                                <span data-i18n="drink_coffee_step1">Котел (4 мин): 3x Какао-бобы, 2x Сахар, 1x Плотный лёд</span>
+                                <span><img src="assets/textures/cocoa_beans.png" class="mc-item-img mc-brew-ico" alt="Cocoa"><img src="assets/textures/sugar.png" class="mc-item-img mc-brew-ico" alt="Sugar"> <span data-i18n="drink_coffee_step1">Котел (4 мин): 3x Какао-бобы, 2x Сахар, 1x Плотный лёд</span></span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">❄️</span>
@@ -912,14 +986,15 @@
                     <div class="brew-card">
                         <div class="brew-header">
                             <div class="brew-title">
-                                <span>🔥</span> <span data-i18n="drink_whiskey_title">Пылающий Виски</span>
+                                <img src="assets/textures/blaze_powder.png" class="mc-title-ico" alt="Blazing Whiskey">
+                                <span data-i18n="drink_whiskey_title">Пылающий Виски</span>
                             </div>
                             <span class="badge badge-red" data-i18n="drink_whiskey_badge">Крепкий (35%)</span>
                         </div>
                         <div class="brew-steps">
                             <div class="brew-step">
                                 <span class="brew-step-icon">🥣</span>
-                                <span data-i18n="drink_whiskey_step1">Котел (10 мин): 6x Пшеница, 2x Огненный порошок, 1x Сгусток магмы</span>
+                                <span><img src="assets/textures/wheat.png" class="mc-item-img mc-brew-ico" alt="Wheat"><img src="assets/textures/blaze_powder.png" class="mc-item-img mc-brew-ico" alt="Blaze Powder"> <span data-i18n="drink_whiskey_step1">Котел (10 мин): 6x Пшеница, 2x Огненный порошок, 1x Сгусток магмы</span></span>
                             </div>
                             <div class="brew-step">
                                 <span class="brew-step-icon">⚗️</span>
@@ -930,7 +1005,7 @@
                                 <span data-i18n="drink_whiskey_step3">Бочка: Акация (выдержка 3 года)</span>
                             </div>
                         </div>
-                        <span class="brew-effect" data-i18n="drink_whiskey_effect">🛡️ Огнестойкость на 5 мин + Сила II</span>
+                        <span class="brew-effect" data-i18n="drink_whiskey_effect">🔥 Огнестойкость III (15 мин) + Сила II (5 мин)</span>
                     </div>
 
                     <!-- Напиток 4: Светящаяся грибная водка -->

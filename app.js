@@ -464,6 +464,11 @@ document.addEventListener('DOMContentLoaded', () => {
             tag_golem_anim: "Анимация голема",
 
             // Info Crafts
+            craft_workbench_title: "Создание",
+            craft_inventory_title: "Инвентарь",
+            craft_anvil_title: "Наковальня (Объединение)",
+            craft_anvil_cost_tag: "Стоимость: 40 уровней опыта",
+            craft_frame_step_title: "Рамка + Ножницы",
             craft_core_title: "Ядро Дровосека",
             craft_core_desc: "Легендарное магическое ядро, концентрирующее силу древнего леса. Используется для создания Топора Дровосека на наковальне.",
             craft_core_legend: "Ингредиенты: 4x Алмаз, 4x Незеритовый слиток, 1x Звезда Незера (в центре).",
@@ -746,6 +751,11 @@ document.addEventListener('DOMContentLoaded', () => {
             tag_golem_anim: "Golem animation",
 
             // Info Crafts
+            craft_workbench_title: "Crafting",
+            craft_inventory_title: "Inventory",
+            craft_anvil_title: "Anvil (Combine)",
+            craft_anvil_cost_tag: "Cost: 40 XP Levels",
+            craft_frame_step_title: "Frame + Shears",
             craft_core_title: "Lumberjack Core",
             craft_core_desc: "Legendary magical core concentrating ancient forest power. Used to craft the Lumberjack Axe on an anvil.",
             craft_core_legend: "Ingredients: 4x Diamond, 4x Netherite Ingot, 1x Nether Star (center).",

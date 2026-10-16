@@ -2472,55 +2472,227 @@ body.theme-light .map-terrain-backdrop {
     color: #f8fafc;
     display: flex;
     align-items: center;
+    gap: 10px;
+}
+.mc-title-ico {
+    width: 24px;
+    height: 24px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* ================= AUTHENTIC MINECRAFT CRAFTING GUI ================= */
+.mc-crafting-gui {
+    background: #c6c6c6;
+    border: 3px solid #ffffff;
+    border-right-color: #555555;
+    border-bottom-color: #555555;
+    border-radius: 4px;
+    padding: 10px 12px 10px 12px;
+    margin: 12px 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    color: #3f3f3f;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    user-select: none;
+}
+
+.mc-gui-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #3f3f3f;
+    margin-bottom: 6px;
+    margin-left: 48px;
+    letter-spacing: 0.3px;
+}
+
+.mc-gui-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 8px;
 }
-.craft-workbench-ui {
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 14px;
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+.mc-anvil-body {
+    justify-content: flex-start;
     gap: 14px;
-    margin: 12px 0;
 }
-.grid-3x3 {
+
+.mc-book-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.mc-book-slot {
+    width: 38px;
+    height: 38px;
+    background: #e4e4e4;
+    border: 2px solid #555555;
+    border-right-color: #ffffff;
+    border-bottom-color: #ffffff;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.mc-grid-3x3 {
     display: grid;
-    grid-template-columns: repeat(3, 44px);
-    grid-gap: 5px;
+    grid-template-columns: repeat(3, 40px);
+    grid-gap: 3px;
 }
-.c-slot {
-    width: 44px;
-    height: 44px;
-    background: rgba(30, 41, 59, 0.9);
-    border: 2px solid rgba(255, 255, 255, 0.12);
-    border-radius: 8px;
+
+.mc-slot {
+    width: 40px;
+    height: 40px;
+    background: #8b8b8b;
+    border-top: 2px solid #373737;
+    border-left: 2px solid #373737;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
-    font-size: 20px;
+    position: relative;
+    box-sizing: border-box;
 }
-.c-arrow {
-    font-size: 24px;
-    color: var(--emerald);
-    font-weight: bold;
+
+.mc-slot:hover {
+    background: #9a9a9a;
 }
-.c-res-slot {
-    width: 58px;
-    height: 58px;
-    background: rgba(16, 185, 129, 0.15);
-    border: 2px solid var(--emerald);
-    border-radius: 12px;
+
+.mc-item-img {
+    width: 28px;
+    height: 28px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    pointer-events: none;
+    user-select: none;
+    transition: transform 0.15s ease;
+}
+
+.mc-slot:hover .mc-item-img {
+    transform: scale(1.1);
+}
+
+.mc-item-img.mc-item-lg {
+    width: 34px;
+    height: 34px;
+}
+
+.mc-item-img.mc-step-ico,
+.mc-item-img.mc-brew-ico {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.mc-arrow-wrap {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 16px var(--emerald-glow), inset 0 2px 4px rgba(0, 0, 0, 0.4);
-    font-size: 26px;
+    padding: 0 4px;
 }
+
+.mc-gui-arrow {
+    width: 26px;
+    height: 20px;
+    display: block;
+}
+
+.mc-res-slot {
+    width: 52px;
+    height: 52px;
+    background: #8b8b8b;
+    border-top: 2px solid #373737;
+    border-left: 2px solid #373737;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.mc-enchanted-slot {
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, #8b8b8b 80%);
+}
+
+.mc-ghost-slot {
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, #8b8b8b 80%);
+}
+
+.mc-enchanted {
+    filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.95)) drop-shadow(0 0 2px #ec4899);
+    animation: mcEnchantPulse 2s infinite ease-in-out;
+}
+
+@keyframes mcEnchantPulse {
+    0%, 100% {
+        filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.8)) drop-shadow(0 0 1px #a855f7);
+    }
+    50% {
+        filter: drop-shadow(0 0 10px rgba(236, 72, 153, 1)) drop-shadow(0 0 4px #c084fc) brightness(1.2);
+    }
+}
+
+.mc-invisible-ghost {
+    opacity: 0.55;
+    filter: drop-shadow(0 0 6px #06b6d4);
+}
+
+.mc-plus-sign {
+    font-size: 22px;
+    font-weight: 900;
+    color: #4a4a4a;
+}
+
+.mc-gui-footer {
+    font-size: 13px;
+    font-weight: 700;
+    color: #3f3f3f;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mc-inv-mini-slot {
+    width: 18px;
+    height: 18px;
+    background: #8b8b8b;
+    border-top: 2px solid #373737;
+    border-left: 2px solid #373737;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    border-radius: 1px;
+}
+
+.mc-anvil-cost-row {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.mc-anvil-cost-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #55ff55;
+    background: #1e1e1e;
+    border: 1px solid #373737;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-shadow: 1px 1px 0 #000000;
+    letter-spacing: 0.5px;
+}
+
 .craft-legend {
     font-size: 12px;
     color: var(--text-muted);
@@ -2538,36 +2710,6 @@ body.theme-light .map-terrain-backdrop {
     color: #e2e8f0;
     margin-top: 8px;
 }
-
-/* Anvil UI */
-.anvil-ui {
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 14px;
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin: 12px 0;
-}
-.anvil-slot {
-    min-width: 50px;
-    height: 50px;
-    padding: 0 8px;
-    background: rgba(30, 41, 59, 0.9);
-    border: 2px solid rgba(255, 255, 255, 0.12);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
-}
-.anvil-plus {
-    font-size: 18px;
-    color: #94a3b8;
-    font-weight: 700;
 }
 .anvil-xp-tag {
     display: inline-flex;
