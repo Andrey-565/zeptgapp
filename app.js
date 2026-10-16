@@ -216,6 +216,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnRefreshProfile = document.getElementById('btnRefreshProfile');
     const badgePlayerRank = document.getElementById('badgePlayerRank');
 
+    // Logout / Unlink elements
+    const btnOpenLogoutModal = document.getElementById('btnOpenLogoutModal');
+    const logoutModalOverlay = document.getElementById('logoutModalOverlay');
+    const btnCloseLogoutModal = document.getElementById('btnCloseLogoutModal');
+    const btnCancelLogout = document.getElementById('btnCancelLogout');
+    const btnConfirmLogout = document.getElementById('btnConfirmLogout');
+    const logoutModalBackdrop = document.getElementById('logoutModalBackdrop');
+    const logoutModalAvatar = document.getElementById('logoutModalAvatar');
+    const logoutModalNick = document.getElementById('logoutModalNick');
+
     // New Settings elements
     const settingSoundFx = document.getElementById('settingSoundFx');
     const settingCompact = document.getElementById('settingCompact');
@@ -383,6 +393,14 @@ document.addEventListener('DOMContentLoaded', () => {
             profile_unlinked_title: "Minecraft аккаунт не привязан",
             profile_unlinked_desc: "Зайдите на сервер Minecraft, скопируйте 6-значный код и подтвердите привязку.",
             profile_unlinked_btn: "Ввести код привязки",
+            btn_logout: "Выйти",
+            logout_modal_title: "Выход из аккаунта",
+            logout_modal_sub: "Отвязать Minecraft от Mini App?",
+            logout_chip_linked: "✔ Привязан",
+            logout_warning_text: "Ваш Minecraft-аккаунт будет отвязан от Mini App. При следующем заходе на сервер вам потребуется привязать его заново с помощью нового кода.",
+            btn_confirm_logout: "Выйти и отвязать",
+            logout_progress: "Отвязка...",
+            logout_success_desc: "Minecraft-аккаунт успешно отвязан. При следующем входе на сервер потребуется новая привязка.",
 
             // Zephyrs Banking (Tinkoff Style)
             bank_title: "Zephyrius Банкинг",
@@ -670,6 +688,14 @@ document.addEventListener('DOMContentLoaded', () => {
             profile_unlinked_title: "Minecraft Account Not Linked",
             profile_unlinked_desc: "Join the Minecraft server, copy the 6-digit code, and confirm linking.",
             profile_unlinked_btn: "Enter Linking Code",
+            btn_logout: "Log out",
+            logout_modal_title: "Account Logout",
+            logout_modal_sub: "Unlink Minecraft from Mini App?",
+            logout_chip_linked: "✔ Linked",
+            logout_warning_text: "Your Minecraft account will be unlinked from Mini App. Next time you join the server, you will need to link your account anew with a new code.",
+            btn_confirm_logout: "Log out & Unlink",
+            logout_progress: "Unlinking...",
+            logout_success_desc: "Minecraft account successfully unlinked. Next time you join the server, a new authorization code will be required.",
 
             // Zephyrs Banking (Tinkoff Style)
             bank_title: "Zephyrius Banking",
@@ -1345,6 +1371,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('zeph_linked_nick', data.nick);
                         if (data.trustedIp) localStorage.setItem('zeph_trusted_ip', data.trustedIp);
                         updateProfileUI(data.nick, data.trustedIp, data.stats, data.zephyrs);
+                    } else if (savedNick || tgId) {
+                        localStorage.removeItem('zeph_linked_nick');
+                        localStorage.removeItem('zeph_trusted_ip');
+                        updateProfileUI('', '');
                     }
                     if (data.pendingSession && data.pendingSession.isIpChange) {
                         showProfileIpAlert(data.pendingSession.player, data.pendingSession.ip, data.pendingSession.code);
@@ -1441,6 +1471,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 badgeNickLinked.style.display = 'inline-block';
                 badgeNickLinked.textContent = t('profile_nick_linked');
             }
+            if (btnOpenLogoutModal) btnOpenLogoutModal.style.display = 'inline-flex';
             if (profileTrustedIp) profileTrustedIp.textContent = trustedIp || t('profile_trusted_ip_active');
             if (profileAuthStatus) profileAuthStatus.textContent = t('profile_auth_status_active');
             if (profileOnlineStatus) {
@@ -1452,6 +1483,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (profileMcNick) profileMcNick.textContent = t('profile_nick_unlinked');
             if (profileUserAvatar) profileUserAvatar.src = 'https://mc-heads.net/avatar/Steve/120';
             if (badgeNickLinked) badgeNickLinked.style.display = 'none';
+            if (btnOpenLogoutModal) btnOpenLogoutModal.style.display = 'none';
             if (profileTrustedIp) profileTrustedIp.textContent = t('profile_trusted_ip_none');
             if (profileAuthStatus) profileAuthStatus.textContent = t('profile_auth_status_req');
             if (profileOnlineStatus) {
@@ -1593,6 +1625,100 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnRefreshProfile.style.transition = '';
             }, 550);
             initProfileData();
+        });
+    }
+
+    // ================= LOGOUT / UNLINK MODAL LOGIC =================
+    function openLogoutModal() {
+        triggerHaptic('medium');
+        const currentNick = (profileMcNick ? profileMcNick.textContent.trim() : '') || localStorage.getItem('zeph_linked_nick') || 'Steve';
+        if (logoutModalNick) logoutModalNick.textContent = currentNick;
+        if (logoutModalAvatar) logoutModalAvatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(currentNick)}/80`;
+        if (logoutModalOverlay) logoutModalOverlay.style.display = 'flex';
+    }
+
+    function closeLogoutModal() {
+        triggerHaptic('light');
+        if (logoutModalOverlay) logoutModalOverlay.style.display = 'none';
+    }
+
+    if (btnOpenLogoutModal) {
+        btnOpenLogoutModal.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openLogoutModal();
+        });
+    }
+
+    if (btnCloseLogoutModal) btnCloseLogoutModal.addEventListener('click', closeLogoutModal);
+    if (btnCancelLogout) btnCancelLogout.addEventListener('click', closeLogoutModal);
+    if (logoutModalBackdrop) logoutModalBackdrop.addEventListener('click', closeLogoutModal);
+
+    const profileHeroCard = document.querySelector('.profile-hero-card');
+    if (profileHeroCard) {
+        profileHeroCard.addEventListener('click', (e) => {
+            if (e.target.closest('#btnOpenLogoutModal')) return;
+            const currentNick = localStorage.getItem('zeph_linked_nick');
+            if (currentNick) {
+                openLogoutModal();
+            }
+        });
+    }
+
+    if (btnConfirmLogout) {
+        btnConfirmLogout.addEventListener('click', async () => {
+            triggerHaptic('warning');
+            const currentNick = (profileMcNick ? profileMcNick.textContent.trim() : '') || localStorage.getItem('zeph_linked_nick') || '';
+            const tgId = Number(localStorage.getItem('zeph_tg_id') || (tg?.initDataUnsafe?.user?.id) || 0);
+
+            btnConfirmLogout.disabled = true;
+            const originalHtml = btnConfirmLogout.innerHTML;
+            btnConfirmLogout.textContent = t('logout_progress');
+
+            const apiUrl = CONFIG.apiUrl || (window.location.hostname === 'localhost' ? 'http://localhost:8088' : '');
+            try {
+                if (apiUrl) {
+                    await fetch(`${apiUrl}/api/unlink`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Bypass-Tunnel-Reminder': '1'
+                        },
+                        body: JSON.stringify({
+                            telegram_id: tgId,
+                            nick: currentNick
+                        })
+                    });
+                }
+            } catch (err) {
+                console.error('Logout unlink error:', err);
+            }
+
+            // Clear stored link info
+            localStorage.removeItem('zeph_linked_nick');
+            localStorage.removeItem('zeph_trusted_ip');
+            localStorage.removeItem('zeph_balance_zephyrs');
+            localStorage.removeItem('zeph_stat_deaths');
+            localStorage.removeItem('zeph_stat_mined');
+            localStorage.removeItem('zeph_stat_kills');
+            localStorage.removeItem('zeph_stat_playtime');
+            localStorage.removeItem('zeph_stat_achieve');
+
+            btnConfirmLogout.disabled = false;
+            btnConfirmLogout.innerHTML = originalHtml;
+            closeLogoutModal();
+
+            triggerHaptic('success');
+            updateProfileUI('', '');
+
+            if (tg?.showPopup) {
+                tg.showPopup({
+                    title: t('logout_modal_title'),
+                    message: t('logout_success_desc'),
+                    buttons: [{ type: 'ok', text: 'OK' }]
+                });
+            } else {
+                alert(t('logout_success_desc'));
+            }
         });
     }
 
